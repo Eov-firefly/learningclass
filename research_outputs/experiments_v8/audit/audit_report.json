@@ -1,0 +1,31 @@
+{
+  "scope": "Independent file, record, parser, aggregate and paired-output checks; no GPU rerun",
+  "errors": [],
+  "warnings": [
+    "Original runnable sources and original prepared input files absent.",
+    "No token-level entropy traces; exact historical entropy implementation cannot be certified.",
+    "New alternate contracts are retrospective diagnostics; wrapper checks are limited heuristics, not semantic validation.",
+    "Continuous bootstrap uses declared ordering/RNG; finite-Monte-Carlo endpoints are independent estimates, not claimed byte-identical to archived endpoints."
+  ],
+  "checksum_entries": 95,
+  "stage_counts": {
+    "dev": 6000,
+    "main": 14400,
+    "pilot": 480,
+    "timing": 4320
+  },
+  "strict_parser_mismatch_count": 0,
+  "question_grids_verified": 3920,
+  "archived_exitcode_files": 16,
+  "mechanisms": {
+    "main_pairs": 2400,
+    "main_E_equals_U": 2399,
+    "pilot_pairs": 80,
+    "pilot_E_equals_U": 80,
+    "timing_pairs": 720,
+    "timing_E_equals_U": 720
+  },
+  "main_discordant_pairs": 114,
+  "aggregate_scalar_checks": 240,
+  "passed": true
+}

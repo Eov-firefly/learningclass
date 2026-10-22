@@ -1,0 +1,67 @@
+{
+  "protocol": "janus-prospective-v5.1-cap512-reduced",
+  "seed": 20261019,
+  "models": {
+    "qwen": {
+      "id": "Qwen/Qwen2.5-7B-Instruct-1M",
+      "revision": "e28526f7bb80e2a9c8af03b831a9af3812f18fba"
+    },
+    "mistral": {
+      "id": "mistralai/Mistral-7B-Instruct-v0.3",
+      "revision": "c170c708c41dac9275d15a8fff4eca08d52bab71"
+    }
+  },
+  "datasets": {
+    "gsm8k": {
+      "id": "openai/gsm8k",
+      "config": "main",
+      "revision": "740312add88f781978c0658806c59bc2815b9866"
+    },
+    "arc": {
+      "id": "allenai/ai2_arc",
+      "config": "ARC-Challenge",
+      "revision": "210d026faf9955653af8916fad021475a3f00453"
+    }
+  },
+  "n_dev": 300,
+  "n_test": 600,
+  "n_pilot": 20,
+  "n_timing": 60,
+  "timing_repeats": 3,
+  "n_pairs": 0,
+  "warmups_per_task": 2,
+  "budgets": [
+    512
+  ],
+  "curve_train_budgets": [
+    512
+  ],
+  "thresholds": [
+    0.005,
+    0.01,
+    0.05
+  ],
+  "quality_margin": 0.02,
+  "fixed_entropy_threshold": 0.01,
+  "allocation_prior_strength": 20,
+  "allocation_mean_caps": [],
+  "timing_isolated": true,
+  "note": "Prespecified, unexecuted v5 reduced protocol, authorized 2026-10-21. Four stages total 25,200 measured calls, excluding per-attempt warmups. Two models, two tasks, six policies, cap512 only; no curve fitting, allowance allocation, transfer or transfer inputs. Exclude the 582 disclosed historical GSM8K questions before selecting 600 eligible test questions. Immutable Hub revisions pinned before any prospective inference. CPU checks and prepared benchmark inputs are not model-quality or GPU timing results.",
+  "historical_exposure": {
+    "gsm8k": {
+      "path": "evidence/historical_exposure_gsm8k.jsonl",
+      "sha256": "27389bbc76e7e1f48084f0415331ed178db03b963e11d464a6ec9f8b772e07ca"
+    }
+  },
+  "enabled_stages": [
+    "pilot",
+    "dev",
+    "main",
+    "timing"
+  ],
+  "enabled_analyses": [
+    "select",
+    "summarize",
+    "audit"
+  ]
+}

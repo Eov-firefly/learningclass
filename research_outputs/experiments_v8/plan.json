@@ -1,0 +1,32 @@
+{
+  "experiment_id": "janus-v8-interface-followup",
+  "status": "new-reference-implementation-not-original-v5-source",
+  "seed": 20261022,
+  "cap": 512,
+  "entropy": {"threshold": 0.01, "window": 5, "min_steps": 21, "alpha": 0.18181818181818182},
+  "runtime": {"torch_threads": 2, "torch_interop_threads": 64, "dtype": "bfloat16", "attention": "sdpa"},
+  "stages": {
+    "smoke": {"n_per_task": 2, "repeats": 1, "sessions": 1, "warmups_per_task_policy": 1,
+      "policies": ["uniform", "complete", "entropy_observe", "structured_complete", "conjunction", "latched_buffer"]},
+    "trace": {"n_per_task": 60, "repeats": 1, "sessions": 1, "warmups_per_task_policy": 1,
+      "policies": ["uniform_trace"]},
+    "quality": {"n_per_task": 600, "repeats": 1, "sessions": 1, "warmups_per_task_policy": 2,
+      "policies": ["uniform", "complete", "structured_complete"]},
+    "timing_pilot": {"n_per_task": 10, "repeats": 2, "sessions": 1, "warmups_per_task_policy": 2,
+      "policies": ["uniform", "boundary_observe", "complete", "entropy_observe", "entropy_uniform"]},
+    "timing": {"n_per_task": 60, "repeats": 3, "sessions": 3, "warmups_per_task_policy": 2,
+      "policies": ["uniform", "boundary_observe", "complete", "entropy_observe", "entropy_uniform"]}
+  },
+  "trace_replay_grid": {
+    "thresholds": [0.005, 0.01, 0.05], "windows": [1, 5], "min_steps": [1, 21],
+    "warning": "offline replay is a mechanism analysis, not measured policy latency"
+  },
+  "primary_followup": [
+    "structured_complete vs complete: strict, closure_tolerant, wrapper-balanced and last-marked endpoints",
+    "entropy_observe vs complete: exact-output-matched runtime per independent session",
+    "boundary_observe vs uniform: exact-output-matched boundary detection runtime",
+    "entropy_uniform vs boundary_observe: added entropy path at baseline stopping length"
+  ],
+  "multiplicity": "Follow-up endpoints are exploratory; 95% intervals are descriptive and not confirmatory. Freeze a separate adjusted primary family before any confirmatory follow-up.",
+  "limitations": "No human semantic outcomes; no historical Legacy code recreation; existing cohorts already inspected. Timing pilot is separate and must not be pooled into formal timing."
+}

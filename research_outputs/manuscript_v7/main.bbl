@@ -1,0 +1,71 @@
+\begin{thebibliography}{8}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Clark et~al.(2018)Clark, Cowhey, Etzioni, Khot, Sabharwal, Schoenick,
+  and Tafjord]{clark2018}
+P.~Clark, I.~Cowhey, O.~Etzioni, T.~Khot, A.~Sabharwal, C.~Schoenick, and
+  O.~Tafjord.
+\newblock Think you have solved question answering? {Try ARC}, the {AI2
+  Reasoning Challenge}, 2018.
+\newblock URL \url{https://arxiv.org/abs/1803.05457}.
+\newblock arXiv:1803.05457.
+
+\bibitem[Cobbe et~al.(2021)Cobbe, Kosaraju, Bavarian, Chen, Jun, Kaiser,
+  Plappert, Tworek, Hilton, Nakano, Hesse, and Schulman]{cobbe2021}
+K.~Cobbe, V.~Kosaraju, M.~Bavarian, M.~Chen, H.~Jun, L.~Kaiser, M.~Plappert,
+  J.~Tworek, J.~Hilton, R.~Nakano, C.~Hesse, and J.~Schulman.
+\newblock Training verifiers to solve math word problems, 2021.
+\newblock URL \url{https://arxiv.org/abs/2110.14168}.
+\newblock arXiv:2110.14168.
+
+\bibitem[Han et~al.(2025)Han, Wang, Fang, Zhao, Ma, and Chen]{han2025}
+T.~Han, Z.~Wang, C.~Fang, S.~Zhao, S.~Ma, and Z.~Chen.
+\newblock Token-budget-aware {LLM} reasoning.
+\newblock In \emph{Findings of the Association for Computational Linguistics:
+  ACL 2025}, pages 24842--24855, 2025.
+\newblock \doi{10.18653/v1/2025.findings-acl.1274}.
+\newblock URL \url{https://aclanthology.org/2025.findings-acl.1274/}.
+
+\bibitem[{Mistral AI}(2024)]{mistral2024}
+{Mistral AI}.
+\newblock {Mistral-7B-Instruct-v0.3} model card, 2024.
+\newblock URL \url{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3}.
+
+\bibitem[Muennighoff et~al.(2025)Muennighoff, Yang, Shi, Li, Fei-Fei,
+  Hajishirzi, Zettlemoyer, Liang, Candes, and Hashimoto]{muennighoff2025}
+N.~Muennighoff, Z.~Yang, W.~Shi, X.~L. Li, L.~Fei-Fei, H.~Hajishirzi,
+  L.~Zettlemoyer, P.~Liang, E.~Candes, and T.~Hashimoto.
+\newblock {s1}: Simple test-time scaling, 2025.
+\newblock URL \url{https://arxiv.org/abs/2501.19393v3}.
+\newblock arXiv:2501.19393, version 3.
+
+\bibitem[Wang et~al.(2024)Wang, Jain, Zhang, Ray, Kumar, and
+  Athiwaratkun]{wang2024}
+J.~Wang, S.~Jain, D.~Zhang, B.~Ray, V.~Kumar, and B.~Athiwaratkun.
+\newblock Reasoning in token economies: Budget-aware evaluation of {LLM}
+  reasoning strategies.
+\newblock In \emph{Proceedings of EMNLP 2024}, pages 19916--19939, 2024.
+\newblock \doi{10.18653/v1/2024.emnlp-main.1112}.
+\newblock URL \url{https://aclanthology.org/2024.emnlp-main.1112/}.
+
+\bibitem[Yang et~al.(2025)Yang, Yu, Li, Liu, Huang, Huang, Jiang, Tu, Zhang,
+  Zhou, Lin, et~al.]{yang2025}
+A.~Yang, B.~Yu, C.~Li, D.~Liu, F.~Huang, H.~Huang, J.~Jiang, J.~Tu, J.~Zhang,
+  J.~Zhou, J.~Lin, et~al.
+\newblock {Qwen2.5-1M} technical report, 2025.
+\newblock URL \url{https://arxiv.org/abs/2501.15383}.
+\newblock arXiv:2501.15383.
+
+\bibitem[Yu et~al.(2025)Yu, Zheng, Song, Li, Xiong, Tang, and Chen]{yu2025}
+Q.~Yu, Z.~Zheng, S.~Song, Z.~Li, F.~Xiong, B.~Tang, and D.~Chen.
+\newblock {xFinder}: Large language models as automated evaluators for reliable
+  evaluation.
+\newblock In \emph{ICLR 2025}, 2025.
+\newblock URL \url{https://arxiv.org/abs/2405.11874}.
+\newblock arXiv:2405.11874, version 3.
+
+\end{thebibliography}

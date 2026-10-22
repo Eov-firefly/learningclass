@@ -1,0 +1,6 @@
+-r requirements-cpu.txt
+transformers==4.48.2
+tokenizers==0.21.4
+huggingface-hub==0.36.2
+safetensors==0.8.0
+sentencepiece==0.2.0

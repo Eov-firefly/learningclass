@@ -1,0 +1,11 @@
+{
+  "source_commit": "1c02f438dea97032ac2a53adfcd2e3f73ff5ca5f",
+  "source": "JANUS_experiment_outputs_20261022.zip",
+  "source_checksums_sha256": "feb7cee3edec5600d2f0dcd66cb064e13de2e12ed201bf7b225fc69a1fb52925",
+  "scope": "Reconstructed serialized prompts and baseline records, NOT original input manifests",
+  "files": {
+    "mistral.jsonl": "0bdc246b22312876f0f7680f8da46de79cb6f48d19864d688cba2e43b30018b8",
+    "protocol.json": "825549269b83301919aa4fc03af3baad6976f2f2de5ac9a42f6a40599cff7a66",
+    "qwen.jsonl": "85a3321830ef3668e09c721803c73b293ed4c84502cc51c8f0a8eab5e8ae31d6"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "result": "passed",
+  "tests_run": 12,
+  "gpu_model_experiments_run_locally": false,
+  "integration": "Offline tiny random GPT2 with scripted logits through Transformers generate; no pretrained model or CUDA tests",
+  "packages": {
+    "torch": "2.6.0+cpu",
+    "transformers": "4.48.2",
+    "tokenizers": "0.21.4",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "expected_negative_test": "Duplicate-session fixture must be rejected; its printed failed analysis is an expected assertion, not a failing test",
+  "checks": [
+    "archive audit passed",
+    "Python compile checks passed",
+    "shell syntax checks passed",
+    "prepared-input integrity and cohort preflight passed"
+  ]
+}

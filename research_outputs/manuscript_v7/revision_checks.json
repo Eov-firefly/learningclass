@@ -1,0 +1,20 @@
+{
+  "source_commit": "f0fd7d37f8f9cba4ea827a363db0f0b81798531f",
+  "source_main_sha256": "6aa00daa3fe6b2eabd950b696a3bf157652cdfd0328498bdb98367314ec4aceb",
+  "results_block_unchanged": true,
+  "original_executed_methods_retained_verbatim": true,
+  "existing_tables": 5,
+  "new_experiments_run": false,
+  "new_formal_analysis": "retrospective",
+  "external_bibliography_verification": "pending",
+  "new_empirical_claims_added": false,
+  "pdf_compile": "passed",
+  "pdf_pages": 24,
+  "undefined_citations_or_references": false,
+  "overfull_boxes": false,
+  "nonfatal_layout_messages": [
+    "Underfull \\hbox (badness 10000) in paragraph at lines 129--130"
+  ],
+  "pdf_visual_review": "spot check of formal section page 5; not an all-page inspection",
+  "pdf_text_extraction": "passed"
+}
