@@ -1,0 +1,5 @@
+model,task,n,uniform_valid,complete_valid,validity_gains,validity_losses,newly_valid_correct,newly_valid_incorrect,correctness_gains,correctness_losses,shorter_outputs,mean_tokens_saved,shortened_equals_validity_repair
+mistral,arc,600,411,458,47,0,19,28,19,0,47,4.75,True
+mistral,gsm8k,600,445,574,129,0,81,48,81,0,129,5.285,True
+qwen,arc,600,579,579,0,0,0,0,0,0,0,0,True
+qwen,gsm8k,600,555,583,28,0,14,14,14,0,28,0.13666666666666666,True

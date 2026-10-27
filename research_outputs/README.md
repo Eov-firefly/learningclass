@@ -1,49 +1,61 @@
-# 论文评审、修改稿与补充实验
+# JANUS 论文修订、严格评审与实验交付
 
-本目录收录本次论文工作生成的可审阅输出。原始论文及实验数据 ZIP 保留在仓库根目录，没有覆盖。
+最新整理：2026-10-27。当前入口为**v8.8论文修订母版**与**v8.9四卡A100最小实验包**。新方法的真实7B/A100实验尚未执行；文件整理、PDF编译和CPU软件检查不代表已经达到投稿标准。
 
-## 阅读入口
+## 最新阅读入口
 
-| 内容 | 文件 |
-|---|---|
-| 严格投稿前评审 | [SCI_review_zh.md](review/SCI_review_zh.md) |
-| v7 英文修改稿 | [PDF](manuscript_v7/main.pdf) · [LaTeX](manuscript_v7/main.tex) · [Markdown](manuscript_v7/manuscript.md) |
-| v7 修改说明 | [REVISION_NOTES_zh.md](manuscript_v7/REVISION_NOTES_zh.md) |
-| v7 待补验证计划 | [VALIDATION_PLAN_zh.md](manuscript_v7/VALIDATION_PLAN_zh.md) |
-| 新上传实验数据的独立审计与实验建议 | [AUDIT_AND_EXPERIMENTS_zh.md](experiments_v8/AUDIT_AND_EXPERIMENTS_zh.md) |
-| GPU 服务器执行说明 | [README_zh.md](experiments_v8/README_zh.md) |
-| 补充实验配置 | [plan.json](experiments_v8/plan.json) |
-| 独立数据审计结果 | [audit_report.json](experiments_v8/audit/audit_report.json) |
-| 全部114个主实验不一致案例 | [discordant_pairs.json](experiments_v8/audit/discordant_pairs.json) |
-| 新增回顾性合同敏感性结果 | [contract_sensitivity.csv](experiments_v8/audit/contract_sensitivity.csv) |
-| 程序测试范围与结果 | [TEST_REPORT.json](experiments_v8/TEST_REPORT.json) |
+| 内容 | 入口 |
+| --- | --- |
+| 修正后的核心创新点 | [CORE_INNOVATION_zh.md](review/CORE_INNOVATION_zh.md) |
+| v8.8论文 | [PDF](manuscript_v88/main.pdf) · [LaTeX](manuscript_v88/main.tex) · [Markdown](manuscript_v88/manuscript.md) |
+| 严格审稿与本轮处理 | [审稿意见](manuscript_v88/严格审稿意见与处理结果_zh.md) |
+| 必须补充的实验 | [E1–E6与结果回填](manuscript_v88/必须补充的实验与结果回填_zh.md) |
+| 投稿前放行条件 | [最终核对表](manuscript_v88/投稿前最终核对表_zh.md) |
+| 旧十张表和完整历史协议 | [历史补充PDF](manuscript_v88/historical_supplement.pdf) · [Markdown](manuscript_v88/historical_supplement.md) |
+| v8.9最小实验运行说明 | [README_zh.md](experiments_v89/README_zh.md) |
+| 冻结工作量和模型版本 | [RUN_PLAN.json](experiments_v89/RUN_PLAN.json) |
+| 数据及抽样来源 | [manifest.json](experiments_v89/data/manifest.json) |
+| 最小实验对论文结论的限制 | [论文回填范围](experiments_v89/论文回填范围_zh.md) |
+| 40项CPU检查范围 | [TEST_REPORT.json](experiments_v89/TEST_REPORT.json) |
 
-## 下载完整包
+## 直接下载
 
-- [v7 稿件修改包](packages/JANUS_v7_structural_revision.zip)
-- [v8 补充实验代码与恢复输入](packages/JANUS_v8_supplement_experiments.zip)
+- **最新论文包**：[JANUS_v8_8_strict_review_final_revision_20261027.zip](packages/JANUS_v8_8_strict_review_final_revision_20261027.zip)
+- **最新GPU实验包**：[JANUS_v8_9_minimal_ARC_4xA100_experiments.zip](packages/JANUS_v8_9_minimal_ARC_4xA100_experiments.zip)
 
-两个 ZIP 与本次交付版本一致。解压版便于 GitHub 浏览、代码审查和后续修改。
+两个解压目录与对应交付ZIP一致，保留各自SHA256SUMS。没有纳入模型权重、虚拟环境、下载缓存或伪造的GPU结果。
 
-## 当前状态
+## 四卡A100运行
 
-v7 是结构和理论修订稿：保留既有实验方法、五张表和结果章节，新增分析不冒充预设实验或已完成新结果。它形成于新实验输出包上传之前，其数据可用性和后续证据状态应以 v8 审计报告为补充，下一轮稿件再统一更新。
-
-v8 指补充实验工具版本，不表示已经完成 v8 科学实验。现有25,200条记录的内部一致性独立核验通过；新增合同分析属于回顾性诊断。代码通过12项本地测试，包括小型随机模型的真实 Transformers generate CPU 集成测试；尚未运行实际 Qwen/Mistral CUDA 实验。
-
-旧 v5 完整 runner/parser 源码仍未包含在原实验资料包中，因此 v8 是独立参考实现，不是旧 Legacy 的精确源码补丁。人工语义评估仍待完成。不要将文件哈希、排版检查或代码测试理解为 SCI 录用保证。
-
-## 在 GPU 服务器运行
-
-推荐下载上方实验 ZIP 后按其说明操作。也可使用此仓库中的目录：
+数据已确定为一个ARC-Challenge已知队列子集：96题正式评估、16题开发。两种输出编码不算两个独立数据集。两个固定revision的7B模型分别分配两张GPU，每卡独立batch1推理；正式计划6,976条记录，其中1,248条为无需新增模型调用的确定性完成。
 
 ```bash
-cd research_outputs/experiments_v8
-bash setup_gpu.sh
-bash run_stage.sh smoke
-.venv/bin/python -m janus_v8.analyze --runs runs --out analysis-smoke
+cd research_outputs/experiments_v89
+export HF_HOME="$PWD/.hf_cache"
+bash scripts/setup_cuda.sh
+.venv/bin/python -m janus_min.prepare --download --hash-weights
+bash scripts/run_4a100.sh runs/minimal 0,1,2,3
 ```
 
-先检查 Smoke，再按说明运行 Trace、Quality、Timing pilot 和正式 Timing。已有恢复输入，不需重新下载 GSM8K/ARC；模型权重需要另行下载或提供可追溯本地快照。
+已有权重时使用运行说明中的本地路径参数。启动短校准会生成ETA；初步规划正式实验45–120分钟，安装/下载另计，未在A100实测。质量阶段后同步进入独立计时，不将共享prefix的后缀时间当作端到端速度。
 
-本目录没有纳入虚拟环境、模型权重、依赖缓存、临时编译文件或 GPU 实验结果。未来产生的新结果请保留完整配置、来源及失败/重试记录。
+```bash
+.venv/bin/python -m janus_min.collect --run runs/minimal \
+  --model-manifest model_manifest.json --output JANUS_results.zip
+```
+
+回传完整结果ZIP，包括raw、配置、环境、失败、评分与分析。有限数据仅适合机制/较大效果检查，不保证小幅收益功效、算法新颖性或SCI录用。当前不设人工评分工作流。
+
+## 历史版本与证据
+
+| 版本 | 交付档案 |
+| --- | --- |
+| v8.3独立复审 | [SCI_readiness_review_v83_zh.md](review/SCI_readiness_review_v83_zh.md) |
+| v8.4终止约束视角 | [完整包](packages/JANUS_v8_4_termination_constraints_revision.zip) |
+| v8.5历史证据增强 | [完整包](packages/JANUS_v8_5_evidence_strengthened_revision.zip) |
+| v8.6候选机制及原型 | [完整包](packages/JANUS_v8_6_budget_viable_commitment_research.zip) |
+| v8.7主线与实验重排 | [完整包](packages/JANUS_v8_7_logic_and_experiment_audit_20261027.zip) |
+| v7结构修订 | [PDF](manuscript_v7/main.pdf) · [完整包](packages/JANUS_v7_structural_revision.zip) |
+| 旧v8审计与工具 | [审计报告](experiments_v8/AUDIT_AND_EXPERIMENTS_zh.md) · [完整包](packages/JANUS_v8_supplement_experiments.zip) |
+
+历史材料描述其当时状态；其中人工评估计划已被后续用户指示取消，不是当前待办。旧早停/监控数据不冒充新约束完成方法的结果。原始论文及上传档案仍保留在仓库原处。

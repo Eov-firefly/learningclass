@@ -1,0 +1,18 @@
+[
+  {
+    "name": "XGrammar",
+    "source_type": "official project documentation, not verified full research paper",
+    "commit": "e085851aec8f417924be5f460d1e038cac0e3bd5",
+    "url": "https://raw.githubusercontent.com/mlc-ai/xgrammar/e085851aec8f417924be5f460d1e038cac0e3bd5/README.md",
+    "sha256": "c940e5bdcdecbababf769ea242ed747e7b8ca6a45f41950b32e8c1da357c2fe5",
+    "accessed": "2026-10-26"
+  },
+  {
+    "name": "Outlines",
+    "source_type": "official project documentation, not verified full research paper",
+    "commit": "c52af8472c6fe8a607a733ec11b709476af77a96",
+    "url": "https://raw.githubusercontent.com/dottxt-ai/outlines/c52af8472c6fe8a607a733ec11b709476af77a96/README.md",
+    "sha256": "2200c02b392cf368f5c0232d5b2c19f6c3f85cc7643b25b487db6a6394156eab",
+    "accessed": "2026-10-26"
+  }
+]

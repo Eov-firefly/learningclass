@@ -1,0 +1,45 @@
+test_already_accepted_record_needs_no_generation_or_budget (test_prototype.GenerateTests.test_already_accepted_record_needs_no_generation_or_budget) ... ok
+test_compiler_rejects_candidate_that_changes_bound_record_field (test_prototype.GenerateTests.test_compiler_rejects_candidate_that_changes_bound_record_field) ... ok
+test_context_roundtrip_failure_is_not_accepted (test_prototype.GenerateTests.test_context_roundtrip_failure_is_not_accepted) ... ok
+test_deadline_is_not_success (test_prototype.GenerateTests.test_deadline_is_not_success) ... ok
+test_deterministic_baseline_is_required_and_equivalent_in_format_only_case (test_prototype.GenerateTests.test_deterministic_baseline_is_required_and_equivalent_in_format_only_case) ... ok
+test_empty_probability_support_is_rejected (test_prototype.GenerateTests.test_empty_probability_support_is_rejected) ... ok
+test_fence_repair (test_prototype.GenerateTests.test_fence_repair) ... ok
+test_infeasible_repair_abstains (test_prototype.GenerateTests.test_infeasible_repair_abstains) ... ok
+test_invalid_eos_is_explicit_abstention (test_prototype.GenerateTests.test_invalid_eos_is_explicit_abstention) ... ok
+test_mask_prunes_infeasible_branch_and_eos (test_prototype.GenerateTests.test_mask_prunes_infeasible_branch_and_eos) ... ok
+test_nan_or_positive_infinity_on_allowed_support_is_rejected (test_prototype.GenerateTests.test_nan_or_positive_infinity_on_allowed_support_is_rejected) ... ok
+test_no_semantic_guarantee (test_prototype.GenerateTests.test_no_semantic_guarantee) ... ok
+test_record_final_certificate_failure_keeps_trace_and_cost (test_prototype.GenerateTests.test_record_final_certificate_failure_keeps_trace_and_cost) ... ok
+test_record_runtime_error_is_explicit_and_forward_hook_removed (test_prototype.GenerateTests.test_record_runtime_error_is_explicit_and_forward_hook_removed) ... ok
+test_repair_changes_trajectory_and_preserves_value (test_prototype.GenerateTests.test_repair_changes_trajectory_and_preserves_value) ... ok
+test_unbound_record_field_is_model_selected_while_id_is_preserved (test_prototype.GenerateTests.test_unbound_record_field_is_model_selected_while_id_is_preserved) ... ok
+test_unsupported_wrapper_abstains (test_prototype.GenerateTests.test_unsupported_wrapper_abstains) ... ok
+test_zero_budget_unaccepted_record_abstains_without_generation (test_prototype.GenerateTests.test_zero_budget_unaccepted_record_abstains_without_generation) ... ok
+test_zero_probability_allowed_token_does_not_block_positive_support (test_prototype.GenerateTests.test_zero_probability_allowed_token_does_not_block_positive_support) ... ok
+test_all_feasible_paths_preserve_invariant (test_prototype.TrieTests.test_all_feasible_paths_preserve_invariant) ... ok
+test_distance_and_deadline_pruning (test_prototype.TrieTests.test_distance_and_deadline_pruning) ... ok
+test_empty_path_accepts_without_a_token (test_prototype.TrieTests.test_empty_path_accepts_without_a_token) ... ok
+test_analyzer_keeps_missing_grid_and_invalid_outputs_visible (test_suite.DataTests.test_analyzer_keeps_missing_grid_and_invalid_outputs_visible) ... ok
+test_conservative_binary_interval_does_not_claim_zero_loss_from_zero_events (test_suite.DataTests.test_conservative_binary_interval_does_not_claim_zero_loss_from_zero_events) ... ok
+test_public_data_is_small_and_blinded (test_suite.DataTests.test_public_data_is_small_and_blinded) ... ok
+test_shards_cover_frozen_grid_without_overlap (test_suite.DataTests.test_shards_cover_frozen_grid_without_overlap) ... ok
+test_budget_below_minimum_does_no_model_work (test_suite.EngineTests.test_budget_below_minimum_does_no_model_work) ... ok
+test_candidate_sequence_scoring_is_one_batched_forward_not_free_generation (test_suite.EngineTests.test_candidate_sequence_scoring_is_one_batched_forward_not_free_generation) ... ok
+test_compiler_canonical_roundtrip_and_unbound_choices (test_suite.EngineTests.test_compiler_canonical_roundtrip_and_unbound_choices) ... ok
+test_deterministic_baseline_has_no_model_forward (test_suite.EngineTests.test_deterministic_baseline_has_no_model_forward) ... ok
+test_format_only_full_and_deterministic_preserve_same_answer (test_suite.EngineTests.test_format_only_full_and_deterministic_preserve_same_answer) ... ok
+test_full_prunes_long_branch_and_preserves_public_id (test_suite.EngineTests.test_full_prunes_long_branch_and_preserves_public_id) ... ok
+test_grammar_only_can_exhaust_budget_on_long_valid_branch (test_suite.EngineTests.test_grammar_only_can_exhaust_budget_on_long_valid_branch) ... ok
+test_invalid_fragment_never_receives_correct_credit (test_suite.EngineTests.test_invalid_fragment_never_receives_correct_credit) ... ok
+test_missing_required_engine_is_a_visible_failure (test_suite.EngineTests.test_missing_required_engine_is_a_visible_failure) ... ok
+test_real_xgrammar_adapter_generates_accepted_alternative (test_suite.EngineTests.test_real_xgrammar_adapter_generates_accepted_alternative) ... ok
+test_runtime_failure_retains_previous_tokens_and_cost (test_suite.EngineTests.test_runtime_failure_retains_previous_tokens_and_cost) ... ok
+test_timing_disables_online_oracle (test_suite.EngineTests.test_timing_disables_online_oracle) ... ok
+test_worker_model_load_calibration_and_progress_on_cpu (test_suite.EngineTests.test_worker_model_load_calibration_and_progress_on_cpu) ... ok
+test_wrapper_eos_certificate_is_recorded (test_suite.EngineTests.test_wrapper_eos_certificate_is_recorded) ... ok
+
+----------------------------------------------------------------------
+Ran 40 tests in 11.901s
+
+OK

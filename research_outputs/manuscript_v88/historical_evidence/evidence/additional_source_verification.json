@@ -1,0 +1,16 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/acl-org/acl-anthology/master/data/xml/P17.xml",
+    "sha256": "cf96f256e949a95f1048e36756b275412799d0aff89abb9e9361d2ccc9080023",
+    "scope": "metadata and abstract"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/huggingface/transformers/v4.48.2/src/transformers/generation/stopping_criteria.py",
+    "sha256": "534bdc18702e040c6e49b57625bee715dda7d0093174c49e23ff2bbed1b94782",
+    "scope": "official versioned implementation documentation"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/acl-org/acl-anthology/master/data/xml/2023.emnlp.xml",
+    "scope": "official bibliographic metadata and abstract; full paper not accessed"
+  }
+]

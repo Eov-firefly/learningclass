@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "tests": 40,
+  "scope": "CPU random GPT2/scripted logits plus real XGrammar 0.1.21; no A100 or pretrained 7B execution",
+  "checks": [
+    "fixed blinded data and shard grid",
+    "finite compiler and context roundtrip",
+    "distance pruning versus grammar-only",
+    "actual XGrammar generation",
+    "one-batch candidate likelihood scoring and cost",
+    "deterministic reduction",
+    "zero budget and runtime trace",
+    "CPU worker model load/calibration",
+    "independent scoring and missing-grid detection",
+    "prototype regression checks"
+  ],
+  "trained_model_quality": "not run",
+  "four_a100_orchestration": "implemented, not hardware-validated",
+  "cuda_latency": "not measured"
+}

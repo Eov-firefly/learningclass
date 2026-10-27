@@ -1,0 +1,12 @@
+<paper id="141">
+      
+      <title>Lexically Constrained Decoding for Sequence Generation Using Grid Beam Search</title>
+      <author id="chris-hokamp"><first>Chris</first><last>Hokamp</last></author>
+      <author><first>Qun</first><last>Liu</last></author>
+      <pages>1535–1546</pages>
+      <pdf hash="e0f68e13" />
+      <doi>10.18653/v1/P17-1141</doi>
+      <abstract>We present Grid Beam Search (GBS), an algorithm which extends beam search to allow the inclusion of pre-specified lexical constraints. The algorithm can be used with any model which generates sequences token by token. Lexical constraints take the form of phrases or words that must be present in the output sequence. This is a very general way to incorporate auxillary knowledge into a model’s output without requiring any modification of the parameters or training data. We demonstrate the feasibility and flexibility of Lexically Constrained Decoding by conducting experiments on Neural Interactive-Predictive Translation, as well as Domain Adaptation for Neural Machine Translation. Experiments show that GBS can provide large improvements in translation quality in interactive scenarios, and that, even without any user input, GBS can be used to achieve significant gains in performance in domain adaptation scenarios.</abstract>
+      <bibkey>hokamp-liu-2017-lexically</bibkey>
+    </paper>
+    

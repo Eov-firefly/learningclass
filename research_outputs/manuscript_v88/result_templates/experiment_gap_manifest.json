@@ -1,0 +1,61 @@
+{
+  "version": "8.8",
+  "date": "2026-10-27",
+  "submission_status": "HOLD",
+  "real_model_results_present": false,
+  "prerequisites": [
+    "gold-independent task compiler",
+    "same-contract benchmark runner and baselines",
+    "complete outer exception accounting",
+    "frozen protocol and power/precision plan"
+  ],
+  "experiments": [
+    {
+      "id": "E1",
+      "purpose": "real-model task comparisons",
+      "status": "not_executed",
+      "summary_schema": "quality_by_cell.csv",
+      "required_raw": "complete request JSONL, separate scoring file, frozen protocol and environment manifest"
+    },
+    {
+      "id": "E2",
+      "purpose": "format-only deterministic reduction",
+      "status": "not_executed",
+      "summary_schema": "quality_by_cell.csv",
+      "required_raw": "complete request JSONL, separate scoring file, frozen protocol and environment manifest"
+    },
+    {
+      "id": "E3",
+      "purpose": "budget curves and mask ablation",
+      "status": "not_executed",
+      "summary_schema": "paired_primary_contrasts.csv",
+      "required_raw": "complete request JSONL, separate scoring file, frozen protocol and environment manifest"
+    },
+    {
+      "id": "E4",
+      "purpose": "equivalent grammar consistency and optimized engine",
+      "status": "not_executed",
+      "summary_schema": "equivalence_checks.csv",
+      "required_raw": "complete request JSONL, separate scoring file, frozen protocol and environment manifest"
+    },
+    {
+      "id": "E5",
+      "purpose": "binding and abstention/failure costs",
+      "status": "not_executed",
+      "summary_schema": "failure_breakdown.csv",
+      "required_raw": "complete request JSONL, separate scoring file, frozen protocol and environment manifest"
+    },
+    {
+      "id": "E6",
+      "purpose": "isolated total request cost and reproducibility",
+      "status": "not_executed",
+      "summary_schema": "latency_by_cell.csv",
+      "required_raw": "complete request JSONL, separate scoring file, frozen protocol and environment manifest"
+    }
+  ],
+  "nonexperimental_blockers": [
+    "nearest-prior paper/source comparison",
+    "author declarations and approval",
+    "target-journal requirements"
+  ]
+}

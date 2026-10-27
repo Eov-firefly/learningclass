@@ -1,0 +1,48 @@
+{
+  "version": "8.9",
+  "date": "2026-10-27",
+  "dataset": "ARC-Challenge known-cohort subset",
+  "n_eval": 96,
+  "n_dev": 16,
+  "models": {
+    "qwen": {
+      "id": "Qwen/Qwen2.5-7B-Instruct-1M",
+      "revision": "e28526f7bb80e2a9c8af03b831a9af3812f18fba"
+    },
+    "mistral": {
+      "id": "mistralai/Mistral-7B-Instruct-v0.3",
+      "revision": "c170c708c41dac9275d15a8fff4eca08d52bab71"
+    }
+  },
+  "budgets": [
+    8,
+    24,
+    64
+  ],
+  "formal_records": 6976,
+  "tracks": {
+    "matched": 5952,
+    "timing": 480,
+    "format": 288,
+    "wrapper_e2e": 256
+  },
+  "zero_additional_model_call_records": 1248,
+  "model_requests_at_most": 5728,
+  "calibration_model_requests": 40,
+  "warmup_model_requests": 8,
+  "primary": "full minus grammar, option_text, suffix budget24; two 97.5% conservative paired binary intervals",
+  "execution": "4 independent batch1 BF16/SDPA workers; two shards/model; quality then barrier then timing",
+  "initial_planning_minutes": [
+    45,
+    120
+  ],
+  "initial_planning_scope": "formal experiments, unmeasured on A100; use calibration ETA; exclude download/install",
+  "not_covered": [
+    "new independent dataset holdout",
+    "powered small-effect confirmation",
+    "general field editing/rollback",
+    "strict end-to-end binding-rule causal ablation",
+    "latest-XGrammar-2 benchmark",
+    "algorithmic priority proof"
+  ]
+}

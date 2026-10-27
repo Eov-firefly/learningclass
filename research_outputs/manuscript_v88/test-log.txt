@@ -1,0 +1,28 @@
+There was a problem when trying to write in your cache folder (/home/agent/.cache/huggingface/hub). You should set the environment variable TRANSFORMERS_CACHE to a writable directory.
+test_already_accepted_record_needs_no_generation_or_budget (test_prototype.GenerateTests.test_already_accepted_record_needs_no_generation_or_budget) ... ok
+test_compiler_rejects_candidate_that_changes_bound_record_field (test_prototype.GenerateTests.test_compiler_rejects_candidate_that_changes_bound_record_field) ... ok
+test_context_roundtrip_failure_is_not_accepted (test_prototype.GenerateTests.test_context_roundtrip_failure_is_not_accepted) ... ok
+test_deadline_is_not_success (test_prototype.GenerateTests.test_deadline_is_not_success) ... ok
+test_deterministic_baseline_is_required_and_equivalent_in_format_only_case (test_prototype.GenerateTests.test_deterministic_baseline_is_required_and_equivalent_in_format_only_case) ... ok
+test_empty_probability_support_is_rejected (test_prototype.GenerateTests.test_empty_probability_support_is_rejected) ... ok
+test_fence_repair (test_prototype.GenerateTests.test_fence_repair) ... ok
+test_infeasible_repair_abstains (test_prototype.GenerateTests.test_infeasible_repair_abstains) ... ok
+test_invalid_eos_is_explicit_abstention (test_prototype.GenerateTests.test_invalid_eos_is_explicit_abstention) ... ok
+test_mask_prunes_infeasible_branch_and_eos (test_prototype.GenerateTests.test_mask_prunes_infeasible_branch_and_eos) ... ok
+test_nan_or_positive_infinity_on_allowed_support_is_rejected (test_prototype.GenerateTests.test_nan_or_positive_infinity_on_allowed_support_is_rejected) ... ok
+test_no_semantic_guarantee (test_prototype.GenerateTests.test_no_semantic_guarantee) ... ok
+test_record_final_certificate_failure_keeps_trace_and_cost (test_prototype.GenerateTests.test_record_final_certificate_failure_keeps_trace_and_cost) ... ok
+test_record_runtime_error_is_explicit_and_forward_hook_removed (test_prototype.GenerateTests.test_record_runtime_error_is_explicit_and_forward_hook_removed) ... ok
+test_repair_changes_trajectory_and_preserves_value (test_prototype.GenerateTests.test_repair_changes_trajectory_and_preserves_value) ... ok
+test_unbound_record_field_is_model_selected_while_id_is_preserved (test_prototype.GenerateTests.test_unbound_record_field_is_model_selected_while_id_is_preserved) ... ok
+test_unsupported_wrapper_abstains (test_prototype.GenerateTests.test_unsupported_wrapper_abstains) ... ok
+test_zero_budget_unaccepted_record_abstains_without_generation (test_prototype.GenerateTests.test_zero_budget_unaccepted_record_abstains_without_generation) ... ok
+test_zero_probability_allowed_token_does_not_block_positive_support (test_prototype.GenerateTests.test_zero_probability_allowed_token_does_not_block_positive_support) ... ok
+test_all_feasible_paths_preserve_invariant (test_prototype.TrieTests.test_all_feasible_paths_preserve_invariant) ... ok
+test_distance_and_deadline_pruning (test_prototype.TrieTests.test_distance_and_deadline_pruning) ... ok
+test_empty_path_accepts_without_a_token (test_prototype.TrieTests.test_empty_path_accepts_without_a_token) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.125s
+
+OK

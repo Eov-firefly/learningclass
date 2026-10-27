@@ -1,0 +1,46 @@
+{
+  "version": "8.8",
+  "date": "2026-10-27",
+  "submission_status": "HOLD",
+  "completed": [
+    "editorial and formal revision",
+    "implementation edge-case fixes",
+    "22 CPU software tests",
+    "historical table preservation",
+    "result schemas and experiment gap manifest"
+  ],
+  "new_real_model_experiments": false,
+  "algorithmic_priority_established": false,
+  "author_declarations_confirmed": false,
+  "cpu_tests_passed": 22,
+  "historical_tables_preserved_verbatim": 10,
+  "historical_table_sha256": [
+    "a05414c4be279402ba42cde0811446f3b8cd1284743c802f64598666f280fb78",
+    "fe23cf7a855dd72cfa4c631be18c7dd9fb313d03a61ccc93cf08afd1075d594c",
+    "ccdbfaf573bfe80fb39e5ad485d1ec83a7854c40985de3cae6aecb0c721f0c4b",
+    "07bbab6488b1819db623b3413f40509c54e821bfb4885e7ef836e51a1ae06aae",
+    "11011b88066795ad44d3cb17de63c760d44eaea35ab0bddce367e4adb3350de1",
+    "0fd509f2b99c9c8d355ea79066b32e2a9a0e245cadb498f27ecf3c79bbb02ac2",
+    "c962bb352b8eee309a4b245d34a2a6327138702d9d77990bd7dcefd958ee7e66",
+    "359ba5d0a4618cc7e16cf3b22f9477887651766c418413f53d732f40cb1a713c",
+    "c79466026b3acd0d0e21a59973b997341d82db95856c85e2f47aeb0ca7400fa8",
+    "9b10969c8789b2854982c3f45ad2e6be7b0d6b635d2cfc1605413b9d78e6d791"
+  ],
+  "main_motivation_table_preserved": true,
+  "result_templates_have_no_data_rows": true,
+  "pdf": {
+    "main": {
+      "pages": 18,
+      "compile": "passed, two passes",
+      "overfull_boxes": false,
+      "undefined_references": false
+    },
+    "historical_supplement": {
+      "pages": 21,
+      "compile": "passed, two passes",
+      "overfull_boxes": false,
+      "undefined_references": false
+    }
+  },
+  "abstract_words": 212
+}

@@ -1,0 +1,6 @@
+# Install torch==2.6.0 separately from the appropriate official CPU/CUDA index.
+transformers==4.48.2
+tokenizers==0.21.4
+numpy==1.26.4
+huggingface-hub==0.36.2
+safetensors==0.8.0

@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/mlc-ai/xgrammar/v0.1.21/python/xgrammar/grammar.py",
+    "sha256": "062f8e6ea6c63b79558a853777c99092f1b89cbb3f726113a273c56d5f63b79e",
+    "checked": "2026-10-27",
+    "scope": "versioned API source; real adapter also CPU-tested"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/mlc-ai/xgrammar/v0.1.21/python/xgrammar/compiler.py",
+    "sha256": "be7e6fc21c2c95b082ddd98fbd524ddc86b93676f0bb0d9096d64beb7b96b334",
+    "checked": "2026-10-27",
+    "scope": "versioned API source; real adapter also CPU-tested"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/mlc-ai/xgrammar/v0.1.21/python/xgrammar/matcher.py",
+    "sha256": "b2568d3c394269de416e92f9fb1fb824d35f925f793f2ed1126395cb7ab8e632",
+    "checked": "2026-10-27",
+    "scope": "versioned API source; real adapter also CPU-tested"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/mlc-ai/xgrammar/v0.1.21/python/xgrammar/tokenizer_info.py",
+    "sha256": "23003cb7823faa489635c765de20f69cb170f9e908f8c5024440b51d58519444",
+    "checked": "2026-10-27",
+    "scope": "versioned API source; real adapter also CPU-tested"
+  }
+]
