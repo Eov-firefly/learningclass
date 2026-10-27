@@ -1,6 +1,6 @@
 # JANUS 论文修订、严格评审与实验交付
 
-最新整理：2026-10-27。当前入口为**v8.8论文修订母版**与**v8.9四卡A100最小实验包**。新方法的真实7B/A100实验尚未执行；文件整理、PDF编译和CPU软件检查不代表已经达到投稿标准。
+最新整理：2026-10-27。当前入口为**v8.8论文修订母版**与**v8.9.1四卡A100最小实验包**。新方法的真实7B/A100实验尚未执行；文件整理、PDF编译和CPU软件检查不代表已经达到投稿标准。
 
 ## 最新阅读入口
 
@@ -12,18 +12,18 @@
 | 必须补充的实验 | [E1–E6与结果回填](manuscript_v88/必须补充的实验与结果回填_zh.md) |
 | 投稿前放行条件 | [最终核对表](manuscript_v88/投稿前最终核对表_zh.md) |
 | 旧十张表和完整历史协议 | [历史补充PDF](manuscript_v88/historical_supplement.pdf) · [Markdown](manuscript_v88/historical_supplement.md) |
-| v8.9最小实验运行说明 | [README_zh.md](experiments_v89/README_zh.md) |
+| v8.9.1最小实验运行说明 | [README_zh.md](experiments_v89/README_zh.md) |
 | 冻结工作量和模型版本 | [RUN_PLAN.json](experiments_v89/RUN_PLAN.json) |
 | 数据及抽样来源 | [manifest.json](experiments_v89/data/manifest.json) |
 | 最小实验对论文结论的限制 | [论文回填范围](experiments_v89/论文回填范围_zh.md) |
-| 40项CPU检查范围 | [TEST_REPORT.json](experiments_v89/TEST_REPORT.json) |
+| 41项CPU检查范围 | [TEST_REPORT.json](experiments_v89/TEST_REPORT.json) |
 
 ## 直接下载
 
 - **最新论文包**：[JANUS_v8_8_strict_review_final_revision_20261027.zip](packages/JANUS_v8_8_strict_review_final_revision_20261027.zip)
-- **最新GPU实验包**：[JANUS_v8_9_minimal_ARC_4xA100_experiments.zip](packages/JANUS_v8_9_minimal_ARC_4xA100_experiments.zip)
+- **最新GPU实验包**：[JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip](packages/JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip)
 
-两个解压目录与对应交付ZIP一致，保留各自SHA256SUMS。没有纳入模型权重、虚拟环境、下载缓存或伪造的GPU结果。
+两个解压目录与对应最新交付ZIP一致，保留各自SHA256SUMS。v8.9原始包保留在packages作为历史版本；v8.9.1修复了ETA并发读取日志的问题。没有纳入模型权重、虚拟环境、下载缓存或伪造的GPU结果。
 
 ## 四卡A100运行
 

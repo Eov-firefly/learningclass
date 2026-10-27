@@ -22,6 +22,7 @@ test_distance_and_deadline_pruning (test_prototype.TrieTests.test_distance_and_d
 test_empty_path_accepts_without_a_token (test_prototype.TrieTests.test_empty_path_accepts_without_a_token) ... ok
 test_analyzer_keeps_missing_grid_and_invalid_outputs_visible (test_suite.DataTests.test_analyzer_keeps_missing_grid_and_invalid_outputs_visible) ... ok
 test_conservative_binary_interval_does_not_claim_zero_loss_from_zero_events (test_suite.DataTests.test_conservative_binary_interval_does_not_claim_zero_loss_from_zero_events) ... ok
+test_eta_ignores_only_inflight_partial_record_and_preserves_raw (test_suite.DataTests.test_eta_ignores_only_inflight_partial_record_and_preserves_raw) ... ok
 test_public_data_is_small_and_blinded (test_suite.DataTests.test_public_data_is_small_and_blinded) ... ok
 test_shards_cover_frozen_grid_without_overlap (test_suite.DataTests.test_shards_cover_frozen_grid_without_overlap) ... ok
 test_budget_below_minimum_does_no_model_work (test_suite.EngineTests.test_budget_below_minimum_does_no_model_work) ... ok
@@ -40,6 +41,6 @@ test_worker_model_load_calibration_and_progress_on_cpu (test_suite.EngineTests.t
 test_wrapper_eos_certificate_is_recorded (test_suite.EngineTests.test_wrapper_eos_certificate_is_recorded) ... ok
 
 ----------------------------------------------------------------------
-Ran 40 tests in 11.901s
+Ran 41 tests in 7.212s
 
 OK

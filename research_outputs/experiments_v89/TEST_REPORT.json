@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "tests": 40,
+  "tests": 41,
   "scope": "CPU random GPT2/scripted logits plus real XGrammar 0.1.21; no A100 or pretrained 7B execution",
   "checks": [
     "fixed blinded data and shard grid",
@@ -12,9 +12,11 @@
     "zero budget and runtime trace",
     "CPU worker model load/calibration",
     "independent scoring and missing-grid detection",
-    "prototype regression checks"
+    "prototype regression checks",
+    "ETA ignores in-flight incomplete JSONL tail without altering raw data; malformed complete records still fail"
   ],
   "trained_model_quality": "not run",
   "four_a100_orchestration": "implemented, not hardware-validated",
-  "cuda_latency": "not measured"
+  "cuda_latency": "not measured",
+  "version": "8.9.1"
 }

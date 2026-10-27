@@ -13,6 +13,27 @@ from janus_min.controllers import XGrammarRuntime
 
 
 class DataTests(unittest.TestCase):
+    def test_eta_ignores_only_inflight_partial_record_and_preserves_raw(self):
+        from janus_min.launch import complete_records,estimate,assignment
+        from janus_min.spec import POLICIES
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            assign=assignment(['0','1','2','3'])
+            for model,shard,_ in assign:
+                sample=[dict(policy=p,encoding=e,request_ms=10,generated_tokens=4,inserted_tokens=0)
+                        for p in POLICIES+['sequence_score'] for e in ['label','option_text']]
+                (root/f'{model}.s{shard}.calibration.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in sample))
+                job=jobs(model,shard,2)[0]
+                raw=root/f'{model}.s{shard}.raw.jsonl'
+                contents=json.dumps({'request_id':job['request_id']})+'\n'+ '{"request_id":"unfinished'
+                raw.write_text(contents)
+                self.assertEqual(complete_records(raw),[{'request_id':job['request_id']}])
+            result=estimate(root,assign)
+            self.assertGreater(result['remaining_point_minutes'],0)
+            self.assertTrue(raw.read_text().endswith('{"request_id":"unfinished'))
+            raw.write_text('{broken}\n')
+            with self.assertRaises(json.JSONDecodeError):complete_records(raw)
+
     def test_analyzer_keeps_missing_grid_and_invalid_outputs_visible(self):
         from janus_min.spec import ROOT
         case=load_public('eval')[0]

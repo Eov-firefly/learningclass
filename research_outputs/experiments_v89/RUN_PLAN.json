@@ -1,5 +1,5 @@
 {
-  "version": "8.9",
+  "version": "8.9.1",
   "date": "2026-10-27",
   "dataset": "ARC-Challenge known-cohort subset",
   "n_eval": 96,

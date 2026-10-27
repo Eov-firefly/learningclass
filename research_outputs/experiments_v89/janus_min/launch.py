@@ -12,15 +12,27 @@ def assignment(devices):
     if len(devices)!=4:raise ValueError('this frozen minimal plan requires exactly four GPU IDs')
     return [('qwen',0,devices[0]),('qwen',1,devices[1]),('mistral',0,devices[2]),('mistral',1,devices[3])]
 
+def complete_records(path):
+    """Read committed JSONL lines while a worker may be appending the next line.
+
+    An unfinished trailing record is ignored in memory for ETA only. The raw
+    file is never altered, and malformed newline-terminated records still fail.
+    """
+    if not path.exists():return []
+    data=path.read_bytes()
+    complete,separator,_=data.rpartition(b'\n')
+    if not separator:return []
+    return [json.loads(line) for line in complete.splitlines()]
+
 def estimate(output,assign):
     estimates=[]
     for model,shard,device in assign:
         p=output/f'{model}.s{shard}.calibration.jsonl'
         if not p.exists():return None
-        samples=[json.loads(l) for l in p.read_text().splitlines()]
+        samples=complete_records(p)
         rates={(s['policy'],s['encoding']):s['request_ms']/max(1,s['generated_tokens']+s['inserted_tokens']) for s in samples}
         raw=output/f'{model}.s{shard}.raw.jsonl'
-        done={json.loads(line)['request_id'] for line in raw.read_text().splitlines()} if raw.exists() else set()
+        done={row['request_id'] for row in complete_records(raw)}
         seconds=0
         for j in jobs(model,shard,2):
             if j['request_id'] in done:continue
@@ -59,7 +71,7 @@ def main():
     try:
         from .worker import code_hash
         from .spec import digest
-        protocol=dict(version='8.9',code_sha256=code_hash(),data_manifest=digest(json.loads((ROOT/'data/manifest.json').read_text())),
+        protocol=dict(version='8.9.1',code_sha256=code_hash(),data_manifest=digest(json.loads((ROOT/'data/manifest.json').read_text())),
           model_specs=MODEL_SPECS,qwen_path=a.qwen_path,mistral_path=a.mistral_path,skip_xgrammar=a.skip_xgrammar,
           assignment=assign,formal_records=sum(grid.values()),primary='full-grammar, option_text, remaining budget24, two model cells')
         protocol_file=a.output/'frozen_run_config.json'

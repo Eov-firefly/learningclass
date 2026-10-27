@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+.hf_cache/
+.kernel_cache/
+runs/
+model_manifest.json
+JANUS_results*.zip
