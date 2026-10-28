@@ -1,339 +1,651 @@
-\documentclass[12pt,a4paper]{article}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  12pt,
+  a4paper,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage[margin=25mm]{geometry}
-\usepackage{array,longtable,booktabs,lineno,setspace}
-\usepackage[hidelinks]{hyperref}
-\usepackage{url}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt}
-\setlength{\emergencystretch}{3em}
-\begin{document}
+\usepackage{lineno,setspace}
+\usepackage{xurl}
+\usepackage{seqsplit,etoolbox}
+\setlength{\tabcolsep}{3pt}
+\AtBeginEnvironment{longtable}{\small}
 \doublespacing
 \linenumbers
-{\Large\bfseries Terminal-answer contracts and monitoring cost in token-limited LLM inference\par}
-Ya Bai, GuoZhen Bian*, Cheng Chang, ZhengGuang Cui, HaiLong Qin, ZhiHui Huang, Yue Wang
+\setlength{\emergencystretch}{3em}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Budget-viable commitment for finite-language LLM completion},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Budget-viable commitment for finite-language LLM completion}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+Ya Bai, GuoZhen Bian*, Cheng Chang, ZhengGuang Cui, HaiLong Qin, ZhiHui
+Huang, Yue Wang
 
 China Telecom Cloud Network Operating System R\&D Center, Beijing, China
 
 * Correspondence: biangz@chinatelecom.cn
 
-Revision dated 24 October 2026. Research manuscript draft; author metadata, declarations and public archive location require author confirmation before submission.
+Version 8.9.1, 28 October 2026. Research draft updated with the completed two-GPU known-cohort study. Independent confirmatory evaluation and author declarations remain incomplete; this version is not submission-ready.
 
-\section*{Abstract}
-Output-token allowances do not directly measure the cost of delivering an acceptable answer. We evaluate answer-boundary stopping and entropy monitoring in two instruction-tuned language models on GSM8K and ARC-Challenge. An initial frozen protocol produced 25,200 scored calls, including 14,400 main calls and 4,320 isolated timing calls. Completion stopping changed terminal-contract accuracy by 2.33, 0.00, 13.50 and 3.17 percentage points for Qwen/GSM8K, Qwen/ARC-Challenge, Mistral/GSM8K and Mistral/ARC-Challenge, respectively, while reducing mean output tokens by 0.00\%-2.59\%. All 114 additional credited answers preserved a terminal representation rather than corrected an incorrect baseline prediction. Retrospective scoring under five contracts showed that the gains depended on the accepted format; last-marked-answer extraction eliminated every net accuracy difference. A separate three-GPU follow-up added 400 pilot and 10,800 formal scored timing calls. Its output-matched controls separated boundary processing from entropy monitoring: all 36 session-specific monitor contrasts had positive descriptive 95\% intervals. Completion stopping nevertheless increased Qwen latency by approximately 2.5\%-2.9\%, while Mistral intervals included both gains and losses. The original isolated measurements and concurrent follow-up are reported separately. These results support explicit parser contracts and output-invariant runtime controls, without establishing semantic reasoning improvement, universal speedup or joint token/compute scheduling. Independent human semantic assessment remains pending.
+\section{Abstract}\label{abstract}
 
-Keywords: large language models; stopping criteria; inference evaluation; answer extraction; entropy monitoring; reproducibility
+An answer-boundary stop can return a locally complete value inside an unfinished artifact, while a grammar-legal continuation can exhaust its token budget before acceptance. We formulate budget-viable commitment as a controller for append-only completion over a declared token language. At activation, selected values are bound and a finite completion language is verified against a consumer contract. The controller retains only tokens with an accepting continuation inside the remaining budget, then commits a validated artifact or records an explicit abstention. We characterize this support by backward reachability and prove conditional completion after entry into a viable state. These properties concern structural acceptance and field preservation, rather than answer truth, and do not establish algorithmic priority over equivalent grammar controllers. A finite-trie implementation integrates with Transformers generation. Controlled CPU checks cover distance pruning, boundary cases, binding, model support and failure accounting. Historical stopping data provide motivation: 204 validity repairs contained 114 correct and 90 incorrect answers, showing that validity and correctness can diverge. A format-only reduction shows that deterministic shortest completion can match acceptance and bound values without additional model calls. In a matched-prefix study of 96 known ARC-Challenge questions per model, the full controller and grammar-only continuation had the same correct-commit counts at a 24-token completion budget: 76 for Qwen and 66 for Mistral. No grammar-legal token was removed in that primary setting. An exploratory tighter budget changed certified coverage, but did not establish a general quality benefit. Timing is descriptive and stratified by two execution waves. The study does not establish equivalence, generalization to unseen tasks, or a GPU speed advantage.
 
-\section*{1. Introduction}
-Early stopping is useful only if it reduces the cost of delivering an answer that an application can accept. A limit such as 512 output tokens is an allowance, whereas actual generated tokens and elapsed time are observations. A second distinction concerns what counts as an answer. A permissive extractor may recover a correct number from an unfinished response; a structured interface may require an identifiable, complete final answer. Evaluating an efficiency intervention therefore requires a matched baseline, a declared output contract, and measurement of the intervention's own cost.
+Keywords: constrained decoding; finite languages; token budgets;
+verified completion; abstention
 
-A consequential case occurs when the model has already emitted an acceptable final line. Continuing generation can add explanatory text, close a formatting wrapper, or introduce another marker. Under a terminal-answer contract, continuation may invalidate a previously acceptable suffix. Conversely, a monitor waiting for an entropy condition may miss the brief boundary at which stopping was possible. This temporal interaction between rule and parser cannot be diagnosed adequately by reporting only an average token reduction or permissive extraction accuracy.
+\section{1. Introduction}\label{introduction}
 
-This study began with an implementation audit of JANUS, an earlier token-budget experiment. Its tested code did not implement the proposed joint scheduling mechanism: TCJS and TokOnly used identical generation paths. That audit motivated an explicitly narrower, prospective evaluation. The initial experiment evaluated six implemented policies in two models and two tasks, included an output-invariant shadow control, and measured latency separately on an isolated GPU. Subsequent work applied alternative parser contracts to saved outputs, audited token traces, and added a separately frozen three-GPU timing experiment with boundary-only and entropy controls. All generation remained single-request, batch-size-one inference. Concurrent execution across three GPUs is a deployment condition, not a model of tool-using agents, multi-agent workflows or directed acyclic graphs.
+Completing an answer field and delivering an accepted artifact are
+different events. A numerical answer may be locally complete while a
+surrounding wrapper remains open. Conversely, a structurally permitted
+continuation may still need more tokens than a request has available.
+Returning early, constraining legal prefixes and enforcing a completion
+deadline address related but distinct problems.
 
-The research questions are: (RQ1) how does stopping at an observable answer boundary affect terminal-contract accuracy and actual token consumption; (RQ2) how much time does entropy monitoring add when output is held fixed; and (RQ3) does adding an entropy condition retain completion stopping's behavior? The contribution is a reproducible comparison separating contract preservation, monitoring overhead and stopping effectiveness. Neither truncation error nor the distinction between allowance and consumption is presented as a new principle.
+We study \textbf{budget-viable commitment} over a declared finite token
+language. A provisional draft is either accepted directly or used to
+bind values and compile verified suffixes. During completion, the
+controller excludes next tokens that leave no accepting path within the
+remaining budget. A final contract check determines commitment.
+Unsupported, infeasible and failed attempts remain observable
+abstentions; their work is not omitted from evaluation.
 
-\subsection*{1.1. Related work and scope}
-Budget-aware reasoning compares alternative uses of inference computation. Wang et al. (2024) evaluate reasoning strategies under token budgets, while Han et al. (2025) study token-budget-aware reasoning through budget estimation and prompting. Muennighoff et al. (2025) investigate test-time scaling with trained reasoning models and budget forcing. Our intervention is narrower: a stopping callback in ordinary greedy generation from instruction-tuned models. We do not reproduce those algorithms or claim a competitive state-of-the-art result against them.
+The current implementation is append-only. It can complete a supported
+prefix, but cannot undo an earlier answer, edit selected preceding
+fields or recover a missed binding event through rollback. The proposal
+therefore concerns a specific completion controller, rather than a
+general document-repair system. Binding preserves content selected by a
+rule; it does not establish that content is true.
 
-Answer extraction is a substantive component of evaluation. Yu et al. (2025) study automated extraction for reliable evaluation in xFinder. Our fixed parsers serve a different purpose: one defines an interface contract, while a permissive parser provides a diagnostic sensitivity analysis. Neither is a semantic oracle. GSM8K (Cobbe et al., 2021) and ARC (Clark et al., 2018) supply two answer types, numeric and multiple-choice, but do not span open-ended reasoning or deployed serving workloads.
+The present contributions are a precise separation of acceptance, budget feasibility and answer correctness; a finite-language implementation of the resulting controller with controlled software checks; a retrospective motivation analysis; and a limited real-model known-cohort study with matched baselines and explicitly bounded interpretation. The backward-reachability recurrence itself is not claimed as a novel algorithm. Whether the controller has an independent methodological advantage over existing structured generation remains unestablished.
 
-\section*{2. Materials and methods}
-\subsection*{2.1. Frozen design and sampling}
-The executed specification was \texttt{janus-prospective-v5.1-cap512-reduced}, with seed 20261019 and one output allowance, 512 tokens. Input preparation, an independent implementation pilot, development diagnostics, the main evaluation and isolated timing were separate stages. The pilot checked implementation and provenance gates, rather than a significance threshold or minimum improvement. The execution chain, gate receipts and formal analyses completed successfully. The archived protocol's pre-execution wording is preserved as provenance; dated execution receipts and raw records establish the completed work.
+Three questions organize the study. RQ1 asks whether the implemented controller satisfies its conditional structural and binding invariants. RQ2 asks whether budget pruning improves completion and correct-commit yield over matched grammar-only continuation. RQ3 asks whether model-scored completion provides value beyond deterministic repair at an acceptable total cost. Controlled checks address RQ1 on finite examples; the matched-prefix and wrapper studies in Section 6 provide limited evidence for RQ2 and RQ3, while the remaining end-to-end and independent evaluations are still needed. Historical stopping results in Section 5 do not evaluate the new controller.
 
-GSM8K used \texttt{openai/gsm8k}, configuration \texttt{main}, revision \texttt{740312add88f781978c0658806c59bc2815b9866}. ARC-Challenge used \texttt{allenai/ai2\_arc}, configuration \texttt{ARC-Challenge}, revision \texttt{210d026faf9955653af8916fad021475a3f00453}. Development contained 300 training questions per task; the held-out evaluation contained 600 test questions per task. Exact prompt duplicates and development/test overlap were checked. The 582 GSM8K test questions touched by historical JANUS work were excluded before drawing the new cohort from the remaining 737 eligible questions. ARC sampling used 1,172 eligible test questions. Deterministic manifests record the resulting membership.
+\section{2. Related work and comparison
+boundary}\label{related-work-and-comparison-boundary}
 
-The pilot used the first 20 development questions per task. Timing used the first 60 main questions per task, with three repetitions per policy. Thus pilot and timing are nested diagnostic subsets, not independent accuracy replications. Both models answered the same cohorts. There are 1,200 distinct main question identities, 600 per task; the 14,400 main calls arise from two models and six policies. Calls and repetitions do not substitute for independent questions in uncertainty estimates.
+Lexically constrained decoding and grammar-constrained generation are
+established approaches (Hokamp and Liu, 2017; Geng et al., 2023).
+Practical libraries such as XGrammar and Outlines support structured
+generation (XGrammar project, 2026; Outlines project, 2026), and native
+Transformers stopping criteria support token-boundary return decisions
+(Hugging Face, 2025). These capabilities are relevant baselines, rather
+than evidence that the present controller is distinct.
 
-Table 1. Executed scored-call counts. Main and pilot evaluate six policies; development evaluates Uniform, Complete and three conjunction thresholds. Warmup calls are outside these counts.
+Budget-aware reasoning addresses how much inference to allocate (Wang et
+al., 2024; Han et al., 2025; Muennighoff et al., 2025). Our stated
+budget is the number of additional output tokens before acceptance in a
+declared controller language. This differs from estimating reasoning
+sufficiency: the controller can ensure a permitted structural ending
+without ensuring that the answer is correct.
 
-\begin{singlespace}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.2253\linewidth}>{\raggedright\arraybackslash}p{0.2417\linewidth}>{\raggedright\arraybackslash}p{0.1090\linewidth}>{\raggedright\arraybackslash}p{0.1090\linewidth}>{\raggedright\arraybackslash}p{0.1749\linewidth}}
+An implementation with the same token transitions, acceptance set, distance filter and scoring rule can be algorithmically equivalent to ours. Renaming that implementation or adding a submission certificate does not establish a new decoding paradigm. The verified XGrammar documentation also identifies its XGrammar-2 successor as dynamic structured generation; comparison cannot be restricted to old static-grammar examples. The documentation was checked, and Section 6 includes an XGrammar baseline for the declared finite-language study; that experiment is not a comparison with every capability of XGrammar-2, nor a completed full-paper survey.
+
+The present literature boundary is consequently limited. The scope must
+be checked against deadline-aware constrained search, structured editing
+and verified generation before asserting priority. No claim is made that
+these fields lack the same recurrence. A useful systems or task
+contribution would require measured value beyond equivalent grammar
+control and deterministic completion.
+
+\section{3. Formal controller}\label{formal-controller}
+
+\subsection{3.1. Consumer contract, provisional prefix and
+binding}\label{consumer-contract-provisional-prefix-and-binding}
+
+Let \(x\) be the prompt and \(y\) the generated output prefix. A
+declared contract \(\mathcal C\) has a final acceptance predicate
+\(V_{\mathcal C}(y)\) and a task extractor \(g\). A binding rule
+identifies values \(b\) to preserve. Define \(P_b(y)\) as their
+preservation predicate. Neither \(V_{\mathcal C}\) nor \(P_b\) is a
+gold-answer oracle. Correctness, when a reference exists, is evaluated
+separately through \(g\).
+
+At an activation prefix, compilation constructs a token controller with
+partial transition \(\delta(s,v)\) and accepting states \(F\). An
+accepting path must decode to an artifact satisfying both
+\(V_{\mathcal C}\) and \(P_b\). This is a soundness requirement for the
+declared predicates, not a claim to implement all Markdown, LaTeX or
+JSON semantics. The current wrapper validator is a limited operational
+heuristic. An independent final call to the predicate rechecks each
+committed artifact; it is not an independently developed semantic
+oracle.
+
+The protocol has four persistent states: DRAFT, REPAIR, COMMIT and
+ABSTAIN. BIND is a transition operation that fixes values and constructs
+the completion controller, rather than a separately persisted state in
+the supplied code. Already accepted prefixes commit directly. The
+current interfaces append tokens to the entire frozen prefix; they do
+not implement selective rewriting of earlier unbound text.
+
+\subsection{3.2. Budget and token
+language}\label{budget-and-token-language}
+
+Let \(B\) be the total allowed number of generated output tokens and let
+\(t\) have already been generated. The repair allowance is \(r=B-t\). In
+a supplied-prefix experiment, the allowance instead refers only to new
+completion tokens, and the supplied prefix's cost must be reported
+separately. Prompt tokens do not count toward this output cap, but their
+processing time remains part of a declared request measurement.
+
+Each transition consumes one model token. Acceptance triggers an
+immediate return action without requiring an additional EOS token. EOS
+is forbidden inside a nonaccepting repair. Any emitted EOS during
+drafting still counts as a generated token. If a different
+implementation requires EOS to complete an artifact, that transition and
+its cost must be included in its controller.
+
+For state \(s\), define the distance within the declared controller
+language:
+
+\[d(s)=\min\{|z|:\delta^*(s,z)\in F\},\]
+
+with \(d(s)=\infty\) for unreachable acceptance and \(d(s)=0\) at an
+accepting state. For \(s\notin F\) and \(r>0\), define
+
+\[\mathcal A_r(s)=\{v:\delta(s,v)\text{ is defined},\ d(\delta(s,v))\le r-1\}.\]
+
+The distance is measured in model tokens, not characters or bytes.
+Exactness is relative to this controller: a finite suffix list with
+selected tokenizations can omit other valid strings and other
+tokenizations of the same string. Its distance is not a global minimum
+over all artifacts accepted by the consumer.
+
+\subsection{3.3. Model scores and viable
+support}\label{model-scores-and-viable-support}
+
+For positive normalizer \(Z\), the locally masked distribution is
+
+\[q_r(v\mid x,y,s)=\frac{p_\theta(v\mid x,y)\mathbf 1\{v\in\mathcal A_r(s)\}}{Z},\qquad Z=\sum_u p_\theta(u\mid x,y)\mathbf 1\{u\in\mathcal A_r(s)\}.\]
+
+The implementation uses greedy selection among permitted finite scores.
+Negative infinity may represent zero model support; it is harmless if
+another permitted token has a finite score. An all-negative-infinity
+support, NaN or positive infinity on permitted entries produces an
+explicit failure. No assertion is made that local masking samples from
+the model conditioned on eventual global acceptance.
+
+\subsection{3.4. Reachability characterization and conditional
+completion}\label{reachability-characterization-and-conditional-completion}
+
+\textbf{Proposition 1 --- feasible first-token characterization.} For a
+nonaccepting state and remaining budget \(r>0\), a legal token \(v\)
+belongs to \(\mathcal A_r(s)\) if and only if some accepting
+continuation of at most \(r\) tokens begins with \(v\).
+
+\textbf{Proof.} If \(v\) is retained, the next state has an accepting
+suffix of length at most \(r-1\), which can follow \(v\). Conversely,
+remove the first token from any accepting path of length at most \(r\);
+its suffix witnesses \(d(\delta(s,v))\le r-1\).
+
+Thus \(\mathcal A_r\) is maximally permissive with respect to
+existential structural feasibility in this language. This
+characterization is ordinary backward reachability; it is not a priority
+claim. Structural feasibility does not ensure that the retained path has
+positive model probability or a correct answer.
+
+\textbf{Proposition 2 --- nonempty support and budget-bounded
+acceptance.} Suppose repair begins at \(s_0\) with \(d(s_0)\le r_0\).
+Assume exact transitions and distances, a permitted token with positive
+model support at every nonaccepting step, selection restricted to the
+viable support, and successful execution without an external failure.
+Then structural acceptance occurs in at most \(r_0\) new tokens.
+
+\textbf{Proof.} A shortest path from any nonaccepting state with
+\(d(s)\le r\) supplies an allowed first token, so the structural support
+is nonempty. After any allowed emission, decrementing \(r\) preserves
+\(d(s)\le r\). At zero remaining tokens, this inequality implies
+\(d(s)=0\), hence acceptance. The model-support and execution
+assumptions ensure the process does not abort earlier. Immediate return
+at acceptance ends the process without another token.
+
+\textbf{Proposition 3 --- certified output.} If all reachable accepting
+states decode to artifacts satisfying \(V_{\mathcal C}\) and \(P_b\),
+and commitment revalidates those predicates, every committed artifact
+satisfies them. This is a contract-relative postcondition. It provides
+no factual or task-correctness guarantee and cannot establish soundness
+of the validator itself.
+
+The statements are conditional on reaching a viable activation point.
+They do not guarantee a candidate, supported compilation or successful
+commitment for every request. An optimistic lower bound on \(d\) is
+insufficient: it can retain a path that misses the deadline. These
+results also concern a token budget, not a bound on wall-clock latency.
+
+\subsection{3.5. Equivalence, deterministic reduction and a quality
+counterexample}\label{equivalence-deterministic-reduction-and-a-quality-counterexample}
+
+Under the same state, language, distance oracle, scores, remaining
+budget, acceptance rule and tie-breaking, another grammar engine
+applying \(\mathcal A_r\) has the same token support and greedy
+trajectory. If every grammar-legal next token already satisfies the
+bound, the distance mask is inactive. Such matched cases are consistency
+controls rather than opportunities for an output-quality advantage.
+
+\textbf{Proposition 4 --- format-only reduction.} Suppose a viable
+compiled repair language contains only formatting variants of the same
+bound complete answer. A deterministic shortest accepting path preserves
+that answer and satisfies the same contract without a new model call.
+Its inserted suffix uses no more tokens than any other accepting path in
+that language.
+
+\textbf{Proof.} Select a shortest accepting path of length \(d(s)\). The
+compiler's postconditions establish acceptance and preservation.
+Selecting and serializing a path requires no probability-model query.
+
+This reduction applies directly to the wrapper prototype. Deterministic
+insertions still have CPU and serialization costs, and the common prefix
+retains its model-generation cost. The result does not compare total
+latency without measurement, nor does it apply when choosing an unbound
+field changes task correctness.
+
+A two-branch counterexample shows why structural feasibility cannot
+replace quality evaluation. Let one accepting path contain token \(a\)
+and encode a wrong answer, while a correct answer requires tokens
+\(b,c\). With one remaining token, the mask can retain the wrong
+one-token path and exclude the correct two-token path. Commitment
+remains structurally valid. Binding can likewise exclude a correct
+answer before repair begins. Therefore neither correct-commit
+improvement nor noninferiority follows from Propositions 1--3 or from
+historical zero-loss observations.
+
+\section{4. Reference implementation and
+verification}\label{reference-implementation-and-verification}
+
+\subsection{4.1. Operational activation
+rule}\label{operational-activation-rule}
+
+The draft-to-wrapper interface uses a total cap \(B\) and a fixed
+reserve \(h\), with \(0\le h<B\). After each draft token, it checks the
+following rules in order:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  If the current artifact satisfies the closure-balanced reference
+  predicate, commit it.
+\item
+  If natural EOS has occurred without acceptance, abstain.
+\item
+  If the strict marker predicate identifies a complete candidate, bind
+  that value and propose supported closing suffixes. Verify their
+  decoded context, final acceptance and candidate preservation. Enter
+  repair only when a compiled accepting suffix fits \(B-t\); otherwise
+  abstain.
+\item
+  If no candidate was found and \(t\ge B-h\), abstain; otherwise
+  continue drafting.
+\end{enumerate}
+
+Candidate recognition takes precedence over the no-candidate deadline at
+the same step, while the total cap still applies. The reserve is a
+drafting policy, not an oracle guaranteeing a candidate by the deadline.
+Unsupported candidate states currently abstain immediately rather than
+continuing to search for a later candidate. This behavior must be held
+fixed or explicitly ablated in experiments.
+
+The supplied-prefix interface starts directly from a finite language and
+an acceptance/binding predicate pair. An already accepted prefix commits
+with zero new tokens and zero model calls, including at zero remaining
+budget. Other prefixes require a viable nonempty completion. The caller
+supplies the prefix and suffix language without a gold-answer argument.
+This API separation alone cannot certify that a caller's predicates are
+gold-independent; benchmark construction must be audited separately.
+
+\subsection{4.2. Compilation, complexity and
+scope}\label{compilation-complexity-and-scope}
+
+Each proposed suffix is tokenized and decoded after the actual output
+prefix; paths failing exact context round-trip, final acceptance or
+preservation are rejected. The verified token paths form a trie. If
+their total length is \(M\), the trie has at most \(M+1\) nodes.
+Building it is \(O(M)\); a postorder distance calculation uses
+\(O(N+E)\) time and memory for \(N\) nodes and \(E\) edges. These bounds
+exclude tokenization, candidate enumeration and predicate execution.
+Enumeration may be impractical for a large compositional answer space.
+
+The current implementation traverses the emitted repair prefix when
+retrieving a trie state and constructs a dense vocabulary mask. At
+repair step \(j\), this adds prefix traversal and outgoing-edge
+inspection plus \(O(|\mathcal V|)\) mask construction, before accounting
+for the model, decoding or validation. Python callbacks and score checks
+may synchronize host and device. No near-zero overhead claim follows
+from the linear distance preprocessing bound.
+
+The implementation is batch-size-one greedy generation with no KV
+rollback, speculative path, arbitrary JSON Schema compiler or general
+document grammar. Two interfaces demonstrate wrapper closure and finite
+structured completion, respectively. The latter allows selection of an
+unbound field from supplied alternatives, but is not itself a dataset
+benchmark or a general grammar compiler.
+
+\subsection{4.3. Controlled software
+checks}\label{controlled-software-checks}
+
+The revised code passed 22 controlled CPU tests using PyTorch 2.6 and
+Transformers 4.48.2 with a small random GPT2 and scripted scores. Checks
+include finite-trie distance and pruning invariants; candidate and
+identifier preservation; choice of an unbound label; unsupported syntax
+and context mismatch; invalid EOS and drafting deadlines; deterministic
+repair; accepting and nonaccepting zero-budget cases; zero model support
+and invalid scores; and retention of trace and cost after
+final-certificate or runtime failure.
+
+The new edge-case checks repair accounting and integration behavior
+rather than measuring answer quality. Both generation adapters return
+explicit constraint/runtime failure records when handled, retain
+available generated tokens and remove their model hooks. Forward counts
+record entered calls, including calls that raise an error; they do not
+count only successful returns. A benchmark wrapper must still capture
+configuration, tokenization, predicate, device and infrastructure
+exceptions outside these handled paths. These tests establish no
+pretrained-model accuracy, practical compilation coverage or CUDA
+speedup.
+
+\section{5. Historical motivation and evidence
+limits}\label{historical-motivation-and-evidence-limits}
+
+The historical stopping experiments used Qwen2.5-7B-Instruct-1M (Yang et
+al., 2025) and Mistral-7B-Instruct-v0.3 (Mistral AI, 2024) on GSM8K
+(Cobbe et al., 2021) and ARC-Challenge (Clark et al., 2018). There were
+600 main questions per task, reused across models. Uniform ran to EOS or
+a 512-token cap. Complete returned the earliest certified terminal
+answer line. The full initial 25,200-call protocol and all ten
+historical table bodies remain in Supplement A--B; the later timing
+study added 11,200 scored calls and 480 warmups. Repeated calls and
+sessions are not independent new questions.
+
+The frozen quality contract required a last line-start \texttt{\#\#\#\#}
+value with a newline or EOS certificate and no later non-whitespace
+content. It did not validate the surrounding document. It differs from
+both the prototype's closure-balanced heuristic and a future
+typed-record contract. All paired scores in Table 1 use the frozen
+historical contract.
+
+Table 1. Historical Uniform-to-Complete validity repairs, not results of
+constrained completion. Each cell uses 600 paired questions. Counts are
+model--question outcomes.
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule\noalign{}
+Model / task & Invalid to valid & Correct repairs & Wrong repairs \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Qwen / GSM8K & 28 & 14 & 14 \\
+Qwen / ARC-C & 0 & 0 & 0 \\
+Mistral / GSM8K & 129 & 81 & 48 \\
+Mistral / ARC-C & 47 & 19 & 28 \\
+\end{longtable}
+
+Across 2,400 model--question pairs, 204 outputs changed from invalid to
+valid: 114 then matched the reference and 90 did not. There were no
+observed validity losses, and the shortened-output set exactly matched
+the validity-repair set. These are descriptive paired findings on reused
+questions, not 2,400 independent question identities. They locate
+savings in contract-breaking continuation, without showing improved
+reasoning.
+
+The interpretation changes under alternative contracts.
+Last-marked-answer extraction gave zero Complete-minus-Uniform accuracy
+difference in all four cells, while the closure-balanced heuristic
+produced a negative difference for Qwen/GSM8K. These results and all
+unfavorable outcomes are retained in Supplement B. New comparisons must
+use the same final contract across policies rather than mixing these
+endpoints.
+
+Historical isolated Shadow-minus-Complete monitoring overhead ranged
+from 16.46 to 51.18 ms. Complete was not universally faster than
+Uniform. Follow-up concurrent timing used different measurement
+boundaries and is not pooled with the isolated run. Its available
+summary package lacks per-call raw follow-up timing records needed to
+reconstruct the intervals independently. These measurements motivate
+complete request accounting but do not measure the new controller's
+cost.
+
+\section{6. New empirical evaluation and remaining protocol}
+
+\subsection{6.1. Study design and data integrity}
+
+We conducted a limited known-cohort evaluation using Qwen2.5-7B-Instruct-1M and Mistral-7B-Instruct-v0.3 on two A800 80 GB GPUs. The matched-prefix task used 96 ARC-Challenge evaluation questions and 16 development questions from an already inspected cohort; these are not an independent unseen test set. The answer-label and option-text representations are two encodings of the same questions, not separate tasks. The supplied prefix and finite candidate language were held fixed within matched comparisons. The completion budget counts newly generated suffix tokens and excludes the supplied prefix. The measured request includes per-request language construction, prompt preparation and, when inference occurs, processing the supplied prompt and prefix; it does not include generating the supplied prefix upstream. The comparison covers the declared finite language and wrapper contract, not arbitrary grammars or full document semantics.
+
+The frozen study contains 6,976 records across all tracks and repetitions, including 1,248 deterministic CPU records; this is not a count of independent questions or GPU inference calls. Offline checks found the expected complete grid with no duplicate or missing records, inference errors, invalid constrained commits, budget overruns or format-reduction mismatches. These are technical integrity checks, not independent human semantic annotation. The format-only reduction and a limited wrapper end-to-end track were also evaluated. On the wrapper track, the full controller certified 27 of 32 Qwen and 30 of 32 Mistral requests; no legal token was removed in that track. These observations do not isolate a binding or budget-pruning effect.
+
+\subsection{6.2. Primary matched-prefix results}
+
+The designated primary family compared the full distance-filtered controller with grammar-only continuation using option-text encoding and a 24-token completion budget. Each model was assessed on the same 96 questions under both policies. The endpoint is correct certified commitments over all eligible questions; a certified output is not necessarily correct. The XGrammar and candidate-sequence-scoring baselines are retained as additional controls, not as interchangeable implementations of the primary comparison. The XGrammar finite-string language can permit tokenization paths that differ from the canonical token trie, so differences from that baseline cannot be attributed to the distance filter alone.
+
+Table 2. Correct certified commitments in the primary matched-prefix setting.
+
+\begin{longtable}{@{}p{.11\linewidth}p{.15\linewidth}p{.16\linewidth}p{.17\linewidth}p{.29\linewidth}@{}}
 \toprule
-Stage & Questions per task/model & Settings & Repeats & Scored calls \\ \midrule \endhead
-Implementation pilot & 20 & 6 & 1 & 480 \\
-Development diagnostic & 300 & 5 & 1 & 6,000 \\
-Main evaluation & 600 & 6 & 1 & 14,400 \\
-Isolated timing & 60 & 6 & 3 & 4,320 \\
-Total & - & - & - & 25,200 \\
+Model & Full & Grammar-only & Full minus grammar & Conservative paired 97.5\% interval \\
+\midrule
+\endhead
+Qwen & 76/96 (79.17\%) & 76/96 (79.17\%) & 0.00 percentage points & $-$5.15 to +5.15 percentage points \\
+Mistral & 66/96 (68.75\%) & 66/96 (68.75\%) & 0.00 percentage points & $-$5.15 to +5.15 percentage points \\
 \bottomrule
 \end{longtable}
-\normalsize
-\end{singlespace}
-Development thresholds were 0.005, 0.01 and 0.05. The frozen rule selected 0.01 a priori for the prospective conjunction; development did not optimize the reported main threshold. The selection record and guard verify this choice. The legacy threshold remained 0.05. No prospective budget sweep, fitted allocation curve, transfer study or scheduling experiment was executed in this reduced design.
 
-\subsection*{2.2. Models, prompts and generation}
-The models were Qwen2.5-7B-Instruct-1M (Yang et al., 2025), revision \texttt{e28526f7bb80e2a9c8af03b831a9af3812f18fba}, and Mistral-7B-Instruct-v0.3 (Mistral AI, 2024), revision \texttt{c170c708c41dac9275d15a8fff4eca08d52bab71}. We used each tokenizer's native chat template with a generation prompt and one user message, without in-context examples. For the initial experiment, model revision pins were recorded but weight bytes were not independently rehashed. The follow-up verified model and tokenizer files against its frozen SHA-256 manifest.
+There were no paired wins or losses in either cell, and the full controller removed no grammar-legal token in this setting. Thus this comparison checks an inactive-mask case; it does not establish performance when the budget filter changes the legal support. A zero observed difference and these intervals do not establish statistical equivalence. Candidate-sequence scoring produced 74/96 correct certified submissions for Qwen and 65/96 for Mistral. This method scores candidate sequences rather than performing the same autoregressive continuation; its scoring inputs and forward calls must be included when comparing cost.
 
-The numeric instruction ended: Solve the problem step by step. End with a final line exactly "\#\#\#\# <number>" using a signed integer or decimal, no units or commas. Put a newline after the final line. ARC used the analogous instruction with the instance's allowed choice letters. The exact prompts, question text and choices are reconstructible from input manifests and the runner. Prompts and generation settings were identical across policies for a question.
+\subsection{6.3. Exploratory tight-budget and format results}
 
-Generation used BF16, Transformers SDPA, batch size one, greedy decoding, one beam, cache enabled, repetition penalty 1.0, no forced EOS token and no minimum new-token requirement. Every policy in the initial experiment and the new timing experiment performed real inference. The separate retrospective analysis reconstructed stopping outcomes from saved baseline sequences and is explicitly identified as replay in Section 2.7. Each inference call recorded generated token IDs, text, token count, stop reason, parser outcomes, timing and provenance. Token counts include an emitted EOS token. Deterministic algorithms were not enabled, so observed identity checks describe these runs rather than a guarantee across kernels or hardware.
+At the 8-token option-text budget, certified coverage under full versus grammar-only was 84/96 versus 69/96 for Qwen and 65/96 versus 53/96 for Mistral. Correct certified submissions were 54/96 for both Qwen policies and 41/96 versus 39/96 for Mistral. In this setting the full filter removed grammar-legal tokens, with 50 and 42 removals respectively. These observations are exploratory: certification and correctness are different endpoints, and the small known cohort and multiple settings do not establish a general or statistically significant quality improvement. Infeasible requests under the full controller were recorded as abstentions, not invalid submissions.
 
-\subsection*{2.3. Terminal-answer contract and diagnostic extraction}
-The prespecified primary quality endpoint is boundary-certified terminal-marker contract accuracy, shortened below to contract accuracy. The parser locates the last line-start \texttt{\#\#\#\#} marker. Numeric values must be signed integers or decimals; commas, units and scientific notation are excluded. ARC values must be an allowed choice letter. After that value, the suffix may contain whitespace only. Online completion requires a newline after the value. Offline validity additionally requires either EOS termination or a newline-terminated terminal answer in the returned text. The scorer recomputes this boundary from the returned text rather than reading a stored completion event. A numeric fragment at the cap without either certificate is not credited.
+In the finite format-only controls, deterministic shortest completion and the full controller matched the reported acceptance and bound-value checks when completion was feasible; both abstained below the compiled minimum. This is consistent with the reduction in Section 3.5, but does not extend the deterministic result to task-relevant unbound answers.
 
-A valid answer is correct if its value, compared as a decimal or choice letter, equals the gold answer. Validity is reported separately from correctness. The same parser scores every main policy, including Uniform. This endpoint measures compliance with a specific terminal interface, not correctness under arbitrary extraction conventions.
+\subsection{6.4. Descriptive timing and limitations}
 
-The parser does not validate document syntax before the marker. A marked line inside an unclosed LaTeX display or code fence can satisfy the contract when stopped after its newline. Later closing that wrapper can invalidate the terminal suffix. This behavior is central to interpreting the results: terminal-line validity and complete-document validity are different requirements. Section 2.7 retrospectively evaluates several explicit alternatives without changing the frozen primary contract.
+Timing was collected with batch size one in two sequential waves. Each wave started one Qwen worker and one Mistral worker on separate A800 GPUs after a two-worker resident-model barrier. The workers could finish at different times; four workers did not execute concurrently. Model and GPU identity were coupled, and question shards were fixed to waves. Each model-wave-policy timing cell contains 24 requests on eight questions with three repetitions per question. Wave-level means below are descriptive; the two waves cannot estimate a wave random effect, and no across-wave confidence interval is asserted.
 
-A legacy-style extractor supplies diagnostic sensitivity scores. GSM8K extraction prioritizes a marked number, then a boxed answer, answer-like phrases or equalities, and finally a trailing number. The ARC diagnostic uses the last standalone A-E letter without filtering to the instance's allowed choices; it is not a historical JANUS parser. These scores describe extraction outcomes and do not establish that incomplete or contradictory text is semantically acceptable.
+Table 3. Matched-prefix mean request time in milliseconds, by wave, model and policy; 24-token option-text setting.
 
-\subsection*{2.4. Implemented stopping policies}
-Uniform (U) runs to model EOS or the 512-token cap without entropy monitoring. Marker (M) stops at the first observed \texttt{\#\#\#\#} substring without requiring a value or newline. Marker is a deliberately incomplete negative control, not a proposed usable efficiency method.
-
-Complete (C) stops at the earliest online boundary satisfying the marked answer-line contract. It does not calculate entropy. Shadow (S; code identifier \texttt{entropy\_observe}) computes entropy diagnostics but uses the Complete stopping rule. Its runtime contrast with Complete isolates the tested monitoring path only if generated token IDs match. A mechanism audit checks that condition.
-
-Legacy entropy (L) calculates full-vocabulary next-token entropy, H = -sum(p log(p + 10\textasciicircum{}-12)), from pre-token logits. Successive entropy differences are smoothed with coefficient 2/11. After the minimum-step gate, it requires five consecutive stable steps with absolute smoothed difference below 0.05, five identical nonempty legacy answer candidates, and an observed marked or boxed answer. The retained legacy candidate prefix includes the final prompt token. Trigger decisions are applied after the subsequent generated token. The code and traces preserve this timing detail; it is not a completed-answer guarantee.
-
-Conjunction (E; \texttt{entropy\_complete}) requires at least 21 generated steps, five stable entropy steps at threshold 0.01, and a complete answer boundary at the current step. Completion is not latched: an earlier acceptable line is insufficient if later text changes the suffix. The tested mechanism therefore requires simultaneous completion and stability. Entropy callbacks return the logits unchanged. EOS has priority in stop-reason classification. Exact gates, indexing and special-token handling are executable in \texttt{core.py} and \texttt{engine.py}.
-
-\subsection*{2.5. Hardware and timing}
-Quality stages in the initial experiment used two NVIDIA A800 80 GB PCIe GPUs, one model per GPU. Its latency analysis uses only the separate isolated timing stage. Models ran sequentially on the same physical GPU without other GPU inference jobs. Each model had 24 warmup calls, two per task/policy, for 48 timing warmups. Jobs were shuffled by the frozen seed within each model session; the saved order was independently reconstructed. Qwen ran on 21 October 2026 from 14:07 to 16:26 UTC, followed by Mistral from 16:29 to 19:17 UTC. Model-session order was not counterbalanced. The later concurrent three-GPU experiment is described separately in Section 2.7 and is not pooled with these measurements.
-
-The runtime used Python 3.11.12, PyTorch 2.6.0+cu124, CUDA 12.4, driver 570.211.01, Transformers 4.48.2, Datasets 3.2.0, NumPy 1.26.4 and SciPy 1.14.1. Timing used two PyTorch CPU threads and 64 interop threads. TF32 matrix multiplication and cuDNN benchmarking were disabled; Flash, memory-efficient and mathematical SDPA backends were enabled. Environment snapshots are archived.
-
-Generation time starts after input preparation and a CUDA synchronization and ends after generation and final synchronization. End-to-end time starts before chat templating, tokenization and device transfer, and ends after generation, synchronization, token-ID transfer and decoding. It excludes model loading, warmup, scoring, logging, network transport and queues. It is a local request interval, not deployed service latency or throughput. Full-vocabulary entropy and scalar transfers introduce GPU/CPU synchronization; measured overhead includes these implementation choices and Python callbacks. It is not a hardware lower bound on entropy estimation.
-
-\subsection*{2.6. Analysis and computational verification}
-Analyses pair policies by question within model and task. The four primary Complete-minus-Uniform accuracy comparisons form one family. Each uses a conservative 98.75\% interval, giving at least 95\% family coverage by Bonferroni adjustment. The paired binary interval bounds win and loss probabilities using simultaneous one-sided Clopper-Pearson bounds. The frozen practical noninferiority margin is two percentage points. Sensitivity compares the same interval against zero-, one-, two- and five-point margins; changing a margin does not add evidence.
-
-Other main binary contrasts use conservative paired 95\% intervals. Continuous metrics use paired question-level bootstrap intervals with 5,000 replicates and seed 20261019. Timing repetitions are first averaged within question before paired resampling, giving 60 clusters per task/model rather than 180. Timing accuracy intervals are descriptive, not a second confirmatory accuracy family. Timing P95 values use nearest-rank individual-call summaries. Secondary intervals are not adjusted for the full set of exploratory comparisons.
-
-Tokens per credited answer equal total output tokens divided by contract-correct calls, and are undefined when no answer is credited. This descriptive ratio does not imply semantic correctness or a deployment price. Relative savings use a no-monitor baseline, never the configured cap, as denominator.
-
-Offline validation checked all 25,200 records, complete job grids, input/protocol provenance, stage separation, threshold selection and mechanism identities. All observed policy outputs were prefixes of their paired Uniform outputs; Complete and Shadow token IDs matched; Conjunction never ended before Complete. Local reanalysis reproduced summaries and mechanisms exactly and intervals within 10\textasciicircum{}-12 numerical tolerance across Python/SciPy versions. Original server results remain unchanged. This is computational reproduction of an archived experiment, not independent experimental replication.
-
-\subsection*{2.7. Frozen follow-up and retrospective sensitivity analyses}
-The follow-up separates reanalysis from newly executed inference. Retrospective reconstruction used 3,600 saved Uniform trajectories (1,200 development and 2,400 main model/question pairs) to form 10,800 reconstructed policy records. Those records are not additional inference calls or independent observations. Reconstruction matched the recorded token sequences, text, stopping outcomes and scores in the audited comparisons. Main-cohort contract sensitivity uses the same 600 questions per model/task cell as the initial experiment. A mechanism audit inspected all 114 strict-contract Complete-over-Uniform wins. These are computational checks of saved outputs, not independent human semantic judgments.
-
-Five operational contracts were applied to the saved main outputs: the frozen strict terminal rule; a closure-tolerant rule allowing recognized closing wrappers; a wrapper-balanced strict rule; a closure-balanced rule combining closure tolerance with wrapper balance; and a last-marked-answer rule that permits later text. These finite rules do not implement a general Markdown or LaTeX parser, and numeric comparison remains exact. The source snapshot used for the reported sensitivity counts requires a line-start marker. A received alternative implementation also accepts indentation before the marker. Their sole affected main-cohort question changes both policies' absolute correct counts in three Qwen/GSM8K contract cells by one, while all 20 paired accuracy differences and win/loss counts remain unchanged. The preserved parser provenance audit documents both implementations; none of these alternatives replaces the frozen primary endpoint.
-
-A separate trace audit reused 240 SHA-verified trajectories and evaluated 12 parameter combinations (2,880 replay evaluations). The frozen entropy conjunction used threshold 0.01, five stable steps and a minimum of 21 steps. More permissive combinations were exploratory and were not used to replace the deployed rule or select new accuracy results. The previously completed 56-call smoke check and 240-call trace set were reused by hash; five-GPU timing observations were excluded from the three-GPU analysis. No additional quality extension was executed.
-
-The v8.3 protocol first ran a three-GPU timing pilot with 400 scored calls and 120 warmups, using six workers in two waves. Its complete grid, exit codes, barriers, token identity checks and analysis underwent independent AI-agent technical review before a hash-bound decision released formal timing. This operational review was not a human semantic audit. Formal timing comprised 10,800 scored calls: two models, two tasks, 60 questions per task, five policies, three within-session repetitions and three sessions. Eighteen workers ran in six waves with 360 additional warmups. Thus, new generation comprised 11,200 scored calls and 480 warmups. The formal 120 distinct questions are a reused subset of the original main cohort; the three sessions do not add new questions.
-
-Each of three A800 80 GB GPUs ran one independent batch-size-one worker. Models, revisions, allowance of 512 tokens, BF16 precision and SDPA attention were retained. Workers used four assigned CPU cores and two intra-operation and two inter-operation threads. Model order was Qwen then Mistral in sessions 0 and 2 and Mistral then Qwen in session 1. This partly varies order but does not fully counterbalance it. The five follow-up policies were Uniform (U); boundary\_observe (BO), which processes the token prefix and parses the boundary without stopping early; Complete (C), which stops at that boundary; entropy\_observe (EO), which adds entropy observation to Complete without gating it; and entropy\_uniform (EU), which adds entropy observation to BO without early stopping. These five controls differ from the six-policy initial accuracy experiment.
-
-Four prespecified operational contrasts were evaluated: EO-C for added entropy monitoring on the completion path, BO-U for boundary processing without truncation, EU-BO for added entropy monitoring on the full-output path, and C-U for the net effect of completion stopping. Calls were paired by model, task, session, question, repetition and recorded worker/GPU provenance. Within each contrast and session, three repetitions were averaged per question before a paired question-cluster percentile bootstrap (5,000 replicates; seed 20261019; n = 60). All 48 resulting 95\% intervals are descriptive and unadjusted for multiple comparisons. The same questions recur across sessions and models; neither repeated calls nor GPU shards are treated as independent questions. Ranges across the three session means are descriptive ranges, not confidence intervals.
-
-The new end-to-end timer starts before tokenization of an already constructed prompt and includes transfer, synchronized generation, token-ID transfer to CPU and decoding. It excludes chat-template construction, model loading, warmups, scoring, logging and network or queue latency. The original end-to-end timer also included chat-template construction and used different CPU thread settings. Hardware sharing, model order and timing boundaries therefore preclude pooling the old isolated, old five-GPU and new three-GPU results or attributing their differences solely to GPU count. The experiment measures paired request latency under concurrent deployment, not aggregate service throughput or a threefold speedup.
-
-\section*{3. Results}
-\subsection*{3.1. Main contract accuracy and actual consumption}
-Table 2 reports all policies. Marker never delivered a contract-valid answer; its apparent token savings are not useful savings for this interface. Complete and Shadow had identical quality and token counts in all 2,400 main question/model pairs. Permissive diagnostic results appear in the supplementary metrics.
-
-Table 2. Main results at cap 512, with 600 questions per row. Correct and valid are terminal-contract percentages. Tok/correct is total tokens per contract-correct call; a dash indicates a zero denominator. U: Uniform; M: Marker; L: Legacy entropy; C: Complete; S: Shadow; E: Conjunction.
-
-\begin{singlespace}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.2235\linewidth}>{\raggedright\arraybackslash}p{0.0654\linewidth}>{\raggedright\arraybackslash}p{0.1217\linewidth}>{\raggedright\arraybackslash}p{0.1127\linewidth}>{\raggedright\arraybackslash}p{0.1617\linewidth}>{\raggedright\arraybackslash}p{0.1749\linewidth}}
+\begin{longtable}{@{}p{.08\linewidth}p{.16\linewidth}p{.13\linewidth}p{.19\linewidth}p{.30\linewidth}@{}}
 \toprule
-Model / task & Policy & Correct \% & Valid \% & Mean tokens & Tok/correct \\ \midrule \endhead
-Qwen / GSM8K & U & 67.83 & 92.50 & 181.05 & 266.90 \\
-Qwen / GSM8K & M & 0.00 & 0.00 & 176.45 & - \\
-Qwen / GSM8K & L & 53.83 & 74.50 & 180.27 & 334.87 \\
-Qwen / GSM8K & C & 70.17 & 97.17 & 180.91 & 257.83 \\
-Qwen / GSM8K & S & 70.17 & 97.17 & 180.91 & 257.83 \\
-Qwen / GSM8K & E & 67.83 & 92.50 & 181.05 & 266.90 \\
-Qwen / ARC-C & U & 87.67 & 96.50 & 191.55 & 218.50 \\
-Qwen / ARC-C & M & 0.00 & 0.00 & 189.60 & - \\
-Qwen / ARC-C & L & 62.67 & 71.00 & 191.29 & 305.26 \\
-Qwen / ARC-C & C & 87.67 & 96.50 & 191.55 & 218.50 \\
-Qwen / ARC-C & S & 87.67 & 96.50 & 191.55 & 218.50 \\
-Qwen / ARC-C & E & 87.67 & 96.50 & 191.55 & 218.50 \\
-Mistral / GSM8K & U & 44.00 & 74.17 & 229.03 & 520.53 \\
-Mistral / GSM8K & M & 0.00 & 0.00 & 219.04 & - \\
-Mistral / GSM8K & L & 32.00 & 54.17 & 227.42 & 710.70 \\
-Mistral / GSM8K & C & 57.50 & 95.67 & 223.75 & 389.13 \\
-Mistral / GSM8K & S & 57.50 & 95.67 & 223.75 & 389.13 \\
-Mistral / GSM8K & E & 44.00 & 74.17 & 229.03 & 520.53 \\
-Mistral / ARC-C & U & 50.83 & 68.50 & 183.58 & 361.14 \\
-Mistral / ARC-C & M & 0.00 & 0.00 & 173.45 & - \\
-Mistral / ARC-C & L & 34.17 & 46.67 & 180.05 & 526.97 \\
-Mistral / ARC-C & C & 54.00 & 76.33 & 178.83 & 331.16 \\
-Mistral / ARC-C & S & 54.00 & 76.33 & 178.83 & 331.16 \\
-Mistral / ARC-C & E & 51.00 & 68.67 & 182.90 & 358.63 \\
+Wave & Model & Full & Grammar-only & Candidate-sequence scoring \\
+\midrule
+\endhead
+0 & Qwen & 120.05 & 119.99 & 60.77 \\
+0 & Mistral & 150.33 & 150.40 & 62.70 \\
+1 & Qwen & 164.49 & 163.66 & 62.21 \\
+1 & Mistral & 220.49 & 221.53 & 62.67 \\
 \bottomrule
 \end{longtable}
-\normalsize
-\end{singlespace}
-Table 3. Main Complete-minus-Uniform contrasts. Accuracy changes are percentage points with family-adjusted 98.75\% intervals. Token changes are tokens per call with paired bootstrap 95\% intervals. Wins and losses concern paired contract correctness.
 
-\begin{singlespace}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.2035\linewidth}>{\raggedright\arraybackslash}p{0.0999\linewidth}>{\raggedright\arraybackslash}p{0.2726\linewidth}>{\raggedright\arraybackslash}p{0.2840\linewidth}}
-\toprule
-Model / task & Win / loss & Accuracy change [CI] & Token change [CI] \\ \midrule \endhead
-Qwen / GSM8K & 14 / 0 & +2.33 [0.03, 4.57] & -0.137 [-0.188, -0.088] \\
-Qwen / ARC-C & 0 / 0 & +0.00 [-0.96, 0.96] & +0.000 [0.000, 0.000] \\
-Mistral / GSM8K & 81 / 0 & +13.50 [8.98, 17.72] & -5.285 [-6.227, -4.388] \\
-Mistral / ARC-C & 19 / 0 & +3.17 [0.59, 5.66] & -4.750 [-7.508, -2.623] \\
-\bottomrule
-\end{longtable}
-\normalsize
-\end{singlespace}
-Complete met the frozen two-point noninferiority criterion in all four cells. Three accuracy intervals excluded zero positively. Qwen ARC-C had no discordant correctness pairs, with an interval of -0.96 to 0.96 points; this supports a two-point tolerance but does not prove zero loss probability. Token savings were 0.08\% for Qwen GSM8K, 0.00\% for Qwen ARC-C, 2.31\% for Mistral GSM8K and 2.59\% for Mistral ARC-C. Contract-accuracy differences can therefore be much larger than consumption differences.
+These are supplied-prefix request measurements, not complete end-to-end system costs. Candidate scoring uses a different computation from autoregressive generation. Differences between waves or policies cannot be attributed to hardware or generalized as a speed advantage. The prior three-GPU timing study used different boundaries and is not pooled with these measurements.
 
-Complete gained 114 credited answers and lost none relative to Uniform. Every gain had a missing terminal-contract prediction under Uniform rather than a different extracted valid prediction. This supports contract preservation, not better mathematical or multiple-choice reasoning. Qwen GSM8K's 14 gains comprised 13 responses with a later LaTeX display closure and one with a later code-fence closure. An accepted prefix can thus be syntactically incomplete under a richer document validator while satisfying the frozen terminal-marker contract.
+\subsection{6.5. Remaining tracks and task construction}
 
-\subsection*{3.2. Entropy conditions and completion opportunities}
-Legacy entropy reduced contract accuracy relative to Uniform by 14.00 points for Qwen GSM8K, 25.00 for Qwen ARC-C, 12.00 for Mistral GSM8K and 16.67 for Mistral ARC-C. The respective 95\% intervals were [-17.48, -10.25], [-29.19, -20.39], [-15.30, -8.46] and [-20.54, -12.48] points. Mean token reductions were only 0.43\%, 0.13\%, 0.70\% and 1.92\%. These findings concern the retained rule and its parser gates, not entropy stopping generally.
+The matched-prefix track above holds the prefix, token language and remaining budget fixed. A broader end-to-end track should include prompt processing, drafting, failed activation, compilation, completion, validation and abstention; the limited wrapper run above does not replace that evaluation. Supplied-prefix timing cannot support end-to-end speed or coverage claims.
 
-Conjunction matched Uniform token IDs in 2,399 of 2,400 main pairs. Relative to Complete it lost 113 credited answers, gained none, and always consumed at least as many tokens. One Mistral ARC-C trajectory stopped before Uniform, explaining their near rather than complete identity. The observed issue is a gate mismatch: entropy stability and the current acceptable suffix often fail to coincide. When continuation changes the suffix, the rule cannot recover the earlier boundary without a latched-completion design. The follow-up included only an execution-consistency smoke check of this design; its prospective quality and latency efficacy were not evaluated.
+The task set must distinguish a format-only reduction control from structured prediction with task-relevant unbound fields. The former compares deterministic closure with model-scored closure without presuming a semantic benefit. The latter can bind a public instance identifier while leaving a categorical or numeric answer to predict. ARC candidates may include all visible options. A numeric answer language must be defined independently of gold answers; a manually supplied reference-answer list is invalid. The present wrapper interface cannot execute a general numeric-grammar task without additional compiler and runner development.
 
-Permissive extraction makes some policy outcomes appear similar. Mistral GSM8K's diagnostic accuracy was 57.83\% under Uniform, Complete and Conjunction, while their contract accuracies were 44.00\%, 57.50\% and 44.00\%. These answer different questions about delivered text. Independent human semantic ratings are pending, so we do not resolve which rejected responses a human would accept.
+Historical cohorts have been inspected and can support a declared known-cohort re-evaluation. They cannot be relabeled unseen holdouts. Independent instances or tasks are needed for broader generalization claims. Input IDs, contracts, compiler capabilities and binding rules will be frozen before final evaluation. Failed compilation remains in the denominator for every frozen eligible request.
 
-\subsection*{3.3. Isolated latency and shadow monitoring}
-Table 4 reports isolated mean end-to-end intervals. Each cell contains 60 questions with three repetitions per policy. Complete was not universally faster than Uniform. Its paired difference was +32.96 ms [22.47, 44.43] for Qwen GSM8K and +36.99 ms [27.30, 46.86] for Qwen ARC-C, approximately 0.9\% in both. Mistral GSM8K's signed difference was -98.23 ms [-191.99, -19.47], or -1.96\%. Mistral ARC-C's signed difference was -43.07 ms [-130.72, 27.16], crossing zero. Parsing and callback costs can offset very small output reductions.
+\subsection{6.6. Further comparators and ablations}
 
-Table 4. Mean local end-to-end interval, seconds, from isolated timing. Concurrent main-stage times are not used for latency claims. Generation-time, median, P95 and quality summaries are in the timing supplement.
+Further matched-prefix comparisons should include deterministic shortest completion, model-scored grammar-only continuation, the full budget mask and an independently implemented version of the same distance recurrence. Shared language and acceptance checks are essential. The equivalent recurrence checks consistency; output superiority is not expected under identical assumptions. Finite-answer tasks also require a strong simple alternative, such as development-frozen prior selection or candidate-sequence scoring with all model calls accounted for.
 
-\begin{singlespace}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.2417\linewidth}>{\raggedright\arraybackslash}p{0.1237\linewidth}>{\raggedright\arraybackslash}p{0.1237\linewidth}>{\raggedright\arraybackslash}p{0.1237\linewidth}>{\raggedright\arraybackslash}p{0.1237\linewidth}>{\raggedright\arraybackslash}p{0.1237\linewidth}}
-\toprule
-Model / task & U & C & S & E & L \\ \midrule \endhead
-Qwen / GSM8K & 3.603 & 3.636 & 3.679 & 3.681 & 3.693 \\
-Qwen / ARC-C & 4.075 & 4.112 & 4.164 & 4.160 & 4.185 \\
-Mistral / GSM8K & 5.005 & 4.907 & 4.936 & 5.077 & 5.063 \\
-Mistral / ARC-C & 4.384 & 4.341 & 4.358 & 4.445 & 4.452 \\
-\bottomrule
-\end{longtable}
-\normalsize
-\end{singlespace}
-Shadow matched Complete token IDs in all 720 paired timing calls. Its additional runtime thus measures the monitoring path while holding observed output fixed. Mean overhead ranged from 16.46 to 51.18 ms (Table 5), with positive unadjusted 95\% intervals in all four cells. Relative overhead was 0.38\%-1.24\%. These values are implementation-specific; token counts alone cannot reveal them.
+End-to-end comparisons require Uniform, early return on the same target contract, deterministic repair, selective grammar-only repair, the full controller and a practical grammar engine operating from the start. Native string stopping is sufficient competition only when it enforces the declared contract. From-start and selective grammar differ in more than the budget filter and must be interpreted as system comparisons. Historical Complete under its old contract remains a diagnostic, not a primary new-contract comparator.
 
-Table 5. Shadow minus Complete end-to-end overhead. Intervals are paired question-cluster bootstrap 95\% intervals. Relative overhead divides by the Complete mean.
+Ablations isolate removal of the distance filter at the same binding point, selective versus from-start constraints, and complete-answer versus public-structure binding. Any comparison requiring earlier-field editing first requires a new implementation. A deliberately removed validator is a fault-injection check rather than a competitive baseline.
 
-\begin{singlespace}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.2689\linewidth}>{\raggedright\arraybackslash}p{0.3816\linewidth}>{\raggedright\arraybackslash}p{0.2095\linewidth}}
-\toprule
-Model / task & Added ms [95\% CI] & Relative \\ \midrule \endhead
-Qwen / GSM8K & 43.76 [35.45, 53.03] & 1.20\% \\
-Qwen / ARC-C & 51.18 [40.33, 62.81] & 1.24\% \\
-Mistral / GSM8K & 28.45 [17.54, 38.21] & 0.58\% \\
-Mistral / ARC-C & 16.46 [5.77, 27.89] & 0.38\% \\
-\bottomrule
-\end{longtable}
-\normalsize
-\end{singlespace}
-Legacy entropy reduced timing output by only 0.22-2.12 tokens per call but increased mean end-to-end latency by 1.15\%-2.69\% relative to Uniform. Conjunction matched Uniform IDs in all 720 timing calls and never terminated through its policy gate. Timing repeats showed no within-question output variation. These observations validate the shadow comparison while limiting any claim that fewer tokens necessarily imply shorter elapsed time.
+\subsection{6.7. Further budgets, endpoints and failure reporting}
 
-\subsection*{3.4. Contract sensitivity and trace evidence}
-The apparent accuracy benefit depends on which output representation a consumer accepts (Table 6). Closure tolerance eliminates the 14 Qwen/GSM8K strict-contract wins; adding a wrapper-balance requirement reverses the Qwen/GSM8K difference under the closure-balanced rule. Last-marked-answer extraction gives zero Complete-Uniform difference in all four model/task cells. These are paired rescoring results on existing outputs and do not show that continuation is semantically harmless.
+Development data will determine tight, intermediate and relaxed total token caps and the reserve rule before testing. Shared-prefix cases include budgets below, at and above the compiled minimum distance; unequal-length accepting branches; inactive masks; and infeasible states. Report how often pruning actually excludes a grammar-legal token. A fixed single cap cannot establish a budget-response curve.
 
-Table 6. Retrospective Complete-Uniform contract-accuracy differences, in percentage points, on 600 main questions per model/task cell. The columns use the same paired outputs under each operational parser. These alternative endpoints are sensitivity analyses, not new primary tests.
+For request $i$, let $D_i$ indicate a declared submission rather than abstention, $A_i=D_i\mathbf 1\{V_{\mathcal C}(y_i)\land P_b(y_i)\}$ indicate a certified submission, and $Q_i=A_i\mathbf 1\{g(y_i)=g_i^*\}$ indicate a correct certified submission. The primary endpoint is $\sum_i Q_i/n$ over all frozen eligible requests. Certified coverage is $\sum_i A_i/n$, and conditional accuracy is $\sum_i Q_i/\sum_i A_i$, undefined when no output is certified. Invalid submissions, $\sum_i D_i(1-A_i)$, and binding violations remain separately visible. For a baseline without controller states, a normal returned output is a declared submission, then scored by the same predicates. Invalid raw returns are retained rather than silently relabeled or discarded. A schema check that rejects outputs can change declared submission counts without improving the all-request quality endpoint.
 
-\begin{singlespace}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.2271\linewidth}>{\raggedright\arraybackslash}p{0.1582\linewidth}>{\raggedright\arraybackslash}p{0.1582\linewidth}>{\raggedright\arraybackslash}p{0.1582\linewidth}>{\raggedright\arraybackslash}p{0.1582\linewidth}}
-\toprule
-Contract & Qwen/GSM8K & Qwen/ARC & Mistral/GSM8K & Mistral/ARC \\ \midrule \endhead
-Strict terminal & 2.33 & 0.00 & 13.50 & 3.17 \\
-Closure-tolerant & 0.00 & 0.00 & 13.50 & 3.17 \\
-Wrapper-balanced strict & 0.00 & 0.00 & 13.50 & 3.17 \\
-Closure-balanced & -2.33 & 0.00 & 13.50 & 3.17 \\
-Last marked answer & 0.00 & 0.00 & 0.00 & 0.00 \\
-\bottomrule
-\end{longtable}
-\normalsize
-\end{singlespace}
-The 114 strict-contract wins were mechanically categorized as 13 LaTeX-wrapper cases, one code-fence case, 98 post-answer continuations and two loop cases. The generated prefix and last marked answer value were unchanged in the audited pairs. Two lexical disavowal or placeholder flags overlap these categories; they are not human semantic labels. Under the frozen conjunction settings, the trace audit found 3,116 stable non-EOS steps but no simultaneous answer-boundary opportunity and no early trigger across 240 trajectories. A more permissive exploratory combination produced 16 triggers, which does not validate a revised stopping policy or its accuracy.
+Also report budget overruns and failure categories: unsupported compilation, context mismatch, no candidate, infeasible distance, invalid EOS, constraint failures and runtime errors. Infrastructure failures need a prespecified retry rule and their own labels; no failed request may silently disappear. No ratio with a zero denominator is assigned an invented zero or perfect value.
 
-\subsection*{3.5. Repeated concurrent three-GPU timing}
-The formal run completed the full 10,800-call scored grid across 18 workers and six waves after the separately reviewed pilot. All three output-invariant monitoring contrasts preserved both generated and returned token IDs. Their 36 model/task/session contrasts yielded 6,480 matched output-pair checks; outputs are reused across contrasts, so this is not a count of independent observations. The pilot had 240 additional matched pair checks. Each formal inference comparison still has 60 question clusters. All 36 descriptive monitoring intervals were above zero, and all 108 corresponding GPU-stratum mean differences were positive. The latter are descriptive point estimates, not 108 independent significance tests or causal GPU effects.
+Length-dependent pruning may favor short wrong answers. Include canonical short-label controls, answer-length strata, erroneous bindings and offline reference-reachability analysis. Reference information is available only to the scorer, never to inference, budget selection or post hoc sample exclusion. Supported-language or reference-reachable subsets are diagnostics rather than replacements for the all-request endpoint.
 
-Table 7. Ranges of the three session-specific mean latency differences in the formal concurrent experiment. Each cell is the minimum and maximum of three point estimates, not an interval estimate. EO-C adds entropy monitoring to completion; BO-U adds boundary processing without truncation; EU-BO adds entropy monitoring without truncation. Full session estimates and descriptive bootstrap intervals are retained in the supplement.
+\subsection{6.8. Further cost, statistics and reproducibility}
 
-\begin{singlespace}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.1672\linewidth}>{\raggedright\arraybackslash}p{0.2309\linewidth}>{\raggedright\arraybackslash}p{0.2309\linewidth}>{\raggedright\arraybackslash}p{0.2309\linewidth}}
-\toprule
-Model/task & Entropy EO-C (ms) & Boundary BO-U (ms) & Entropy EU-BO (ms) \\ \midrule \endhead
-Qwen/GSM8K & 43.42-48.02 & 90.74-95.89 & 41.98-44.87 \\
-Qwen/ARC & 49.49-58.57 & 115.76-121.43 & 48.35-51.48 \\
-Mistral/GSM8K & 22.33-25.27 & 150.46-154.96 & 20.48-25.15 \\
-Mistral/ARC & 12.79-25.07 & 107.42-115.32 & 23.02-31.60 \\
-\bottomrule
-\end{longtable}
-\normalsize
-\end{singlespace}
-Boundary processing without early stopping added approximately 91-155 ms per call across the model/task/session cells. Added entropy monitoring ranged from approximately 13-59 ms on the completion path and 20-52 ms on the full-output path. The consistency of the matched-output contrasts isolates overhead from output truncation within this runtime; it does not imply an implementation-independent monitoring cost.
+Record model-generated, deterministically inserted and returned token IDs separately, together with forward calls and costs of compilation, masking, validation and failed attempts. Measure synchronized isolated request latency with matched model precision, attention backend, batch size and hardware; randomize or balance policy order. Separate cold compilation from a declared reusable-cache regime. Report mean and P50/P95 latency and paired uncertainty. Concurrent throughput would require a distinct experiment, not extrapolation from request times.
 
-Table 8. Complete-Uniform mean latency differences in milliseconds, with descriptive, unadjusted 95\% paired question-cluster bootstrap intervals. Negative values favor completion stopping. Every cell uses 60 questions with three within-session repetitions averaged per question; sessions reuse the same questions.
+A pilot will support sample-size planning from a prespecified meaningful correct-commit difference and paired discordance; timing planning uses paired variability. Repeated calls, budgets and model answers to the same question are not independent questions. Question-level pairing and clustering must preserve these dependencies. A primary setting or multiplicity adjustment must be fixed before confirmatory cross-budget and cross-model claims. All cells and unfavorable results remain reportable.
 
-\begin{singlespace}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.1672\linewidth}>{\raggedright\arraybackslash}p{0.2309\linewidth}>{\raggedright\arraybackslash}p{0.2309\linewidth}>{\raggedright\arraybackslash}p{0.2309\linewidth}}
-\toprule
-Model/task & Session 0 & Session 1 & Session 2 \\ \midrule \endhead
-Qwen/GSM8K & 90.87 [68.19, 117.65] & 92.13 [72.34, 116.03] & 90.72 [72.06, 112.54] \\
-Qwen/ARC & 110.49 [91.31, 131.74] & 114.50 [97.00, 132.79] & 118.62 [99.21, 140.28] \\
-Mistral/GSM8K & 0.29 [-97.67, 88.08] & -0.10 [-98.14, 86.27] & -2.34 [-98.14, 83.51] \\
-Mistral/ARC & 21.60 [-58.03, 91.23] & 26.22 [-53.36, 94.76] & 19.66 [-58.51, 86.43] \\
-\bottomrule
-\end{longtable}
-\normalsize
-\end{singlespace}
-Completion stopping did not produce a stable overall latency improvement. All Qwen session intervals were above zero, corresponding to approximately 2.5\%-2.9\% more elapsed time despite unchanged or slightly shortened output. Mistral point differences were near zero or positive and every interval spanned zero; these intervals permit both benefit and harm and do not establish equivalence. Mistral's shorter output therefore did not establish a net latency gain in this concurrent setting. The Complete-Uniform contrast includes output differences and is not an output-invariant overhead control. These findings complement, but are not pooled with, the earlier isolated measurements in Tables 4 and 5.
+The archive will contain frozen manifests, version and environment hashes, full token traces, binding and distance events, statuses/errors, request-time boundaries and executable scoring/analysis. An audited separation of controller inputs from reference labels is required. The primary matched-prefix comparison reported above is distinct from the additional, as-yet-unexecuted evaluation described in this section; its known-cohort observations must not be presented as independent confirmation.
 
-\section*{4. Discussion}
-\subsection*{4.1. Meaning of the quality differences}
-The main accuracy differences arise because the interface accepts a marked final line and rejects later non-whitespace continuation. Stopping preserves an accepted representation; it does not demonstrate additional solved problems. The retrospective contracts make this dependence explicit: closure handling removes the Qwen/GSM8K strict-contract gain, whereas last-marked-answer extraction removes every net difference. Wrapper-balance requirements can instead penalize a truncated response. These operational alternatives are finite parser rules rather than semantic or document-validity oracles. A richer structured-output interface could change the observed benefit, while a tolerant consumer may accept continuation; neither possibility establishes that the continuations are correct or harmless.
+\section{7. Discussion}
 
-The result nevertheless matters to systems enforcing a terminal field, parser or protocol. A monitor intended to improve reliability can harm delivery if it waits past the accepted boundary. It should be evaluated jointly with the consumer's parser, including cases where completion becomes true and subsequently false. Our evidence supports this implementation check, without establishing that the tested contract is optimal for deployment.
+The controller adds a remaining-budget condition to structural prefix legality and makes acceptance a distinct return event. Its conditional guarantee is useful for specifying behavior, but follows from reachability over a declared language. It cannot alone support a paradigm claim relative to an equivalent grammar implementation. A larger experimental advantage must be attributed to a documented difference in language, activation, scoring, compiler cost or task behavior, rather than a name.
 
-\subsection*{4.2. Interpreting monitoring cost}
-The shadow arm separates two otherwise confounded effects: changing generation length and paying to observe generation. Entropy monitoring here adds a small measurable latency cost without changing a token. Legacy entropy combines that cost with very small token savings and substantially lower contract accuracy. This configuration offers no efficiency advantage for the measured endpoint. The result does not rule out fused monitors, asynchronous estimates, less frequent checks or different stopping conditions.
+The current finite language limits both coverage and scalability. Missing valid paths can cause unnecessary abstention, and an exhaustive language over rich fields can be expensive to construct. The wrapper contract is a heuristic rather than a full document parser. Append-only binding may freeze an incorrect answer and cannot use later correction. Validity is consequently a necessary interface property, not a proxy for reasoning quality.
 
-A useful evaluation sequence is to verify a shadow arm's token-path identity, measure its overhead in the intended execution mode, and compare the stopping arm against both shadow and no-monitor controls. This diagnoses cost in the tested system; it is not a physical scheduling algorithm. A token allowance specifies neither GPU allocation nor FLOPs, energy, monetary cost or throughput. Peak allocated memory includes model and cache storage and cannot supply these missing measurements.
+The deterministic reduction is a substantive boundary. If empirical gains are restricted to formatting-equivalent suffixes, the appropriate contribution is verified interface repair. Task-relevant unbound fields may justify model-scored continuation, but they also expose quality loss through budget pruning and require strong non-generative or candidate-scoring baselines. The known-cohort comparison against grammar-only and candidate scoring is informative but limited, particularly because the primary budget filter was inactive.
 
-The concurrent follow-up further separates the cost of processing a boundary from the incremental cost of entropy. BO-U changes the callback path without shortening the output, whereas C-U combines that overhead with any token savings. Their different results explain why fewer tokens need not reduce elapsed time. The three repeated sessions show consistent positive monitor costs under this implementation, while the net completion effect remains model- and condition-dependent. Positive descriptive intervals across the 36 monitor contrasts should not be read as multiplicity-adjusted confirmatory tests, and ranges of session means should not be read as confidence bounds.
+The new study found no correct-commit difference in its primary matched-prefix cells and observed exploratory coverage differences at a tighter budget. It establishes neither a general task-quality improvement nor a latency advantage. The historical studies support their own stopping and monitoring conclusions; the CPU tests support implementation behavior on controlled finite cases. Independent data, broader task runs and source-level comparison with relevant prior systems are required before a stronger contribution claim can be assessed.
 
-\subsection*{4.3. Generalization limits and further validation}
-The study contains two approximately 7B instruction-tuned models, two tasks, one allowance, one question-sampling/order seed, greedy decoding and batch size one on A800 hardware. The models share questions, and all timing cohorts reuse subsets of the accuracy cohort. Three follow-up sessions add repeated measurements under a concurrent deployment condition, not independent datasets or a budget sweep. The benchmarks do not represent long-horizon agents, tool calls, concurrent service queues, speculative decoding or reasoning-model budget forcing. Model order was fixed in the original experiment and only partly varied in the follow-up. Session-level drift, host contention and different timer boundaries prevent direct attribution of cross-experiment differences to concurrency. Small effects may differ under another runtime.
+\section{8. Conclusions}
 
-Independent human semantic audit is pending. Two blinded rating packages have been prepared for the same 600 sampled outputs (525 distinct model/task/question identities), drawn in 12 strata from the original 14,400-call main cohort. No human ratings or agreement statistics are complete. Each of two human raters must independently assign correctness and completeness labels of 1, 0 or U, with reasons; U denotes unresolved judgment and must remain visible. Original returns will be sealed before comparison or adjudication. Because the sample enriches contract/diagnostic disagreements, an unweighted mean would not estimate population semantic accuracy. Later analysis must retain inclusion probabilities and report appropriately weighted estimates and unresolved-case sensitivity. Computational audits and AI-agent deployment review do not substitute for this work.
+Budget-viable commitment provides an explicit finite-language specification for append-only constrained completion and validated return. Exact token-level reachability gives conditional structural completion inside a remaining budget, while final acceptance checks preserve declared contract and binding predicates. These properties do not imply true answers, global compiler completeness, successful activation for every request or wall-clock speed. The finite-trie implementation and controlled checks make the specification testable. Historical evidence motivates separating validity from correctness, and the format-only reduction identifies a necessary deterministic comparator. The two-model known-cohort study adds a matched comparison but finds no primary correct-commit difference when the filter is inactive. Independent task and full-system cost comparisons remain necessary before a broader empirical algorithm claim.
 
-The record now includes retrospective richer-contract and trace sensitivity analyses and an executed control for boundary processing, but it contains no prospective quality evaluation of latched completion, revised stopping thresholds or a cheaper monitoring implementation. The exploratory trace triggers do not authorize a new accuracy claim. The single-allowance design cannot estimate a budget-response function or validate dynamic allocation. Public release and an independent rerun would strengthen external reproducibility beyond the local computational checks.
+\section{Data and code availability}
 
-\subsection*{4.4. Historical JANUS evidence}
-Historical JANUS results motivated these controls and are not pooled with the prospective cohort. The earlier audit found TCJS/TokOnly identity in 3,000 paired records and identical CompRoute results across nominal allowances 64, 128 and 256. A separate offline tokenizer-based reconstruction indicated that all three allowances were clamped to an effective cap of 64. Historical logs did not record every effective cap directly, and the reconstruction used a different tokenizer patch version, as documented in the archived audit. Those findings diagnose implementation naming and cap transformations, not scheduling efficacy. Historical prompts, scoring and sampling differ. Preserving those artifacts supports accountability; counting them as prospective replications would be inappropriate.
+The revision package contains controller code, two Transformers interfaces, deterministic repair, controlled tests, historical analysis inputs/summaries and the ten-table historical supplement. The two-GPU v8.9.1 study has a separately preserved local archive of raw records, frozen inputs, run logs, analysis and verification evidence; its archive SHA-256 is 356984d29742605b26261bb7cc73cce575f53c7e1687c04404ab3224760ef7bf. The full old raw experiment archive is a separate prerequisite for rerunning the historical JSONL analysis. The historical follow-up timing summary does not itself contain all per-call raw records. Availability of a public permanent archive, DOI and final publication release remains to be established.
 
-\section*{5. Conclusions}
-Under a frozen terminal-answer contract, completion stopping preserved 114 additional credited answers across 2,400 question/model pairs, with modest or zero token savings. Retrospective alternative contracts changed or eliminated those differences, confirming that they depend on the accepted output representation. Output-invariant controls measured positive boundary-processing and entropy-monitoring costs in a separate three-GPU follow-up, while completion stopping did not establish an overall speedup. The earlier isolated study and later concurrent study support explicit parser contracts, policy-path audits and matched-output runtime controls within their respective conditions. They do not establish semantic reasoning gains, universal acceleration or joint token/compute scheduling. Independent human assessment and public archival release remain outstanding.
+\section{Declarations pending author
+verification}\label{declarations-pending-author-verification}
 
-\section*{Data and code availability}
-Complete local archives contain frozen protocols, revision pins, input manifests, raw outputs, attempt/completion receipts, environment snapshots and analysis scripts. Downloaded bundles were verified before the rental instances were shut down. The 24 October revision adds contract sensitivity, parser provenance, repeated three-GPU timing results, dated offline checks and editable manuscript sources while preserving the frozen experimental files. The supplement includes all 48 formal timing contrasts and the 20 contract-sensitivity cells. A public repository/archive URL and, if obtained, DOI must be inserted after authors approve release and verify redistribution permissions. No public deposit is claimed. Reproduction and human-audit instructions distinguish release material from the private sampling key and unblinding records.
+Funding, competing interests, author contributions and final author
+approval remain unconfirmed. The supplied author order, affiliation and
+correspondence address are retained for verification. These entries must
+be replaced with factual, journal-compliant declarations before
+submission; absence of funding or conflicts is not assumed.
 
-\section*{Declarations requiring author confirmation}
-\textbf{Funding.} Pending confirmation of actual support, grant identifiers and funders' roles. Absence of funding is not assumed.
+AI assistance was used in preparing this revised text and
+developing/checking the supplied code. The authors must verify and
+complete the disclosure against the actual research workflow and the
+selected journal's policy. All reported endpoints are computational; no
+human-rating result is claimed. Human authors remain responsible for all
+content and final approval.
 
-\textbf{Competing interests.} Pending author confirmation, including employment and support relevant to this work. The supplied affiliation is retained and is not a verified disclosure.
+\section{References}\label{references}
 
-\textbf{Author contributions.} Pending a factual account of contributions and final approval. Supplied author order and correspondence details are retained for confirmation.
+Clark P, Cowhey I, Etzioni O, Khot T, Sabharwal A, Schoenick C, Tafjord
+O. 2018. Think you have solved question answering? Try ARC, the AI2
+Reasoning Challenge. arXiv:1803.05457.
+\url{https://arxiv.org/abs/1803.05457}
 
-\textbf{AI-assisted work.} AI assistance was used in manuscript revision, code inspection and modification, experiment operation, computational analysis and document preparation. Authors must verify the precise account against actual use and current journal disclosure fields. AI output has not substituted for independent human semantic ratings. Human authors remain responsible for methods, data, interpretations and final text.
+Cobbe K, Kosaraju V, Bavarian M, Chen M, Jun H, Kaiser L, Plappert M,
+Tworek J, Hilton J, Nakano R, Hesse C, Schulman J. 2021. Training
+verifiers to solve math word problems. arXiv:2110.14168.
+\url{https://arxiv.org/abs/2110.14168}
 
-\section*{References}
-Clark P, Cowhey I, Etzioni O, Khot T, Sabharwal A, Schoenick C, Tafjord O. 2018. Think you have solved question answering? Try ARC, the AI2 Reasoning Challenge. arXiv:1803.05457. \url{https://arxiv.org/abs/1803.05457}
+Geng S, Josifoski M, Peyrard M, West R. 2023. Grammar-Constrained
+Decoding for Structured NLP Tasks without Finetuning. Proceedings of
+EMNLP 2023, 10932--10952. DOI: 10.18653/v1/2023.emnlp-main.674.
+\url{https://aclanthology.org/2023.emnlp-main.674/}
 
-Cobbe K, Kosaraju V, Bavarian M, Chen M, Jun H, Kaiser L, Plappert M, Tworek J, Hilton J, Nakano R, Hesse C, Schulman J. 2021. Training verifiers to solve math word problems. arXiv:2110.14168. \url{https://arxiv.org/abs/2110.14168}
+Han T, Wang Z, Fang C, Zhao S, Ma S, Chen Z. 2025. Token-budget-aware
+LLM reasoning. Findings of ACL 2025, 24842--24855. DOI:
+10.18653/v1/2025.findings-acl.1274.
+\url{https://aclanthology.org/2025.findings-acl.1274/}
 
-Han T, Wang Z, Fang C, Zhao S, Ma S, Chen Z. 2025. Token-budget-aware LLM reasoning. Findings of the Association for Computational Linguistics: ACL 2025, 24842-24855. DOI: 10.18653/v1/2025.findings-acl.1274. \url{https://aclanthology.org/2025.findings-acl.1274/}
+Hokamp C, Liu Q. 2017. Lexically Constrained Decoding for Sequence
+Generation Using Grid Beam Search. Proceedings of ACL 2017 (Volume 1:
+Long Papers), 1535--1546. DOI: 10.18653/v1/P17-1141.
+\url{https://aclanthology.org/P17-1141/}
 
-Mistral AI. 2024. Mistral-7B-Instruct-v0.3 model card. \url{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3}
+Hugging Face. 2025. Transformers v4.48.2: generation stopping criteria,
+including StopStringCriteria. Versioned implementation.
+\url{https://github.com/huggingface/transformers/blob/v4.48.2/src/transformers/generation/stopping_criteria.py}
+(accessed 26 October 2026).
 
-Muennighoff N, Yang Z, Shi W, Li XL, Fei-Fei L, Hajishirzi H, Zettlemoyer L, Liang P, Candes E, Hashimoto T. 2025. s1: Simple test-time scaling. arXiv:2501.19393, version 3. \url{https://arxiv.org/abs/2501.19393v3}
+Mistral AI. 2024. Mistral-7B-Instruct-v0.3 model card.
+\url{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3}
 
-Wang J, Jain S, Zhang D, Ray B, Kumar V, Athiwaratkun B. 2024. Reasoning in token economies: Budget-aware evaluation of LLM reasoning strategies. Proceedings of EMNLP 2024, 19916-19939. DOI: 10.18653/v1/2024.emnlp-main.1112. \url{https://aclanthology.org/2024.emnlp-main.1112/}
+Muennighoff N, Yang Z, Shi W, Li XL, Fei-Fei L, Hajishirzi H,
+Zettlemoyer L, Liang P, Candes E, Hashimoto T. 2025. s1: Simple
+test-time scaling. arXiv:2501.19393v3.
+\url{https://arxiv.org/abs/2501.19393v3}
 
-Yang A, Yu B, Li C, Liu D, Huang F, Huang H, Jiang J, Tu J, Zhang J, Zhou J, Lin J, et al. 2025. Qwen2.5-1M technical report. arXiv:2501.15383. \url{https://arxiv.org/abs/2501.15383}
+Outlines project. 2026. Official project README, commit
+\texttt{\seqsplit{c52af8472c6fe8a607a733ec11b709476af77a96}}.
+\url{https://github.com/dottxt-ai/outlines/blob/c52af8472c6fe8a607a733ec11b709476af77a96/README.md}
+(accessed 27 October 2026).
 
-Yu Q, Zheng Z, Song S, Li Z, Xiong F, Tang B, Chen D. 2025. xFinder: Large language models as automated evaluators for reliable evaluation. ICLR 2025; arXiv:2405.11874, version 3. \url{https://arxiv.org/abs/2405.11874}
+Wang J, Jain S, Zhang D, Ray B, Kumar V, Athiwaratkun B. 2024. Reasoning
+in token economies: Budget-aware evaluation of LLM reasoning strategies.
+Proceedings of EMNLP 2024, 19916--19939. DOI:
+10.18653/v1/2024.emnlp-main.1112.
+\url{https://aclanthology.org/2024.emnlp-main.1112/}
+
+XGrammar project. 2026. Official project README, including the
+XGrammar-2 announcement, commit
+\texttt{\seqsplit{e085851aec8f417924be5f460d1e038cac0e3bd5}}.
+\url{https://github.com/mlc-ai/xgrammar/blob/e085851aec8f417924be5f460d1e038cac0e3bd5/README.md}
+(accessed 27 October 2026).
+
+Yang A, Yu B, Li C, Liu D, Huang F, Huang H, Jiang J, Tu J, Zhang J,
+Zhou J, Lin J, et al.~2025. Qwen2.5-1M technical report.
+arXiv:2501.15383. \url{https://arxiv.org/abs/2501.15383}
 
 \end{document}
