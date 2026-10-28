@@ -1,0 +1,3 @@
+model,full_correct,grammar_correct,n,difference_pp,zero_discordance_conservative_975_half_width_pp
+Qwen,76,76,96,0.0,5.149326970620622
+Mistral,66,66,96,0.0,5.149326970620622

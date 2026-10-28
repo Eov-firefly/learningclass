@@ -1,0 +1,18 @@
+test_bundled_data_manifest_is_complete_and_blinded (test_analysis.ControlTests.test_bundled_data_manifest_is_complete_and_blinded) ... ok
+test_cli_reanalysis_scores_transfer_but_leaves_unknown_distance_empty (test_analysis.ControlTests.test_cli_reanalysis_scores_transfer_but_leaves_unknown_distance_empty) ... ok
+test_feasible_success_has_no_dead_entry (test_analysis.ControlTests.test_feasible_success_has_no_dead_entry) ... ok
+test_illegal_prefix_distinguished_from_legal_budget_dead_end (test_analysis.ControlTests.test_illegal_prefix_distinguished_from_legal_budget_dead_end) ... ok
+test_initial_infeasibility_is_not_a_new_dead_entry (test_analysis.ControlTests.test_initial_infeasibility_is_not_a_new_dead_entry) ... ok
+test_input_corruption_is_not_silently_accepted (test_analysis.ControlTests.test_input_corruption_is_not_silently_accepted) ... ok
+test_legal_long_branch_becomes_dead_before_cap (test_analysis.ControlTests.test_legal_long_branch_becomes_dead_before_cap) ... ok
+test_missing_token_evidence_is_not_identical_trajectory (test_analysis.ControlTests.test_missing_token_evidence_is_not_identical_trajectory) ... ok
+test_pair_context_mismatch_is_reported (test_analysis.ControlTests.test_pair_context_mismatch_is_reported) ... ok
+test_paired_interval_handles_direction_and_no_samples (test_analysis.ControlTests.test_paired_interval_handles_direction_and_no_samples) ... ok
+test_runner_partial_grid_and_collection_remain_review_needed (test_analysis.ControlTests.test_runner_partial_grid_and_collection_remain_review_needed) ... ok
+test_success_preservation_and_new_commit_are_separate (test_analysis.ControlTests.test_success_preservation_and_new_commit_are_separate) ... ok
+test_zero_discordance_interval_does_not_prove_equivalence (test_analysis.ControlTests.test_zero_discordance_interval_does_not_prove_equivalence) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.308s
+
+OK

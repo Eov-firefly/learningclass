@@ -1,0 +1,5 @@
+wave,model,full_ms,grammar_ms,sequence_ms,full_minus_grammar_ms,full_to_sequence_time_ratio,scope
+0,Qwen,120.05,119.99,60.77,0.060000000000002274,1.9754813230212274,descriptive reported means only; no paired runtime uncertainty available
+0,Mistral,150.33,150.4,62.7,-0.06999999999999318,2.3976076555023926,descriptive reported means only; no paired runtime uncertainty available
+1,Qwen,164.49,163.66,62.21,0.8300000000000125,2.6441086642018967,descriptive reported means only; no paired runtime uncertainty available
+1,Mistral,220.49,221.53,62.67,-1.039999999999992,3.518270304771023,descriptive reported means only; no paired runtime uncertainty available

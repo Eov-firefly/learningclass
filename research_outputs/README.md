@@ -1,13 +1,20 @@
 # JANUS 论文修订、严格评审与实验交付
 
-最新整理：2026-10-27。当前入口为**v8.8论文修订母版**与**v8.9.1四卡A100最小实验包**。新方法的真实7B/A100实验尚未执行；文件整理、PDF编译和CPU软件检查不代表已经达到投稿标准。
+最新整理：2026-10-28。根目录论文已整合用户报告的**两卡A800、两波执行**结果，当前优先执行**局部可控性再分析**，无需新增GPU推理。新raw归档尚未在本仓库提供可下载副本，本轮复审不能冒充独立完整复算。原v8.8及四卡A100计划作为历史交付保留。
 
 ## 最新阅读入口
 
 | 内容 | 入口 |
 | --- | --- |
+| 当前用户整合稿 | [Markdown](../manuscript.md) · [LaTeX](../main.tex) |
+| 2026-10-28审阅快照PDF | [22页PDF，基于commit 1112413](review_20261028/build/main.pdf) |
+| 新结果严格复审与算术核对 | [详细复审](review_20261028/严格复审_zh.md) · [核查范围](review_20261028/review_checks.json) |
+| 局部优势：具体执行步骤 | [执行步骤_zh.md](controllability_v1/执行步骤_zh.md) |
+| 一键CPU再分析入口 | [run_control.py](controllability_v1/run_control.py) · [使用说明](controllability_v1/README_zh.md) |
+| 预算可控性的局部验证方案 | [实验方案](controllability_v1/局部突破实验方案_zh.md) |
+| 再分析软件检查范围 | [STATUS.json](controllability_v1/STATUS.json) |
 | 修正后的核心创新点 | [CORE_INNOVATION_zh.md](review/CORE_INNOVATION_zh.md) |
-| v8.8论文 | [PDF](manuscript_v88/main.pdf) · [LaTeX](manuscript_v88/main.tex) · [Markdown](manuscript_v88/manuscript.md) |
+| v8.8历史修订母版 | [PDF](manuscript_v88/main.pdf) · [LaTeX](manuscript_v88/main.tex) · [Markdown](manuscript_v88/manuscript.md) |
 | 严格审稿与本轮处理 | [审稿意见](manuscript_v88/严格审稿意见与处理结果_zh.md) |
 | 必须补充的实验 | [E1–E6与结果回填](manuscript_v88/必须补充的实验与结果回填_zh.md) |
 | 投稿前放行条件 | [最终核对表](manuscript_v88/投稿前最终核对表_zh.md) |
@@ -20,12 +27,27 @@
 
 ## 直接下载
 
-- **最新论文包**：[JANUS_v8_8_strict_review_final_revision_20261027.zip](packages/JANUS_v8_8_strict_review_final_revision_20261027.zip)
-- **最新GPU实验包**：[JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip](packages/JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip)
+- **当前优先使用：局部可控性再分析包**：[JANUS_control_reanalysis_v1_20261028.zip](packages/JANUS_control_reanalysis_v1_20261028.zip)
+- **最新论文复审快照**：[JANUS_20261028_post_experiment_strict_review.zip](packages/JANUS_20261028_post_experiment_strict_review.zip)
+- **历史论文修订包**：[JANUS_v8_8_strict_review_final_revision_20261027.zip](packages/JANUS_v8_8_strict_review_final_revision_20261027.zip)
+- **原四卡GPU实验工具**：[JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip](packages/JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip)
 
 两个解压目录与对应最新交付ZIP一致，保留各自SHA256SUMS。v8.9原始包保留在packages作为历史版本；v8.9.1修复了ETA并发读取日志的问题。没有纳入模型权重、虚拟环境、下载缓存或伪造的GPU结果。
 
-## 四卡A100运行
+## 当前先做CPU再分析
+
+```bash
+cd research_outputs/controllability_v1
+python3 -m venv .venv
+.venv/bin/python -m unittest -v test_analysis
+.venv/bin/python run_control.py --run /data/janus_completed --out /data/janus_control_basic
+```
+
+精确死路诊断再安装tokenizer依赖并指定实际本地tokenizer，见执行步骤。64题新确认研究目前是待冻结方案，不是此工具已经实现或运行的新GPU实验；不要直接重跑旧脚本冒充新确认结果。
+
+## 历史四卡A100计划（当前无需重跑）
+
+下方是原实验工具的四卡配置，不能代替用户实际两卡两波执行快照。仅在确需复现该原计划时使用；当前优先完成上面的现有结果再分析。
 
 数据已确定为一个ARC-Challenge已知队列子集：96题正式评估、16题开发。两种输出编码不算两个独立数据集。两个固定revision的7B模型分别分配两张GPU，每卡独立batch1推理；正式计划6,976条记录，其中1,248条为无需新增模型调用的确定性完成。
 

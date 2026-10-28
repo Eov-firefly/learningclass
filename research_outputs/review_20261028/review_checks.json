@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-28",
+  "reviewed_commit": "11124130a9712c887f6bc952edbc28f7c7e998f2",
+  "source_sha256": {
+    "main.tex": "e756abc07703ccb7e4f733b9cb2e039d6423364f150119912bf682d1fa3ad623",
+    "manuscript.md": "dbbc752f8cfb87ee5ee123f797c42775678840a2c79cce289e22e419bac90919"
+  },
+  "abstract_word_count": 261,
+  "source_main_tex_compiles": true,
+  "pdf_pages": 22,
+  "underfull_boxes": 2,
+  "overfull_boxes": 0,
+  "substantive_md_tex_discrepancy_found": false,
+  "text_comparison_note": "Five plain-text conversion differences are table rules/widths and seqsplit macros; relevant text and three tables match.",
+  "raw_new_result_archive_available_in_review": false,
+  "raw_archive_sha256_reported_in_manuscript": "356984d29742605b26261bb7cc73cce575f53c7e1687c04404ab3224760ef7bf",
+  "raw_integrity_claims_independently_recomputed": false,
+  "arithmetic_scope": "only published aggregate counts and timings; primary interval reconstructed conditional on reported zero discordance",
+  "submission_recommendation": "hold for substantive contribution/evidence/protocol revision; no blanket claim that negative studies are unpublishable",
+  "new_gpu_experiments_run": false,
+  "original_repository_sources_modified": false
+}

@@ -1,0 +1,23 @@
+{
+  "version": "control-reanalysis-v1",
+  "date": "2026-10-28",
+  "status": "prepared; CPU software tests passed",
+  "software_tests": 13,
+  "execution_stages_available": [
+    "A: basic existing-result transfers/cost",
+    "B: tokenizer-only exact canonical dead-end reconstruction"
+  ],
+  "entrypoint": "run_control.py",
+  "readable_output": "执行结果摘要_zh.md",
+  "instructions": "执行步骤_zh.md",
+  "gpu_inference": false,
+  "new_real_model_experiments": "not run",
+  "existing_raw_data_reanalyzed": "not available in repository snapshot",
+  "proposed_confirmation_records": 1536,
+  "confirmation_gpu_runner_in_this_package": false,
+  "scope": "local control metrics; descriptive paired intervals; not a new confirmed primary result or novelty proof",
+  "matched_expected": 5952,
+  "core_full_grammar_expected": 2304,
+  "dataset_eval": 96,
+  "dataset_dev": 16
+}

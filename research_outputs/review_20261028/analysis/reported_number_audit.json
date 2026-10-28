@@ -1,0 +1,107 @@
+{
+  "source_file": "/workspace/learningclass/manuscript.md",
+  "source_sha256": "dbbc752f8cfb87ee5ee123f797c42775678840a2c79cce289e22e419bac90919",
+  "review_date": "2026-10-28",
+  "scope": "reported-number arithmetic only, no new inference and no raw statistical reproduction",
+  "primary": [
+    {
+      "model": "Qwen",
+      "full_correct": 76,
+      "grammar_correct": 76,
+      "n": 96,
+      "difference_pp": 0.0,
+      "zero_discordance_conservative_975_half_width_pp": 5.149326970620622
+    },
+    {
+      "model": "Mistral",
+      "full_correct": 66,
+      "grammar_correct": 66,
+      "n": 96,
+      "difference_pp": 0.0,
+      "zero_discordance_conservative_975_half_width_pp": 5.149326970620622
+    }
+  ],
+  "tight_budget": [
+    {
+      "model": "Qwen",
+      "n": 96,
+      "full_certified": 84,
+      "grammar_certified": 69,
+      "full_correct": 54,
+      "grammar_correct": 54,
+      "coverage_difference_pp": 15.625,
+      "correct_commit_difference_pp": 0.0,
+      "full_conditional_accuracy_pct": 64.28571428571429,
+      "grammar_conditional_accuracy_pct": 78.26086956521739,
+      "full_wrong_certified": 30,
+      "grammar_wrong_certified": 15,
+      "paired_wins_losses": "not recoverable from aggregates",
+      "caution": "conditional rates compare selected sets; not proof of harm on common accepted outputs"
+    },
+    {
+      "model": "Mistral",
+      "n": 96,
+      "full_certified": 65,
+      "grammar_certified": 53,
+      "full_correct": 41,
+      "grammar_correct": 39,
+      "coverage_difference_pp": 12.5,
+      "correct_commit_difference_pp": 2.083333333333333,
+      "full_conditional_accuracy_pct": 63.07692307692307,
+      "grammar_conditional_accuracy_pct": 73.58490566037736,
+      "full_wrong_certified": 24,
+      "grammar_wrong_certified": 14,
+      "paired_wins_losses": "not recoverable from aggregates",
+      "caution": "conditional rates compare selected sets; not proof of harm on common accepted outputs"
+    }
+  ],
+  "timing": [
+    {
+      "wave": 0,
+      "model": "Qwen",
+      "full_ms": 120.05,
+      "grammar_ms": 119.99,
+      "sequence_ms": 60.77,
+      "full_minus_grammar_ms": 0.060000000000002274,
+      "full_to_sequence_time_ratio": 1.9754813230212274,
+      "scope": "descriptive reported means only; no paired runtime uncertainty available"
+    },
+    {
+      "wave": 0,
+      "model": "Mistral",
+      "full_ms": 150.33,
+      "grammar_ms": 150.4,
+      "sequence_ms": 62.7,
+      "full_minus_grammar_ms": -0.06999999999999318,
+      "full_to_sequence_time_ratio": 2.3976076555023926,
+      "scope": "descriptive reported means only; no paired runtime uncertainty available"
+    },
+    {
+      "wave": 1,
+      "model": "Qwen",
+      "full_ms": 164.49,
+      "grammar_ms": 163.66,
+      "sequence_ms": 62.21,
+      "full_minus_grammar_ms": 0.8300000000000125,
+      "full_to_sequence_time_ratio": 2.6441086642018967,
+      "scope": "descriptive reported means only; no paired runtime uncertainty available"
+    },
+    {
+      "wave": 1,
+      "model": "Mistral",
+      "full_ms": 220.49,
+      "grammar_ms": 221.53,
+      "sequence_ms": 62.67,
+      "full_minus_grammar_ms": -1.039999999999992,
+      "full_to_sequence_time_ratio": 3.518270304771023,
+      "scope": "descriptive reported means only; no paired runtime uncertainty available"
+    }
+  ],
+  "missing_evidence": [
+    "new raw JSONL archive",
+    "actual two-GPU wave runner and version/configuration",
+    "all-policy all-budget summaries",
+    "paired outcome matrices",
+    "latency pairs and environment snapshots"
+  ]
+}

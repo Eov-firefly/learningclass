@@ -1,0 +1,8 @@
+# Optional stage B only. Stage A and the base tests use the standard library.
+# No torch/CUDA or model weights are needed for tokenizer-only reconstruction.
+transformers==4.48.2
+tokenizers==0.21.4
+huggingface-hub==0.36.2
+numpy==1.26.4
+safetensors==0.8.0
+sentencepiece==0.2.0

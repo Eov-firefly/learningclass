@@ -1,0 +1,3 @@
+model,n,full_certified,grammar_certified,full_correct,grammar_correct,coverage_difference_pp,correct_commit_difference_pp,full_conditional_accuracy_pct,grammar_conditional_accuracy_pct,full_wrong_certified,grammar_wrong_certified,paired_wins_losses,caution
+Qwen,96,84,69,54,54,15.625,0.0,64.28571428571429,78.26086956521739,30,15,not recoverable from aggregates,conditional rates compare selected sets; not proof of harm on common accepted outputs
+Mistral,96,65,53,41,39,12.5,2.083333333333333,63.07692307692307,73.58490566037736,24,14,not recoverable from aggregates,conditional rates compare selected sets; not proof of harm on common accepted outputs
