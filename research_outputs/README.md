@@ -1,6 +1,6 @@
 # JANUS 论文修订、严格评审与实验交付
 
-最新整理：2026-10-28。根目录论文已整合用户报告的**两卡A800、两波执行**结果，当前优先执行**局部可控性再分析**，无需新增GPU推理。新raw归档尚未在本仓库提供可下载副本，本轮复审不能冒充独立完整复算。原v8.8及四卡A100计划作为历史交付保留。
+最新整理：2026-10-29。根目录论文已整合用户报告的**两卡A800、两波执行**结果，当前优先执行**局部可控性再分析**，无需新增GPU推理。另已准备可选的2/4卡最小追加实验运行器，尚未运行；默认复用旧题，不能当作新独立确认。新raw归档尚未在本仓库提供可下载副本，本轮复审不能冒充独立完整复算。原v8.8及四卡A100计划作为历史交付保留。
 
 ## 最新阅读入口
 
@@ -13,6 +13,8 @@
 | 一键CPU再分析入口 | [run_control.py](controllability_v1/run_control.py) · [使用说明](controllability_v1/README_zh.md) |
 | 预算可控性的局部验证方案 | [实验方案](controllability_v1/局部突破实验方案_zh.md) |
 | 再分析软件检查范围 | [STATUS.json](controllability_v1/STATUS.json) |
+| 可选追加实验：2卡/4卡运行器 | [设计说明](controllability_gpu_v1/README_zh.md) · [执行步骤](controllability_gpu_v1/执行步骤_zh.md) |
+| 追加实验实现与检查范围 | [STATUS.json](controllability_gpu_v1/STATUS.json) |
 | 修正后的核心创新点 | [CORE_INNOVATION_zh.md](review/CORE_INNOVATION_zh.md) |
 | v8.8历史修订母版 | [PDF](manuscript_v88/main.pdf) · [LaTeX](manuscript_v88/main.tex) · [Markdown](manuscript_v88/manuscript.md) |
 | 严格审稿与本轮处理 | [审稿意见](manuscript_v88/严格审稿意见与处理结果_zh.md) |
@@ -28,11 +30,12 @@
 ## 直接下载
 
 - **当前优先使用：局部可控性再分析包**：[JANUS_control_reanalysis_v1_20261028.zip](packages/JANUS_control_reanalysis_v1_20261028.zip)
+- **可选追加实验运行器，未运行GPU**：[JANUS_control_gpu_v1_20261029.zip](packages/JANUS_control_gpu_v1_20261029.zip)
 - **最新论文复审快照**：[JANUS_20261028_post_experiment_strict_review.zip](packages/JANUS_20261028_post_experiment_strict_review.zip)
 - **历史论文修订包**：[JANUS_v8_8_strict_review_final_revision_20261027.zip](packages/JANUS_v8_8_strict_review_final_revision_20261027.zip)
 - **原四卡GPU实验工具**：[JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip](packages/JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip)
 
-两个解压目录与对应最新交付ZIP一致，保留各自SHA256SUMS。v8.9原始包保留在packages作为历史版本；v8.9.1修复了ETA并发读取日志的问题。没有纳入模型权重、虚拟环境、下载缓存或伪造的GPU结果。
+各版本保留对应交付ZIP及SHA256SUMS。新GPU工具包同时包含其相邻推理和分析依赖，解压后保留research_outputs目录关系。v8.9原始包保留在packages作为历史版本；v8.9.1修复了ETA并发读取日志的问题。没有纳入模型权重、虚拟环境、下载缓存或伪造的GPU结果。
 
 ## 当前先做CPU再分析
 
@@ -43,7 +46,7 @@ python3 -m venv .venv
 .venv/bin/python run_control.py --run /data/janus_completed --out /data/janus_control_basic
 ```
 
-精确死路诊断再安装tokenizer依赖并指定实际本地tokenizer，见执行步骤。64题新确认研究目前是待冻结方案，不是此工具已经实现或运行的新GPU实验；不要直接重跑旧脚本冒充新确认结果。
+精确死路诊断再安装tokenizer依赖并指定实际本地tokenizer，见执行步骤。2026-10-29已补齐[可选GPU运行器](controllability_gpu_v1/README_zh.md)：64题、2模型、3预算、5策略，1,920条记录/最多1,536条模型请求，另计校准。默认64题来自已知队列，标签为探索性；独立新64题仍未冻结，不能直接重跑旧脚本冒充新确认结果。请先解释现有raw再分析，再决定是否运行追加实验。
 
 ## 历史四卡A100计划（当前无需重跑）
 

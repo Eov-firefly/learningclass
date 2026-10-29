@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-29",
+  "status": "prepared_cpu_checked_not_gpu_executed",
+  "software_tests_passed": 13,
+  "tests_use_synthetic_fixtures": true,
+  "real_gpu_requests_executed_in_this_delivery": 0,
+  "new_independent_dataset_frozen": false,
+  "default_dataset": "64 deterministically selected examples from the existing known 96-example ARC cohort; exploratory only",
+  "formal_records_for_64_examples": 1920,
+  "neural_request_upper_bound_excluding_warmup_calibration": 1536,
+  "deterministic_records": 384,
+  "supported_gpu_counts": [2, 4],
+  "gpu_integration_pending": [
+    "Actual pinned model/tokenizer paths and local weight provenance",
+    "CUDA BF16 SDPA and XGrammar runtime on the user's server",
+    "Hardware calibration and formal inference",
+    "Full raw-result scoring and counterexample inspection"
+  ],
+  "priority": "Reanalyze the existing 6976 raw records with controllability_v1 before spending new GPU time",
+  "paper_root_sources_modified": false,
+  "original_24_token_primary_result_replaced": false
+}

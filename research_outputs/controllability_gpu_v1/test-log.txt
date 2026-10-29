@@ -1,0 +1,25 @@
+test_assignments (test_workflow.WorkflowTests.test_assignments) ... ok
+test_cli_plan_and_full_analysis_without_gpu (test_workflow.WorkflowTests.test_cli_plan_and_full_analysis_without_gpu) ... ok
+test_complete_evaluation_and_preservation (test_workflow.WorkflowTests.test_complete_evaluation_and_preservation) ... ok
+test_context_and_token_mismatch_not_silenced (test_workflow.WorkflowTests.test_context_and_token_mismatch_not_silenced) ... ok
+test_counts_and_sharding (test_workflow.WorkflowTests.test_counts_and_sharding) ... ok
+test_dead_end_reconstruction_and_initial_infeasible (test_workflow.WorkflowTests.test_dead_end_reconstruction_and_initial_infeasible) ... ok
+test_duplicate_and_modified_jobs_rejected (test_workflow.WorkflowTests.test_duplicate_and_modified_jobs_rejected) ... ok
+test_freeze_cli_uses_structure_and_retains_external_exposure_warning (test_workflow.WorkflowTests.test_freeze_cli_uses_structure_and_retains_external_exposure_warning) ... ok
+test_frozen_hash_and_worker_does_not_read_gold (test_workflow.WorkflowTests.test_frozen_hash_and_worker_does_not_read_gold) ... ok
+test_missing_grid_is_reported (test_workflow.WorkflowTests.test_missing_grid_is_reported) ... ok
+test_partial_jsonl_and_failed_resume_rejected (test_workflow.WorkflowTests.test_partial_jsonl_and_failed_resume_rejected) ... ok
+test_public_rejects_gold_duplicates_and_collision (test_workflow.WorkflowTests.test_public_rejects_gold_duplicates_and_collision) ... ok
+test_valid_text_must_match_its_canonical_token_path (test_workflow.WorkflowTests.test_valid_text_must_match_its_canonical_token_path) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.448s
+
+OK
+{
+  "n": 2,
+  "evidence_label": "prospective_external_cohort_unverified_prior_exposure",
+  "overlap_with_known_112": 0,
+  "total_records": 60,
+  "neural_request_upper_bound": 48
+}
