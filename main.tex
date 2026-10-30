@@ -86,11 +86,11 @@ China Telecom Cloud Network Operating System R\&D Center, Beijing, China
 
 * Correspondence: biangz@chinatelecom.cn
 
-Version 8.9.1, 28 October 2026. Research draft updated with the completed two-GPU known-cohort study. Independent confirmatory evaluation and author declarations remain incomplete; this version is not submission-ready.
+Revision 30 October 2026. Research draft integrating the two-GPU study and the subsequent single-GPU exploratory control study. Independent confirmatory evaluation and author declarations remain incomplete; this version is not submission-ready.
 
 \section{Abstract}\label{abstract}
 
-An answer-boundary stop can return a locally complete value inside an unfinished artifact, while a grammar-legal continuation can exhaust its token budget before acceptance. We formulate budget-viable commitment as a controller for append-only completion over a declared token language. At activation, selected values are bound and a finite completion language is verified against a consumer contract. The controller retains only tokens with an accepting continuation inside the remaining budget, then commits a validated artifact or records an explicit abstention. We characterize this support by backward reachability and prove conditional completion after entry into a viable state. These properties concern structural acceptance and field preservation, rather than answer truth, and do not establish algorithmic priority over equivalent grammar controllers. A finite-trie implementation integrates with Transformers generation. Controlled CPU checks cover distance pruning, boundary cases, binding, model support and failure accounting. Historical stopping data provide motivation: 204 validity repairs contained 114 correct and 90 incorrect answers, showing that validity and correctness can diverge. A format-only reduction shows that deterministic shortest completion can match acceptance and bound values without additional model calls. In a matched-prefix study of 96 known ARC-Challenge questions per model, the full controller and grammar-only continuation had the same correct-commit counts at a 24-token completion budget: 76 for Qwen and 66 for Mistral. No grammar-legal token was removed in that primary setting. An exploratory tighter budget changed certified coverage, but did not establish a general quality benefit. Timing is descriptive and stratified by two execution waves. The study does not establish equivalence, generalization to unseen tasks, or a GPU speed advantage.
+An answer-boundary stop can return a locally complete value inside an unfinished artifact, while a grammar-legal continuation can exhaust its token budget before acceptance. We formulate budget-viable commitment as a controller for append-only completion over a declared token language. At activation, selected values are bound and a finite completion language is verified against a consumer contract. The controller retains only tokens with an accepting continuation inside the remaining budget, then commits a validated artifact or records an explicit abstention. We characterize this support by backward reachability and prove conditional completion after entry into a viable state. These properties concern structural acceptance and field preservation, rather than answer truth, and do not establish algorithmic priority over equivalent grammar controllers. A finite-trie implementation integrates with Transformers generation. Controlled CPU checks cover distance pruning, boundary cases, binding, model support and failure accounting. Historical stopping data provide motivation: 204 validity repairs contained 114 correct and 90 incorrect answers, showing that validity and correctness can diverge. A format-only reduction shows that deterministic shortest completion can match acceptance and bound values without additional model calls. In a matched-prefix study of 96 known ARC-Challenge questions per model, the full controller and grammar-only continuation had the same correct-commit counts at a 24-token completion budget: 76 for Qwen and 66 for Mistral. No grammar-legal token was removed in that primary setting. An exploratory tighter budget changed certified coverage, but did not establish a general quality benefit. A subsequent single-GPU study of 64 previously examined questions per model found higher certified coverage for the full controller on initially feasible eight-token requests, with little or no change in correct commitments. Timing for the two-GPU study is descriptive and stratified by two execution waves; the instrumented single-GPU study is not an isolated latency benchmark. The study does not establish equivalence, generalization to unseen tasks, or a GPU speed advantage.
 
 Keywords: constrained decoding; finite languages; token budgets;
 verified completion; abstention
@@ -499,11 +499,33 @@ At the 8-token option-text budget, certified coverage under full versus grammar-
 
 In the finite format-only controls, deterministic shortest completion and the full controller matched the reported acceptance and bound-value checks when completion was feasible; both abstained below the compiled minimum. This is consistent with the reduction in Section 3.5, but does not extend the deterministic result to task-relevant unbound answers.
 
-\subsection{6.4. Descriptive timing and limitations}
+\subsection{6.4. Single-GPU exploratory controllability study}
+
+A subsequent frozen control study ran Qwen and Mistral sequentially on one A800 80 GB GPU. Its 64 ARC-Challenge questions were drawn from the already inspected cohort; the study is exploratory and does not supply an independent test set. Across two models, 64 questions, three budget conditions and five policies, it produced 1,920 records. Offline integrity checks found a complete grid, zero inference errors, invalid submissions or budget overruns, and no lost certified or correct commitments in the full-versus-grammar comparisons. The two model runs completed with zero exit codes. These are computational checks, not human semantic annotation.
+
+The prespecified within-study comparison considered the eight-token cap only among requests initially feasible for the shared canonical token language. The full distance-filtered controller and grammar-only continuation shared this language and the same matched inputs. Table 3 also reports correct certified commitments over all 64 eligible requests: certified completion is a structural endpoint and does not imply a correct answer. The seven Qwen and 19 Mistral requests initially infeasible at this cap are excluded from the feasible-subset rate, but remain in the all-request correctness denominator.
+
+Table 3. Eight-token exploratory control: structural completion among initially feasible requests and correct certified commitments among all 64 requests per model.
+
+\begin{longtable}{@{}p{.10\linewidth}p{.13\linewidth}p{.16\linewidth}p{.16\linewidth}p{.16\linewidth}p{.16\linewidth}@{}}
+\toprule
+Model & Initially feasible & Full certified / feasible & Grammar certified / feasible & Full correct / all & Grammar correct / all \\
+\midrule
+\endhead
+Qwen & 57/64 & 57/57 & 44/57 & 35/64 & 35/64 \\
+Mistral & 45/64 & 45/45 & 37/45 & 28/64 & 27/64 \\
+\bottomrule
+\end{longtable}
+
+The paired full-minus-grammar difference in feasible-subset certified completion was 22.81 percentage points for Qwen (conservative paired 97.5\% interval: 2.16 to 39.39 points) and 17.78 points for Mistral (interval: $-$4.42 to 36.02 points). These per-model intervals use the study's two-cell multiplicity adjustment; the reused known cohort and exploratory status limit inference. On this subset the grammar-only controller entered non-completable paths in 13 Qwen and eight Mistral cases. Successful grammar-only token trajectories were preserved by the full controller: 44/44 for Qwen and 37/37 for Mistral. The additional structural completions were not evidence of a corresponding general accuracy improvement: the all-request correct counts changed by zero and one, respectively. Incorrect certified submissions also increased from nine to 22 for Qwen and from 10 to 17 for Mistral, emphasizing that structural completion is not answer quality.
+
+Two case-dependent boundary controls help interpret the mechanism. At each case's compiled minimum canonical suffix length, full versus grammar-only certified 64/64 versus 24/64 for Qwen and 64/64 versus 26/64 for Mistral. At a wider cap defined by each case's maximum canonical suffix length, both policies certified 64/64 for both models. These deliberately constructed caps are not a deployment-budget distribution, and the three conditions reuse the same questions. At the fixed eight-token cap, candidate-sequence scoring certified 57 and 45 requests and yielded 34 and 27 correct submissions for Qwen and Mistral, respectively; XGrammar certified 39 and 37 and yielded 31 and 27 correct submissions. XGrammar may allow tokenizations outside the canonical trie, so its difference cannot be attributed to distance pruning alone. Deterministic shortest completion also certified all initially feasible fixed-eight requests, with nine correct Qwen and 11 correct Mistral submissions; its completion guarantee is therefore another relevant structural comparator. The 1,920 records include 384 deterministic cases without model inference. The instrumentation serves correctness analysis and does not establish isolated latency or speed.
+
+\subsection{6.5. Descriptive timing and limitations}
 
 Timing was collected with batch size one in two sequential waves. Each wave started one Qwen worker and one Mistral worker on separate A800 GPUs after a two-worker resident-model barrier. The workers could finish at different times; four workers did not execute concurrently. Model and GPU identity were coupled, and question shards were fixed to waves. Each model-wave-policy timing cell contains 24 requests on eight questions with three repetitions per question. Wave-level means below are descriptive; the two waves cannot estimate a wave random effect, and no across-wave confidence interval is asserted.
 
-Table 3. Matched-prefix mean request time in milliseconds, by wave, model and policy; 24-token option-text setting.
+Table 4. Matched-prefix mean request time in milliseconds, by wave, model and policy; 24-token option-text setting.
 
 \begin{longtable}{@{}p{.08\linewidth}p{.16\linewidth}p{.13\linewidth}p{.19\linewidth}p{.30\linewidth}@{}}
 \toprule
@@ -519,7 +541,7 @@ Wave & Model & Full & Grammar-only & Candidate-sequence scoring \\
 
 These are supplied-prefix request measurements, not complete end-to-end system costs. Candidate scoring uses a different computation from autoregressive generation. Differences between waves or policies cannot be attributed to hardware or generalized as a speed advantage. The prior three-GPU timing study used different boundaries and is not pooled with these measurements.
 
-\subsection{6.5. Remaining tracks and task construction}
+\subsection{6.6. Remaining tracks and task construction}
 
 The matched-prefix track above holds the prefix, token language and remaining budget fixed. A broader end-to-end track should include prompt processing, drafting, failed activation, compilation, completion, validation and abstention; the limited wrapper run above does not replace that evaluation. Supplied-prefix timing cannot support end-to-end speed or coverage claims.
 
@@ -527,7 +549,7 @@ The task set must distinguish a format-only reduction control from structured pr
 
 Historical cohorts have been inspected and can support a declared known-cohort re-evaluation. They cannot be relabeled unseen holdouts. Independent instances or tasks are needed for broader generalization claims. Input IDs, contracts, compiler capabilities and binding rules will be frozen before final evaluation. Failed compilation remains in the denominator for every frozen eligible request.
 
-\subsection{6.6. Further comparators and ablations}
+\subsection{6.7. Further comparators and ablations}
 
 Further matched-prefix comparisons should include deterministic shortest completion, model-scored grammar-only continuation, the full budget mask and an independently implemented version of the same distance recurrence. Shared language and acceptance checks are essential. The equivalent recurrence checks consistency; output superiority is not expected under identical assumptions. Finite-answer tasks also require a strong simple alternative, such as development-frozen prior selection or candidate-sequence scoring with all model calls accounted for.
 
@@ -535,7 +557,7 @@ End-to-end comparisons require Uniform, early return on the same target contract
 
 Ablations isolate removal of the distance filter at the same binding point, selective versus from-start constraints, and complete-answer versus public-structure binding. Any comparison requiring earlier-field editing first requires a new implementation. A deliberately removed validator is a fault-injection check rather than a competitive baseline.
 
-\subsection{6.7. Further budgets, endpoints and failure reporting}
+\subsection{6.8. Further budgets, endpoints and failure reporting}
 
 Development data will determine tight, intermediate and relaxed total token caps and the reserve rule before testing. Shared-prefix cases include budgets below, at and above the compiled minimum distance; unequal-length accepting branches; inactive masks; and infeasible states. Report how often pruning actually excludes a grammar-legal token. A fixed single cap cannot establish a budget-response curve.
 
@@ -545,7 +567,7 @@ Also report budget overruns and failure categories: unsupported compilation, con
 
 Length-dependent pruning may favor short wrong answers. Include canonical short-label controls, answer-length strata, erroneous bindings and offline reference-reachability analysis. Reference information is available only to the scorer, never to inference, budget selection or post hoc sample exclusion. Supported-language or reference-reachable subsets are diagnostics rather than replacements for the all-request endpoint.
 
-\subsection{6.8. Further cost, statistics and reproducibility}
+\subsection{6.9. Further cost, statistics and reproducibility}
 
 Record model-generated, deterministically inserted and returned token IDs separately, together with forward calls and costs of compilation, masking, validation and failed attempts. Measure synchronized isolated request latency with matched model precision, attention backend, batch size and hardware; randomize or balance policy order. Separate cold compilation from a declared reusable-cache regime. Report mean and P50/P95 latency and paired uncertainty. Concurrent throughput would require a distinct experiment, not extrapolation from request times.
 
@@ -561,15 +583,15 @@ The current finite language limits both coverage and scalability. Missing valid 
 
 The deterministic reduction is a substantive boundary. If empirical gains are restricted to formatting-equivalent suffixes, the appropriate contribution is verified interface repair. Task-relevant unbound fields may justify model-scored continuation, but they also expose quality loss through budget pruning and require strong non-generative or candidate-scoring baselines. The known-cohort comparison against grammar-only and candidate scoring is informative but limited, particularly because the primary budget filter was inactive.
 
-The new study found no correct-commit difference in its primary matched-prefix cells and observed exploratory coverage differences at a tighter budget. It establishes neither a general task-quality improvement nor a latency advantage. The historical studies support their own stopping and monitoring conclusions; the CPU tests support implementation behavior on controlled finite cases. Independent data, broader task runs and source-level comparison with relevant prior systems are required before a stronger contribution claim can be assessed.
+The two-GPU study found no correct-commit difference in its primary matched-prefix cells. The subsequent single-GPU controls show that the budget filter can preserve structural completion when grammar-only paths run out of budget on this known cohort, while the all-request correct counts changed little or not at all. Both observations at the tighter budget are exploratory. It establishes neither a general task-quality improvement nor a latency advantage. The historical studies support their own stopping and monitoring conclusions; the CPU tests support implementation behavior on controlled finite cases. Independent data, broader task runs and source-level comparison with relevant prior systems are required before a stronger contribution claim can be assessed.
 
 \section{8. Conclusions}
 
-Budget-viable commitment provides an explicit finite-language specification for append-only constrained completion and validated return. Exact token-level reachability gives conditional structural completion inside a remaining budget, while final acceptance checks preserve declared contract and binding predicates. These properties do not imply true answers, global compiler completeness, successful activation for every request or wall-clock speed. The finite-trie implementation and controlled checks make the specification testable. Historical evidence motivates separating validity from correctness, and the format-only reduction identifies a necessary deterministic comparator. The two-model known-cohort study adds a matched comparison but finds no primary correct-commit difference when the filter is inactive. Independent task and full-system cost comparisons remain necessary before a broader empirical algorithm claim.
+Budget-viable commitment provides an explicit finite-language specification for append-only constrained completion and validated return. Exact token-level reachability gives conditional structural completion inside a remaining budget, while final acceptance checks preserve declared contract and binding predicates. These properties do not imply true answers, global compiler completeness, successful activation for every request or wall-clock speed. The finite-trie implementation and controlled checks make the specification testable. Historical evidence motivates separating validity from correctness, and the format-only reduction identifies a necessary deterministic comparator. The two-GPU known-cohort study finds no primary correct-commit difference when the filter is inactive. The later single-GPU controls expose a structural completion difference at a tighter cap on reused questions, without establishing a general accuracy benefit. Independent task and full-system cost comparisons remain necessary before a broader empirical algorithm claim.
 
 \section{Data and code availability}
 
-The revision package contains controller code, two Transformers interfaces, deterministic repair, controlled tests, historical analysis inputs/summaries and the ten-table historical supplement. The two-GPU v8.9.1 study has a separately preserved local archive of raw records, frozen inputs, run logs, analysis and verification evidence; its archive SHA-256 is 356984d29742605b26261bb7cc73cce575f53c7e1687c04404ab3224760ef7bf. The full old raw experiment archive is a separate prerequisite for rerunning the historical JSONL analysis. The historical follow-up timing summary does not itself contain all per-call raw records. Availability of a public permanent archive, DOI and final publication release remains to be established.
+The revision package contains controller code, two Transformers interfaces, deterministic repair, controlled tests, historical analysis inputs/summaries and the ten-table historical supplement. The two-GPU v8.9.1 study has a separately preserved local archive of raw records, frozen inputs, run logs, analysis and verification evidence; its archive SHA-256 is 356984d29742605b26261bb7cc73cce575f53c7e1687c04404ab3224760ef7bf. The subsequent single-GPU exploratory study is separately preserved with raw records, frozen inputs, logs, analysis and verification evidence; the verified archive SHA-256 is \seqsplit{874d09359bd953712b801b3ce40fa249da6646eb8041deda19acdfe8aa63aef1}. The full old raw experiment archive is a separate prerequisite for rerunning the historical JSONL analysis. The historical follow-up timing summary does not itself contain all per-call raw records. Availability of a public permanent archive, DOI and final publication release remains to be established.
 
 \section{Declarations pending author
 verification}\label{declarations-pending-author-verification}
