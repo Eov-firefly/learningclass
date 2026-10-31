@@ -1,0 +1,15 @@
+{
+  "review_date": "2026-10-31",
+  "reviewed_commit": "52b8cc10fd1d483e683c258c1ab157b7d7ce1eee",
+  "reviewed_source": "main.tex",
+  "source_sha256": "46b6eac35f4eb62300a7cd4e0863a421757899ab21b29a6f74a346c24af05dac",
+  "pdf_sha256": "f611b67327bb9879cc9210631ad8b2366687e3f7e82f5ceeaaa8658de662ab81",
+  "pdf_pages": 23,
+  "scope": "manuscript review, reported-number arithmetic and two-pass LaTeX compilation; not raw-result reproduction",
+  "raw_archives_independently_verified": false,
+  "compiled_without_errors": true,
+  "overfull_boxes": 0,
+  "underfull_warnings": 4,
+  "paper_source_changed_by_this_delivery": false,
+  "manuscript_md_contains_new_single_gpu_section": false
+}

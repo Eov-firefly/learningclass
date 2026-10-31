@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-31",
+  "source": "/workspace/learningclass/main.tex",
+  "source_sha256": "46b6eac35f4eb62300a7cd4e0863a421757899ab21b29a6f74a346c24af05dac",
+  "scope": "source-number arithmetic; no raw traces, archive checksum verification or GPU replication",
+  "paired_intervals_assume": "reported subset preservation and zero paired certification losses are correct",
+  "abstract_whitespace_word_count": 307,
+  "single_gpu": [
+    {
+      "model": "Qwen",
+      "all_requests": 64,
+      "initially_feasible": 57,
+      "initially_infeasible": 7,
+      "full_certified": 57,
+      "grammar_certified": 44,
+      "feasible_difference_pp": 22.80701754385965,
+      "conservative_paired_975_ci_pp": [
+        2.162570724017654,
+        39.386310689165285
+      ],
+      "full_correct": 35,
+      "grammar_correct": 35,
+      "full_wrong_certified": 22,
+      "grammar_wrong_certified": 9,
+      "full_conditional_accuracy": 0.6140350877192983,
+      "grammar_conditional_accuracy": 0.7954545454545454,
+      "extra_correct_if_reported_preservation_holds": 0,
+      "extra_wrong_if_reported_preservation_holds": 13
+    },
+    {
+      "model": "Mistral",
+      "all_requests": 64,
+      "initially_feasible": 45,
+      "initially_infeasible": 19,
+      "full_certified": 45,
+      "grammar_certified": 37,
+      "feasible_difference_pp": 17.77777777777778,
+      "conservative_paired_975_ci_pp": [
+        -4.415967102139085,
+        36.01535340024687
+      ],
+      "full_correct": 28,
+      "grammar_correct": 27,
+      "full_wrong_certified": 17,
+      "grammar_wrong_certified": 10,
+      "full_conditional_accuracy": 0.6222222222222222,
+      "grammar_conditional_accuracy": 0.7297297297297297,
+      "extra_correct_if_reported_preservation_holds": 1,
+      "extra_wrong_if_reported_preservation_holds": 7
+    }
+  ]
+}

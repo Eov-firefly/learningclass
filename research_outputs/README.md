@@ -1,14 +1,16 @@
 # JANUS 论文修订、严格评审与实验交付
 
-最新整理：2026-10-29。根目录论文已整合用户报告的**两卡A800、两波执行**结果，当前优先执行**局部可控性再分析**，无需新增GPU推理。另已准备可选的2/4卡最小追加实验运行器，尚未运行；默认复用旧题，不能当作新独立确认。新raw归档尚未在本仓库提供可下载副本，本轮复审不能冒充独立完整复算。原v8.8及四卡A100计划作为历史交付保留。
+最新整理：2026-10-31。根目录main.tex已整合用户报告的**两卡A800两波研究和后续单卡探索性研究**，本轮新增严格复审建议及23页编译PDF。manuscript.md尚未同步单卡结果。优先补齐原始证据并完成CPU分析，不立即重复GPU实验。新raw归档尚未在main分支提供可下载副本，本轮复审不能冒充独立完整复算。原v8.8及四卡A100计划作为历史交付保留。
 
 ## 最新阅读入口
 
 | 内容 | 入口 |
 | --- | --- |
-| 当前用户整合稿 | [Markdown](../manuscript.md) · [LaTeX](../main.tex) |
+| 当前用户整合稿 | [LaTeX，已含单卡结果](../main.tex) · [Markdown，尚未同步](../manuscript.md) |
+| 2026-10-31最新严格复审与下一步 | [完整建议](review_20261031/严格复审与下一步_zh.md) · [核查范围](review_20261031/review_checks.json) |
+| 2026-10-31最新编译PDF | [23页PDF，基于commit 52b8cc1](review_20261031/build/main.pdf) · [对应源文件](review_20261031/build/main.tex) |
 | 2026-10-28审阅快照PDF | [22页PDF，基于commit 1112413](review_20261028/build/main.pdf) |
-| 新结果严格复审与算术核对 | [详细复审](review_20261028/严格复审_zh.md) · [核查范围](review_20261028/review_checks.json) |
+| 2026-10-28历史复审与算术核对 | [详细复审](review_20261028/严格复审_zh.md) · [核查范围](review_20261028/review_checks.json) |
 | 局部优势：具体执行步骤 | [执行步骤_zh.md](controllability_v1/执行步骤_zh.md) |
 | 一键CPU再分析入口 | [run_control.py](controllability_v1/run_control.py) · [使用说明](controllability_v1/README_zh.md) |
 | 预算可控性的局部验证方案 | [实验方案](controllability_v1/局部突破实验方案_zh.md) |
@@ -31,7 +33,8 @@
 
 - **当前优先使用：局部可控性再分析包**：[JANUS_control_reanalysis_v1_20261028.zip](packages/JANUS_control_reanalysis_v1_20261028.zip)
 - **可选追加实验运行器，未运行GPU**：[JANUS_control_gpu_v1_20261029.zip](packages/JANUS_control_gpu_v1_20261029.zip)
-- **最新论文复审快照**：[JANUS_20261028_post_experiment_strict_review.zip](packages/JANUS_20261028_post_experiment_strict_review.zip)
+- **最新复审建议与23页PDF**：[JANUS_20261031_review_and_pdf.zip](packages/JANUS_20261031_review_and_pdf.zip)
+- **2026-10-28历史论文复审快照**：[JANUS_20261028_post_experiment_strict_review.zip](packages/JANUS_20261028_post_experiment_strict_review.zip)
 - **历史论文修订包**：[JANUS_v8_8_strict_review_final_revision_20261027.zip](packages/JANUS_v8_8_strict_review_final_revision_20261027.zip)
 - **原四卡GPU实验工具**：[JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip](packages/JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip)
 
