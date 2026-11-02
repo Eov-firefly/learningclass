@@ -1,0 +1,24 @@
+{
+  "recorded_model_manifest_matches": {
+    "qwen": {
+      "spec": {
+        "id": "Qwen/Qwen2.5-7B-Instruct-1M",
+        "revision": "e28526f7bb80e2a9c8af03b831a9af3812f18fba"
+      },
+      "matching_file_entries": 12,
+      "weight_entries_with_sha256": 4
+    },
+    "mistral": {
+      "spec": {
+        "id": "mistralai/Mistral-7B-Instruct-v0.3",
+        "revision": "c170c708c41dac9275d15a8fff4eca08d52bab71"
+      },
+      "matching_file_entries": 11,
+      "weight_entries_with_sha256": 3
+    }
+  },
+  "original_source_python_files_matched": 16,
+  "aggregate_wave_raw_byte_equality": true,
+  "single_raw_archive_byte_equality": true,
+  "note": "Recorded hashes are compared; absent weights are not reread. No infrastructure/closeout script is executed."
+}

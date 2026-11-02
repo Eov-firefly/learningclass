@@ -86,11 +86,11 @@ China Telecom Cloud Network Operating System R\&D Center, Beijing, China
 
 * Correspondence: biangz@chinatelecom.cn
 
-Revision 30 October 2026. Research draft integrating the two-GPU study and the subsequent single-GPU exploratory control study. Independent confirmatory evaluation and author declarations remain incomplete; this version is not submission-ready.
+Revision 2 November 2026. Raw-audited research draft. The two studies reuse a known cohort; independent evaluation, priority assessment and final author declarations remain outstanding.
 
 \section{Abstract}\label{abstract}
 
-An answer-boundary stop can return a locally complete value inside an unfinished artifact, while a grammar-legal continuation can exhaust its token budget before acceptance. We formulate budget-viable commitment as a controller for append-only completion over a declared token language. At activation, selected values are bound and a finite completion language is verified against a consumer contract. The controller retains only tokens with an accepting continuation inside the remaining budget, then commits a validated artifact or records an explicit abstention. We characterize this support by backward reachability and prove conditional completion after entry into a viable state. These properties concern structural acceptance and field preservation, rather than answer truth, and do not establish algorithmic priority over equivalent grammar controllers. A finite-trie implementation integrates with Transformers generation. Controlled CPU checks cover distance pruning, boundary cases, binding, model support and failure accounting. Historical stopping data provide motivation: 204 validity repairs contained 114 correct and 90 incorrect answers, showing that validity and correctness can diverge. A format-only reduction shows that deterministic shortest completion can match acceptance and bound values without additional model calls. In a matched-prefix study of 96 known ARC-Challenge questions per model, the full controller and grammar-only continuation had the same correct-commit counts at a 24-token completion budget: 76 for Qwen and 66 for Mistral. No grammar-legal token was removed in that primary setting. An exploratory tighter budget changed certified coverage, but did not establish a general quality benefit. A subsequent single-GPU study of 64 previously examined questions per model found higher certified coverage for the full controller on initially feasible eight-token requests, with little or no change in correct commitments. Timing for the two-GPU study is descriptive and stratified by two execution waves; the instrumented single-GPU study is not an isolated latency benchmark. The study does not establish equivalence, generalization to unseen tasks, or a GPU speed advantage.
+Grammar legality does not ensure acceptance before an output token budget expires. We study budget-viable commitment for append-only completion over a declared finite token language. The controller preserves bound fields, removes tokens without a budget-feasible accepting continuation, and returns a validated artifact or abstention. Backward reachability yields conditional completion. With matched greedy scores and tie-breaking, every grammar-only trajectory already accepting within budget is preserved exactly. Neither property guarantees a correct answer. We audit two models on 96 known ARC-Challenge questions and a subsequent 64-question subset. At the original 24-token setting, pruning was inactive and correct-commit counts were unchanged. In the exploratory eight-token subset, full versus grammar-only completion among initially feasible requests was 57/57 versus 44/57 for Qwen and 45/45 versus 37/45 for Mistral. All successful grammar trajectories were preserved. However, all 13 additional Qwen completions and seven of eight Mistral completions had over-budget canonical reference paths; correct commitments increased by zero and one. Candidate scoring matched structural coverage, with correct counts differing by one per model. A weaker text-only certificate changes some comparisons, exposing sensitivity to terminal policy. The evidence establishes a declared-language control benefit and encoding-dependent semantic limits, rather than general accuracy or speed superiority. The formulation, preservation analysis and reproducible audit do not establish a new reachability algorithm or independent-task generalization.
 
 Keywords: constrained decoding; finite languages; token budgets;
 verified completion; abstention
@@ -119,9 +119,9 @@ therefore concerns a specific completion controller, rather than a
 general document-repair system. Binding preserves content selected by a
 rule; it does not establish that content is true.
 
-The present contributions are a precise separation of acceptance, budget feasibility and answer correctness; a finite-language implementation of the resulting controller with controlled software checks; a retrospective motivation analysis; and a limited real-model known-cohort study with matched baselines and explicitly bounded interpretation. The backward-reachability recurrence itself is not claimed as a novel algorithm. Whether the controller has an independent methodological advantage over existing structured generation remains unestablished.
+Our contribution has three parts. First, we give a contract-explicit formulation separating structural acceptance, budget feasibility, bound-field preservation and task correctness. Second, we characterize viable support and prove a conditional successful-trajectory preservation property for matched greedy grammar decoding, alongside a counterexample to semantic guarantees. Third, a reference implementation and a reproducible raw-record audit connect these properties to two-model behavior, strong finite-choice baselines and reference-path reachability. The contribution is a specification and mechanism analysis; the backward-reachability recurrence is established machinery, and algorithmic priority over equivalent controllers is not asserted.
 
-Three questions organize the study. RQ1 asks whether the implemented controller satisfies its conditional structural and binding invariants. RQ2 asks whether budget pruning improves completion and correct-commit yield over matched grammar-only continuation. RQ3 asks whether model-scored completion provides value beyond deterministic repair at an acceptable total cost. Controlled checks address RQ1 on finite examples; the matched-prefix and wrapper studies in Section 6 provide limited evidence for RQ2 and RQ3, while the remaining end-to-end and independent evaluations are still needed. Historical stopping results in Section 5 do not evaluate the new controller.
+Three questions organize the study. RQ1 asks when budget filtering guarantees acceptance and preserves already successful grammar-only trajectories. RQ2 asks whether it prevents grammar-legal budget dead ends, and at what computational cost. RQ3 asks whether additional structural completions improve correct-commit yield relative to grammar-only, deterministic completion and candidate-sequence scoring. Section 3 gives conditional analyses; Section 6 reports the completed studies and their offline audit. Historical stopping results in Section 5 motivate the distinction between validity and correctness but do not evaluate the new controller.
 
 \section{2. Related work and comparison
 boundary}\label{related-work-and-comparison-boundary}
@@ -143,12 +143,9 @@ without ensuring that the answer is correct.
 
 An implementation with the same token transitions, acceptance set, distance filter and scoring rule can be algorithmically equivalent to ours. Renaming that implementation or adding a submission certificate does not establish a new decoding paradigm. The verified XGrammar documentation also identifies its XGrammar-2 successor as dynamic structured generation; comparison cannot be restricted to old static-grammar examples. The documentation was checked, and Section 6 includes an XGrammar baseline for the declared finite-language study; that experiment is not a comparison with every capability of XGrammar-2, nor a completed full-paper survey.
 
-The present literature boundary is consequently limited. The scope must
-be checked against deadline-aware constrained search, structured editing
-and verified generation before asserting priority. No claim is made that
-these fields lack the same recurrence. A useful systems or task
-contribution would require measured value beyond equivalent grammar
-control and deterministic completion.
+The experimental distinction is narrower than a comparison with all structured-generation methods. Source inspection of the archived comparators shows that the grammar-only adapter permits trie-legal tokens and relies on the generation cap, whereas the full adapter additionally checks remaining distance before token selection. The XGrammar 0.1.21 adapter constrains a finite set of suffix strings without supplying a remaining-distance bound to its matcher. Candidate-sequence scoring first removes paths exceeding the cap and then maximizes summed teacher-forced log likelihood. Deterministic completion chooses a shortest feasible path without a model query. Thus the last two comparators also achieve structural completion when a canonical path fits; that property is not unique to the full controller.
+
+These are source-level distinctions between the evaluated adapters, not claims that the corresponding libraries cannot express other controls. We do not establish priority over length-constrained search, deadline-aware decoding or equivalent finite-state reachability methods. A general new-paradigm claim would require a separate, comprehensive comparison with that literature. The present evidence instead addresses the conditional behavior and semantic limits of a declared, reproducible refinement.
 
 \section{3. Formal controller}\label{formal-controller}
 
@@ -311,6 +308,23 @@ answer before repair begins. Therefore neither correct-commit
 improvement nor noninferiority follows from Propositions 1--3 or from
 historical zero-loss observations.
 
+\subsection{3.6. Conditional preservation of successful greedy trajectories}
+
+Let $G$ be grammar-only greedy completion and $F$ its distance-filtered refinement. Assume identical prompt, initial prefix, bound values, token language, accepting states and budget $R$. At an identical history, both use the same finite model scores and a fixed global tie-break. They return immediately at acceptance, use the same final certificate, and execute without external failure. The only difference is removal by $F$ of grammar-legal tokens with no accepting continuation within the remaining budget.
+
+\textbf{Proposition 5 --- successful-trajectory preservation.} If $G$ produces a certified trajectory $g_1,\ldots,g_T$ with $T\le R$, then $F$ produces exactly the same tokens and artifact.
+
+\textbf{Proof.} Suppose their histories agree through step $j-1$. After $g_j$, the actual suffix $g_{j+1},\ldots,g_T$ is an accepting witness of length $T-j\le R-j$. Hence $g_j$ survives the distance filter. It is the grammar-only maximum under the common score and global tie-break, and remains the maximum after deleting other choices. Induction preserves every choice; both then accept and return the same artifact. The same argument includes an initially accepted prefix with $T=0$.
+
+Let $A_G,A_F$ indicate certified commitments and $Q_G,Q_F$ correct certified commitments on one request. Under these assumptions,
+\[
+A_F-A_G=(1-A_G)A_F\ge0,\qquad
+Q_F-Q_G=(1-A_G)Q_F\ge0.
+\]
+The identities concern the matched greedy comparator, not an unconditional statistical noninferiority claim or a truth guarantee. Newly certified requests can be wrong, so conditional accuracy and application utility can decrease. The result does not compare candidate scoring, random sampling, different tokenizations or activation/binding rules. Different numeric model scores across devices or kernels also invalidate its premise. This preservation argument is a consequence of exact feasibility filtering and greedy subset selection, not a claim of algorithmic priority.
+
+For a reference label $a^*$, define the offline diagnostic $H_R=\mathbf1\{\exists p\in L(a^*):|p|\le R\}$, where $L(a^*)$ contains declared accepting suffix paths encoding that answer. If $H_R=0$, no certified completion in this language can be correct within $R$, regardless of scoring policy. In our canonical finite-choice language, each visible option has one path. This diagnostic uses reference information only after inference; it is not a controller input or a basis for excluding requests from the main denominator.
+
 \section{4. Reference implementation and
 verification}\label{reference-implementation-and-verification}
 
@@ -405,6 +419,8 @@ exceptions outside these handled paths. These tests establish no
 pretrained-model accuracy, practical compilation coverage or CUDA
 speedup.
 
+Four additional offline-audit tests check initial infeasibility versus newly entered dead ends, illegal prefixes, the archived historical scoring contract, and the greedy preservation property over 500 finite-language cases. They are software checks rather than pretrained-model or benchmark results.
+
 \section{5. Historical motivation and evidence
 limits}\label{historical-motivation-and-evidence-limits}
 
@@ -461,21 +477,26 @@ endpoints.
 Historical isolated Shadow-minus-Complete monitoring overhead ranged
 from 16.46 to 51.18 ms. Complete was not universally faster than
 Uniform. Follow-up concurrent timing used different measurement
-boundaries and is not pooled with the isolated run. Its available
-summary package lacks per-call raw follow-up timing records needed to
-reconstruct the intervals independently. These measurements motivate
-complete request accounting but do not measure the new controller's
-cost.
+boundaries and is not pooled with the isolated run. The newly supplied
+archive now includes its 11,200 scored records and 480 warmups. The
+offline audit reproduces all five archived scoring contracts; no
+concurrent timing interval is newly claimed here. These measurements
+motivate complete request accounting but do not measure the new
+controller's cost.
 
-\section{6. New empirical evaluation and remaining protocol}
+\section{6. Empirical evaluation and raw-record audit}
 
 \subsection{6.1. Study design and data integrity}
 
 We conducted a limited known-cohort evaluation using Qwen2.5-7B-Instruct-1M and Mistral-7B-Instruct-v0.3 on two A800 80 GB GPUs. The matched-prefix task used 96 ARC-Challenge evaluation questions and 16 development questions from an already inspected cohort; these are not an independent unseen test set. The answer-label and option-text representations are two encodings of the same questions, not separate tasks. The supplied prefix and finite candidate language were held fixed within matched comparisons. The completion budget counts newly generated suffix tokens and excludes the supplied prefix. The measured request includes per-request language construction, prompt preparation and, when inference occurs, processing the supplied prompt and prefix; it does not include generating the supplied prefix upstream. The comparison covers the declared finite language and wrapper contract, not arbitrary grammars or full document semantics.
 
-The frozen study contains 6,976 records across all tracks and repetitions, including 1,248 deterministic CPU records; this is not a count of independent questions or GPU inference calls. Offline checks found the expected complete grid with no duplicate or missing records, inference errors, invalid constrained commits, budget overruns or format-reduction mismatches. These are technical integrity checks, not independent human semantic annotation. The format-only reduction and a limited wrapper end-to-end track were also evaluated. On the wrapper track, the full controller certified 27 of 32 Qwen and 30 of 32 Mistral requests; no legal token was removed in that track. These observations do not isolate a binding or budget-pruning effect.
+The frozen study contains 6,976 records across all tracks and repetitions, including 1,248 deterministic CPU records; this is not a count of independent questions or GPU inference calls. The two-model runs used Python 3.11.12, PyTorch 2.6.0+cu124, CUDA 12.4, Transformers 4.48.2 and XGrammar 0.1.21, with BF16, SDPA, greedy batch-size-one generation and per-request cold caches. Qwen revision \texttt{\seqsplit{e28526f7bb80e2a9c8af03b831a9af3812f18fba}} and Mistral revision \texttt{\seqsplit{c170c708c41dac9275d15a8fff4eca08d52bab71}} are recorded in the manifests. The follow-up mirror provenance records file hashes matching those manifests; this audit checks the recorded metadata and does not reread absent model weights. Offline checks found the expected complete grid with no duplicate or missing records, inference errors, invalid constrained commits, budget overruns or format-reduction mismatches. These are technical integrity checks, not independent human semantic annotation. The format-only reduction and a limited wrapper end-to-end track were also evaluated. On the wrapper track, the full controller certified 27 of 32 Qwen and 30 of 32 Mistral requests; no legal token was removed in that track. These observations do not isolate a binding or budget-pruning effect.
 
 \subsection{6.2. Primary matched-prefix results}
+
+For request $i$, let $D_i$ indicate a returned submission, $A_i=D_i\mathbf1\{V_{\mathcal C}(y_i)\land P_b(y_i)\}$ a certified submission, and $Q_i=A_i\mathbf1\{g(y_i)=g_i^*\}$ a correct certified submission. The canonical controllers accept completed token paths that include a terminal newline. The final text predicate permits trailing whitespace to be omitted; it is therefore weaker than native controller acceptance. A returned prefix can satisfy that text predicate while its controller still abstains. We retain the frozen declared-submission endpoints and separately audit this terminal-policy sensitivity in Section 6.6. The original 96-question study's primary endpoint is $\sum_iQ_i/n$ at option-text cap24. The subsequent 64-question study separately fixes feasible-subset certified completion at cap8 as its within-study comparison, with all-request $A$ and $Q$ retained as guardrails. Its known-cohort, post-pilot status remains exploratory. These distinct endpoints are not retroactively pooled or relabeled as one preregistered confirmatory primary.
+
+
 
 The designated primary family compared the full distance-filtered controller with grammar-only continuation using option-text encoding and a 24-token completion budget. Each model was assessed on the same 96 questions under both policies. The endpoint is correct certified commitments over all eligible questions; a certified output is not necessarily correct. The XGrammar and candidate-sequence-scoring baselines are retained as additional controls, not as interchangeable implementations of the primary comparison. The XGrammar finite-string language can permit tokenization paths that differ from the canonical token trie, so differences from that baseline cannot be attributed to the distance filter alone.
 
@@ -501,7 +522,7 @@ In the finite format-only controls, deterministic shortest completion and the fu
 
 \subsection{6.4. Single-GPU exploratory controllability study}
 
-A subsequent frozen control study ran Qwen and Mistral sequentially on one A800 80 GB GPU. Its 64 ARC-Challenge questions were drawn from the already inspected cohort; the study is exploratory and does not supply an independent test set. Across two models, 64 questions, three budget conditions and five policies, it produced 1,920 records. Offline integrity checks found a complete grid, zero inference errors, invalid submissions or budget overruns, and no lost certified or correct commitments in the full-versus-grammar comparisons. The two model runs completed with zero exit codes. These are computational checks, not human semantic annotation.
+A subsequent frozen control study ran Qwen and Mistral sequentially on one A800 80 GB GPU using the same recorded model specifications and inference stack. The archived single-GPU adapter launches each original worker with one shard, first Qwen and then Mistral; it changes orchestration rather than the inference policy. Its 64 ARC-Challenge questions were drawn from the already inspected cohort; the study is exploratory and does not supply an independent test set. Across two models, 64 questions, three budget conditions and five policies, it produced 1,920 records. Offline integrity checks found a complete grid, zero inference errors, invalid submissions or budget overruns, and no lost certified or correct commitments in the full-versus-grammar comparisons. The two model runs completed with zero exit codes. These are computational checks, not human semantic annotation.
 
 The prespecified within-study comparison considered the eight-token cap only among requests initially feasible for the shared canonical token language. The full distance-filtered controller and grammar-only continuation shared this language and the same matched inputs. Table 3 also reports correct certified commitments over all 64 eligible requests: certified completion is a structural endpoint and does not imply a correct answer. The seven Qwen and 19 Mistral requests initially infeasible at this cap are excluded from the feasible-subset rate, but remain in the all-request correctness denominator.
 
@@ -519,13 +540,81 @@ Mistral & 45/64 & 45/45 & 37/45 & 28/64 & 27/64 \\
 
 The paired full-minus-grammar difference in feasible-subset certified completion was 22.81 percentage points for Qwen (conservative paired 97.5\% interval: 2.16 to 39.39 points) and 17.78 points for Mistral (interval: $-$4.42 to 36.02 points). These per-model intervals use the study's two-cell multiplicity adjustment; the reused known cohort and exploratory status limit inference. On this subset the grammar-only controller entered non-completable paths in 13 Qwen and eight Mistral cases. Successful grammar-only token trajectories were preserved by the full controller: 44/44 for Qwen and 37/37 for Mistral. The additional structural completions were not evidence of a corresponding general accuracy improvement: the all-request correct counts changed by zero and one, respectively. Incorrect certified submissions also increased from nine to 22 for Qwen and from 10 to 17 for Mistral, emphasizing that structural completion is not answer quality.
 
-Two case-dependent boundary controls help interpret the mechanism. At each case's compiled minimum canonical suffix length, full versus grammar-only certified 64/64 versus 24/64 for Qwen and 64/64 versus 26/64 for Mistral. At a wider cap defined by each case's maximum canonical suffix length, both policies certified 64/64 for both models. These deliberately constructed caps are not a deployment-budget distribution, and the three conditions reuse the same questions. At the fixed eight-token cap, candidate-sequence scoring certified 57 and 45 requests and yielded 34 and 27 correct submissions for Qwen and Mistral, respectively; XGrammar certified 39 and 37 and yielded 31 and 27 correct submissions. XGrammar may allow tokenizations outside the canonical trie, so its difference cannot be attributed to distance pruning alone. Deterministic shortest completion also certified all initially feasible fixed-eight requests, with nine correct Qwen and 11 correct Mistral submissions; its completion guarantee is therefore another relevant structural comparator. The 1,920 records include 384 deterministic cases without model inference. The instrumentation serves correctness analysis and does not establish isolated latency or speed.
+Two case-dependent boundary controls help interpret the mechanism. At each case's compiled minimum canonical suffix length, full versus grammar-only certified 64/64 versus 24/64 for Qwen and 64/64 versus 26/64 for Mistral. At a wider cap defined by each case's maximum canonical suffix length, both policies certified 64/64 for both models. These deliberately constructed caps are not a deployment-budget distribution, and the three conditions reuse the same questions. At the fixed eight-token cap, candidate-sequence scoring certified 57 and 45 requests and yielded 34 and 27 correct submissions for Qwen and Mistral, respectively; XGrammar certified 39 and 37 and yielded 31 and 27 correct submissions. XGrammar may allow tokenizations outside the canonical trie, so its difference cannot be attributed to distance pruning alone. Deterministic shortest completion also certified all initially feasible fixed-eight requests, with nine correct Qwen and 11 correct Mistral submissions; its completion guarantee is therefore another relevant structural comparator. The 1,920 records include 384 deterministic cases without model inference. The instrumentation serves correctness analysis and does not establish isolated latency or speed. Across all three conditions, all 259 grammar-certified model--question--condition trajectories were preserved exactly by the full controller; the count contains repeated questions, not 259 independent instances. At fixed8, the 13 and eight newly entered grammar dead ends were followed by 90 and 52 additional forward calls, respectively. Separately, the seven and 19 initially infeasible requests consumed 56 and 152 grammar calls; the full controller rejected these before model inference. Initial infeasibility is not counted as a newly entered dead end.
 
-\subsection{6.5. Descriptive timing and limitations}
+\subsection{6.5. Reference reachability, strong baselines and costs}
+
+Table 4 partitions the fixed8 requests by the offline reference-path diagnostic from Section 3.6. It does not redefine eligibility or provide gold information to inference. In Qwen, the correct option was canonically reachable in 44/64 requests; full and grammar both certified those 44 and answered 35 correctly. Every one of the 13 structural rescues had an over-budget reference path. In Mistral, the correct option was reachable in 35/64 requests; full certified all 35 with 28 correct, while grammar certified 34 with 27 correct. Seven of its eight structural rescues had over-budget reference paths. The remaining rescue is the one additional correct commitment. These are verified paired transitions, not deductions from aggregate accuracy alone.
+
+Table 4. Reference-path reachability at fixed8. Each completion/correct cell gives certified commitments followed by correct commitments; the two strata sum to all 64 requests per model.
+
+\begin{longtable}{@{}llrrrr@{}}
+\toprule
+Model & Reference fits & $n$ & Full & Grammar & Sequence score \\
+\midrule
+\endhead
+Qwen & Yes & 44 & 44/35 & 44/35 & 44/34 \\
+Qwen & No & 20 & 13/0 & 0/0 & 13/0 \\
+Mistral & Yes & 35 & 35/28 & 34/27 & 35/27 \\
+Mistral & No & 29 & 10/0 & 3/0 & 10/0 \\
+\bottomrule
+\end{longtable}
+
+The all-request denominator therefore matters. Raising coverage can replace an unreturned long answer with a certified short wrong answer when truth is unreachable under the chosen encoding and cap. This is a semantic feasibility limit, not evidence that prior successful grammar outputs were damaged. In the original 96-question label-encoding control at cap8, both full and grammar certified 96/96; correct counts were 85 for Qwen and 66 for Mistral, and budget pruning was inactive. The structural contrast is encoding- and budget-dependent, rather than a general property of ARC answer prediction. Different encodings also change model scores and are not an isolated distance-filter ablation.
+
+Table 5 keeps all five fixed8 policies visible. Candidate scoring achieves the same structural coverage as full and differs in correct yield by only one request per model. The paired correct-outcome counts are two full wins and one loss for Qwen, and one win and zero losses for Mistral; the descriptive conservative 95\% difference intervals are $[-9.30,12.08]$ and $[-6.60,9.56]$ percentage points. They do not establish a quality advantage. Deterministic completion exposes the low quality of arbitrary shortest-answer selection; model-guided selection improves on that comparator here, but candidate scoring also uses the model.
+
+Table 5. Fixed8 all-request results and computation counts, $n=64$ per row. Fwd counts entered model calls. TF input counts candidate-scoring nonpadding input tokens, including repeated prompt/prefix tokens; zero denotes an inapplicable teacher-forcing metric, not zero autoregressive computation.
+
+\begin{longtable}{@{}llrrrrr@{}}
+\toprule
+Model & Policy & Cert. & Correct & Wrong & Fwd & TF input \\
+\midrule
+\endhead
+Qwen & Grammar & 44 & 35 & 9 & 378 & 0 \\
+Qwen & Full & 57 & 35 & 22 & 310 & 0 \\
+Qwen & XGrammar & 39 & 31 & 8 & 417 & 0 \\
+Qwen & Sequence score & 57 & 34 & 23 & 57 & 28167 \\
+Qwen & Deterministic & 57 & 9 & 48 & 0 & 0 \\
+Mistral & Grammar & 37 & 27 & 10 & 427 & 0 \\
+Mistral & Full & 45 & 28 & 17 & 273 & 0 \\
+Mistral & XGrammar & 37 & 27 & 10 & 427 & 0 \\
+Mistral & Sequence score & 45 & 27 & 18 & 45 & 20038 \\
+Mistral & Deterministic & 45 & 11 & 34 & 0 & 0 \\
+\bottomrule
+\end{longtable}
+
+Candidate scoring uses batched teacher forcing; its forward count is not a token-compute equivalent to one autoregressive step. Full emits 310/273 new tokens for Qwen/Mistral, while grammar emits 378/427. The deterministic comparator inserts 273/243 tokens, and candidate scoring inserts 308/274 while scoring 934/789 candidate suffix tokens. All these token categories remain separate in the audit tables. Frozen inputs, compilation and failed attempts remain in total request accounting. The single-GPU measurements include correctness instrumentation and are not a dedicated isolated performance benchmark. In particular, no speed superiority over candidate scoring follows from the grammar dead-end savings.
+
+\subsection{6.6. Sensitivity to terminal acceptance policy}
+
+The compiled canonical paths and the XGrammar string alternatives include a terminal newline, while the final text checker compares artifacts after stripping trailing whitespace. Native controller acceptance is consequently stricter than this downstream text predicate. Some cap-truncated outputs are valid under the latter but are still recorded as ABSTAIN. The distinction affects grammar-only as well as XGrammar and is not a property of the language model's answer reasoning.
+
+Table 6 retains the frozen controller-certified endpoint and reports a separate offline text-only diagnostic. No status is changed and no hypothetical earlier return is labeled a new run. At fixed8, Qwen's XGrammar controller certified 39 outputs with 31 correct, but 44 final texts satisfy the weaker predicate, with 35 correct. For Mistral, grammar's corresponding counts are 37/27 versus 43/30, and XGrammar's are 37/27 versus 42/30. Thus full's 28 correct native commitments do not dominate the 30 correct returned texts under either weaker comparator endpoint. At the Mistral minimum-length boundary, the same distinction gives 26/17 controller-certified/correct grammar outputs versus 42/28 text-valid/correct outputs, compared with full's 64/18.
+
+Table 6. Fixed8 terminal-policy sensitivity, all 64 requests per row. Cells give valid or certified count/correct count. Text-only scoring disregards the original declaration status and is a diagnostic endpoint, not additional committed outputs.
+
+\begin{longtable}{@{}llrr@{}}
+\toprule
+Model & Policy & Controller-certified/correct & Text-valid/correct \\
+\midrule
+\endhead
+Qwen & Full & 57/35 & 57/35 \\
+Qwen & Grammar & 44/35 & 44/35 \\
+Qwen & XGrammar & 39/31 & 44/35 \\
+Mistral & Full & 45/28 & 45/28 \\
+Mistral & Grammar & 37/27 & 43/30 \\
+Mistral & XGrammar & 37/27 & 42/30 \\
+\bottomrule
+\end{longtable}
+
+The full-versus-grammar controller comparison still shares the same canonical token language and accepting states, so its conditional preservation analysis remains applicable to that endpoint. It does not imply nondecreasing correctness against a comparator returning earlier under the weaker predicate. Likewise, the canonical reference-reachability diagnostic does not show that the correct answer is impossible under every text predicate or tokenization. Native-acceptance differences from XGrammar cannot isolate distance pruning, and its lower declared coverage must not be described as evidence of inferior general grammar enforcement. A future common-consumer comparison must first freeze terminal-newline policy and align compiled paths, stopping rules and final scoring; retrospective text scoring does not replace such an execution.
+
+\subsection{6.7. Descriptive timing and limitations}
 
 Timing was collected with batch size one in two sequential waves. Each wave started one Qwen worker and one Mistral worker on separate A800 GPUs after a two-worker resident-model barrier. The workers could finish at different times; four workers did not execute concurrently. Model and GPU identity were coupled, and question shards were fixed to waves. Each model-wave-policy timing cell contains 24 requests on eight questions with three repetitions per question. Wave-level means below are descriptive; the two waves cannot estimate a wave random effect, and no across-wave confidence interval is asserted.
 
-Table 4. Matched-prefix mean request time in milliseconds, by wave, model and policy; 24-token option-text setting.
+Table 7. Matched-prefix mean request time in milliseconds, by wave, model and policy; 24-token option-text setting.
 
 \begin{longtable}{@{}p{.08\linewidth}p{.16\linewidth}p{.13\linewidth}p{.19\linewidth}p{.30\linewidth}@{}}
 \toprule
@@ -541,57 +630,37 @@ Wave & Model & Full & Grammar-only & Candidate-sequence scoring \\
 
 These are supplied-prefix request measurements, not complete end-to-end system costs. Candidate scoring uses a different computation from autoregressive generation. Differences between waves or policies cannot be attributed to hardware or generalized as a speed advantage. The prior three-GPU timing study used different boundaries and is not pooled with these measurements.
 
-\subsection{6.6. Remaining tracks and task construction}
+\subsection{6.8. Reproducibility, statistical scope and remaining evidence}
 
-The matched-prefix track above holds the prefix, token language and remaining budget fixed. A broader end-to-end track should include prompt processing, drafting, failed activation, compilation, completion, validation and abstention; the limited wrapper run above does not replace that evaluation. Supplied-prefix timing cannot support end-to-end speed or coverage claims.
+The 2 November bundle contains both complete newer raw archives, source snapshots, frozen inputs, model-file manifests, environment logs and the actual sequential single-GPU and two-wave schedulers. We verified all 443 listed file hashes and reproduced the 1,920- and 6,976-record grids, with no duplicate/missing jobs, inference errors, invalid constrained commitments or budget overruns. The original study's deterministic format-reduction checks also reproduce. New-study token IDs, artifact certificates, budget distances and dead-entry steps were reconstructed against its archived canonical paths, independently of its stored distance events. This is exact path enumeration in that frozen language, not a newly loaded tokenizer or a distance oracle for XGrammar's alternate tokenizations.
 
-The task set must distinguish a format-only reduction control from structured prediction with task-relevant unbound fields. The former compares deterministic closure with model-scored closure without presuming a semantic benefit. The latter can bind a public instance identifier while leaving a categorical or numeric answer to predict. ARC candidates may include all visible options. A numeric answer language must be defined independently of gold answers; a manually supplied reference-answer list is invalid. The present wrapper interface cannot execute a general numeric-grammar task without additional compiler and runner development.
+The archived inference Python files match the repository sources used by the audit. The recorded model specifications and weight-file hashes agree across study manifests; model weights themselves are not in the results bundle and were not reread during this offline verification. Archival hashes establish integrity of supplied artifacts, not proof that unobserved execution or every compiler predicate is correct. Verification results and per-request rescued-case IDs are released with the audit.
 
-Historical cohorts have been inspected and can support a declared known-cohort re-evaluation. They cannot be relabeled unseen holdouts. Independent instances or tasks are needed for broader generalization claims. Input IDs, contracts, compiler capabilities and binding rules will be frozen before final evaluation. Failed compilation remains in the denominator for every frozen eligible request.
+The two studies reuse data. Every fixed8 returned token sequence in the later 64-question subset matches its original-study counterpart for full, grammar, XGrammar and deterministic completion: 64/64 per policy and model. This provides execution consistency, not independent replication or additional question-level evidence. The original all-budget comparison also preserves all 1,082 already-certified grammar trajectories across its 12 model/encoding/cap cells; these again contain repeated questions. No cross-study pooling or effective sample-size increase is asserted.
 
-\subsection{6.7. Further comparators and ablations}
+The original two-model cap24 primary family uses conservative paired 97.5\% intervals. The later study's fixed8 feasible-subset family separately uses the same per-cell confidence level, adjusting for its two model cells only. Other strata, reference-reachability analyses and cost comparisons are exploratory descriptions. Zero observed loss is not, by itself, a statistical equivalence or noninferiority result; Proposition 5 states a different, conditional algorithmic property. Intervals do not repair prior data inspection or dependence across budgets, models and studies.
 
-Further matched-prefix comparisons should include deterministic shortest completion, model-scored grammar-only continuation, the full budget mask and an independently implemented version of the same distance recurrence. Shared language and acceptance checks are essential. The equivalent recurrence checks consistency; output superiority is not expected under identical assumptions. Finite-answer tasks also require a strong simple alternative, such as development-frozen prior selection or candidate-sequence scoring with all model calls accounted for.
-
-End-to-end comparisons require Uniform, early return on the same target contract, deterministic repair, selective grammar-only repair, the full controller and a practical grammar engine operating from the start. Native string stopping is sufficient competition only when it enforces the declared contract. From-start and selective grammar differ in more than the budget filter and must be interpreted as system comparisons. Historical Complete under its old contract remains a diagnostic, not a primary new-contract comparator.
-
-Ablations isolate removal of the distance filter at the same binding point, selective versus from-start constraints, and complete-answer versus public-structure binding. Any comparison requiring earlier-field editing first requires a new implementation. A deliberately removed validator is a fault-injection check rather than a competitive baseline.
-
-\subsection{6.8. Further budgets, endpoints and failure reporting}
-
-Development data will determine tight, intermediate and relaxed total token caps and the reserve rule before testing. Shared-prefix cases include budgets below, at and above the compiled minimum distance; unequal-length accepting branches; inactive masks; and infeasible states. Report how often pruning actually excludes a grammar-legal token. A fixed single cap cannot establish a budget-response curve.
-
-For request $i$, let $D_i$ indicate a declared submission rather than abstention, $A_i=D_i\mathbf 1\{V_{\mathcal C}(y_i)\land P_b(y_i)\}$ indicate a certified submission, and $Q_i=A_i\mathbf 1\{g(y_i)=g_i^*\}$ indicate a correct certified submission. The primary endpoint is $\sum_i Q_i/n$ over all frozen eligible requests. Certified coverage is $\sum_i A_i/n$, and conditional accuracy is $\sum_i Q_i/\sum_i A_i$, undefined when no output is certified. Invalid submissions, $\sum_i D_i(1-A_i)$, and binding violations remain separately visible. For a baseline without controller states, a normal returned output is a declared submission, then scored by the same predicates. Invalid raw returns are retained rather than silently relabeled or discarded. A schema check that rejects outputs can change declared submission counts without improving the all-request quality endpoint.
-
-Also report budget overruns and failure categories: unsupported compilation, context mismatch, no candidate, infeasible distance, invalid EOS, constraint failures and runtime errors. Infrastructure failures need a prespecified retry rule and their own labels; no failed request may silently disappear. No ratio with a zero denominator is assigned an invented zero or perfect value.
-
-Length-dependent pruning may favor short wrong answers. Include canonical short-label controls, answer-length strata, erroneous bindings and offline reference-reachability analysis. Reference information is available only to the scorer, never to inference, budget selection or post hoc sample exclusion. Supported-language or reference-reachable subsets are diagnostics rather than replacements for the all-request endpoint.
-
-\subsection{6.9. Further cost, statistics and reproducibility}
-
-Record model-generated, deterministically inserted and returned token IDs separately, together with forward calls and costs of compilation, masking, validation and failed attempts. Measure synchronized isolated request latency with matched model precision, attention backend, batch size and hardware; randomize or balance policy order. Separate cold compilation from a declared reusable-cache regime. Report mean and P50/P95 latency and paired uncertainty. Concurrent throughput would require a distinct experiment, not extrapolation from request times.
-
-A pilot will support sample-size planning from a prespecified meaningful correct-commit difference and paired discordance; timing planning uses paired variability. Repeated calls, budgets and model answers to the same question are not independent questions. Question-level pairing and clustering must preserve these dependencies. A primary setting or multiplicity adjustment must be fixed before confirmatory cross-budget and cross-model claims. All cells and unfavorable results remain reportable.
-
-The archive will contain frozen manifests, version and environment hashes, full token traces, binding and distance events, statuses/errors, request-time boundaries and executable scoring/analysis. An audited separation of controller inputs from reference labels is required. The primary matched-prefix comparison reported above is distinct from the additional, as-yet-unexecuted evaluation described in this section; its known-cohort observations must not be presented as independent confirmation.
+The completed experiments do not test general field editing, rollback, arbitrary numeric languages or rich document grammars. The wrapper track does not isolate binding benefits, and supplied-prefix costs exclude upstream prefix generation. A broad full-system or generalization claim would therefore require a genuinely separate evaluation with frozen contracts, a justified sample size, all five strong comparators and complete attempt costs. If such a study is pursued, a fixed global budget must be distinguished from constructed per-case minimum/maximum controls. Existing known-cohort results and the original inactive-mask outcome must remain reportable. No human-rating endpoint is required for these computational claims.
 
 \section{7. Discussion}
 
-The controller adds a remaining-budget condition to structural prefix legality and makes acceptance a distinct return event. Its conditional guarantee is useful for specifying behavior, but follows from reachability over a declared language. It cannot alone support a paradigm claim relative to an equivalent grammar implementation. A larger experimental advantage must be attributed to a documented difference in language, activation, scoring, compiler cost or task behavior, rather than a name.
+The distance filter provides a useful control distinction: prefix legality asks whether a continuation is permitted, whereas viability asks whether acceptance remains reachable before the remaining token budget expires. Proposition 5 additionally specifies when this refinement makes no change at all: an already successful matched greedy grammar trajectory is preserved. The raw audit connects these statements to observed dead-end avoidance and retained token trajectories within the declared canonical language, while recording initial infeasibility separately from failures introduced during decoding. These canonical dead ends do not imply that every weaker consumer predicate is still unsatisfied.
 
-The current finite language limits both coverage and scalability. Missing valid paths can cause unnecessary abstention, and an exhaustive language over rich fields can be expensive to construct. The wrapper contract is a heuristic rather than a full document parser. Append-only binding may freeze an incorrect answer and cannot use later correction. Validity is consequently a necessary interface property, not a proxy for reasoning quality.
+Both semantic feasibility and terminal acceptance policy are measurable limitations. At fixed8, 13/13 Qwen and 7/8 Mistral rescues have no budget-feasible canonical reference answer. The method completes the structural task it was given but cannot make an excluded answer fit. The same effect helps explain the large completion gains at constructed minimum-length budgets. Moreover, a weaker downstream text predicate can accept some prefixes before native controller termination; Section 6.6 shows that this can reverse correct-yield comparisons. Correctness and conditional accuracy must therefore accompany coverage, and answer-length/reference-reachability diagnostics must accompany claims about hard-budget success. An application that penalizes wrong commitments more heavily than abstention may receive little or negative utility from extra structural returns; no universal utility gain is claimed.
 
-The deterministic reduction is a substantive boundary. If empirical gains are restricted to formatting-equivalent suffixes, the appropriate contribution is verified interface repair. Task-relevant unbound fields may justify model-scored continuation, but they also expose quality loss through budget pruning and require strong non-generative or candidate-scoring baselines. The known-cohort comparison against grammar-only and candidate scoring is informative but limited, particularly because the primary budget filter was inactive.
+Strong simple alternatives are decisive for interpreting novelty and value. Deterministic shortest completion can provide structural acceptance without model inference, and feasible-candidate scoring combines that structural coverage with model-informed answer selection. The latter is a competitive baseline in this small finite-choice task, not an inferior grammar surrogate. The full controller's local preservation property concerns grammar-only greedy trajectories; it does not imply superiority over global candidate scoring. The experiments establish neither a general accuracy advantage nor a scalability or speed advantage over this alternative.
 
-The two-GPU study found no correct-commit difference in its primary matched-prefix cells. The subsequent single-GPU controls show that the budget filter can preserve structural completion when grammar-only paths run out of budget on this known cohort, while the all-request correct counts changed little or not at all. Both observations at the tighter budget are exploratory. It establishes neither a general task-quality improvement nor a latency advantage. The historical studies support their own stopping and monitoring conclusions; the CPU tests support implementation behavior on controlled finite cases. Independent data, broader task runs and source-level comparison with relevant prior systems are required before a stronger contribution claim can be assessed.
+The scope of the implementation remains narrow. Canonical token paths omit some valid tokenizations; compiler coverage limits which contracts can be served; enumeration can be expensive as candidate spaces grow. Append-only binding cannot correct a wrongly frozen answer. The wrapper's acceptance check is an operational heuristic. The more defensible contribution is the contract-explicit specification, conditional preservation analysis and auditable account of the structural--semantic trade-off. A claim of a new constrained-decoding paradigm remains unsupported without a substantive distinction from prior length-aware and reachability-based methods, and independent task or application evidence.
 
 \section{8. Conclusions}
 
-Budget-viable commitment provides an explicit finite-language specification for append-only constrained completion and validated return. Exact token-level reachability gives conditional structural completion inside a remaining budget, while final acceptance checks preserve declared contract and binding predicates. These properties do not imply true answers, global compiler completeness, successful activation for every request or wall-clock speed. The finite-trie implementation and controlled checks make the specification testable. Historical evidence motivates separating validity from correctness, and the format-only reduction identifies a necessary deterministic comparator. The two-GPU known-cohort study finds no primary correct-commit difference when the filter is inactive. The later single-GPU controls expose a structural completion difference at a tighter cap on reused questions, without establishing a general accuracy benefit. Independent task and full-system cost comparisons remain necessary before a broader empirical algorithm claim.
+Budget-viable commitment refines finite-language constrained completion by retaining only next tokens with an accepting suffix inside the remaining budget. Exact reachability gives conditional structural completion; under matched greedy scores and tie-breaking, already successful grammar trajectories are preserved. Raw audits confirm this mechanism in the evaluated known cohort, including fewer budget dead ends and explicit initial-infeasibility rejection. They also identify its semantic boundary: most additional fixed8 completions occur where the canonical reference path cannot fit, correct-commit gains are minimal, and weaker text-only acceptance can change the comparison. Candidate scoring matches structural coverage and remains a strong alternative. These results support a reproducible mechanism and failure-boundary analysis, not a new reachability algorithm, universal quality improvement or deployment speed guarantee. Independent evaluation and a completed nearest-prior-method comparison remain necessary for stronger claims.
 
 \section{Data and code availability}
 
-The revision package contains controller code, two Transformers interfaces, deterministic repair, controlled tests, historical analysis inputs/summaries and the ten-table historical supplement. The two-GPU v8.9.1 study has a separately preserved local archive of raw records, frozen inputs, run logs, analysis and verification evidence; its archive SHA-256 is 356984d29742605b26261bb7cc73cce575f53c7e1687c04404ab3224760ef7bf. The subsequent single-GPU exploratory study is separately preserved with raw records, frozen inputs, logs, analysis and verification evidence; the verified archive SHA-256 is \seqsplit{874d09359bd953712b801b3ce40fa249da6646eb8041deda19acdfe8aa63aef1}. The full old raw experiment archive is a separate prerequisite for rerunning the historical JSONL analysis. The historical follow-up timing summary does not itself contain all per-call raw records. Availability of a public permanent archive, DOI and final publication release remains to be established.
+Code, the raw-result bundle and this audit are available in the public repository \url{https://github.com/Eov-firefly/learningclass}. The bundle dated 2 November 2026 contains the 1,920-record single-GPU study, the 6,976-record two-wave study, the 25,200-record historical main protocol, and the 11,200 scored concurrent-timing calls with 480 warmups. Duplicate aggregate/wave copies and derived scored files are not extra observations. The outer bundle SHA-256 is \texttt{\seqsplit{91fed3db13cca2b2d8ab65d5c6e0a714c0ad55626f5133a93f8be119e6e3782e}}. The preserved single-GPU and two-wave ZIP hashes are, respectively, \texttt{\seqsplit{874d09359bd953712b801b3ce40fa249da6646eb8041deda19acdfe8aa63aef1}} and \texttt{\seqsplit{356984d29742605b26261bb7cc73cce575f53c7e1687c04404ab3224760ef7bf}}.
+
+The directory \texttt{research\_outputs/raw\_audit\_20261102} contains the offline audit program, verification scope and derived tables. The original runtime source snapshots and schedulers remain in the bundle. A journal-specific permanent release/DOI is pending. Funding and other author declarations below require factual completion; neither absent funding nor absent conflicts is inferred.
 
 \section{Declarations pending author
 verification}\label{declarations-pending-author-verification}

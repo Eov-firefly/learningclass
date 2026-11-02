@@ -1,0 +1,22 @@
+{
+  "bundle_files_hash_verified": 443,
+  "archive_hashes": {
+    "01_单卡补充实验_20261030/archive.zip": "874d09359bd953712b801b3ce40fa249da6646eb8041deda19acdfe8aa63aef1",
+    "02_双卡实验_v8.9.1_20261028/原始完整备份.zip": "356984d29742605b26261bb7cc73cce575f53c7e1687c04404ab3224760ef7bf"
+  },
+  "source_py_differences": [],
+  "single_records": 1920,
+  "double_records": 6976,
+  "new_gpu_inference": false,
+  "consumer_valid_but_uncommitted_records": 106,
+  "substantive_cautions": [
+    "terminal-policy sensitivity",
+    "most fixed8 rescues have over-budget canonical reference paths",
+    "known-cohort reuse",
+    "no demonstrated quality advantage over candidate scoring",
+    "priority comparison incomplete"
+  ],
+  "distance_scope": "Exact enumeration of frozen single-study canonical paths, not a newly loaded tokenizer or all XGrammar tokenizations.",
+  "provenance_scope": "Archive/file hashes and recorded model manifests checked; model weights absent, no independent bitwise weight reread.",
+  "inference_scope": "Known cohort; no independent new evaluation, no priority claim."
+}

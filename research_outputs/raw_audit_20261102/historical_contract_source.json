@@ -1,0 +1,6 @@
+{
+  "archive_member": "project/experiments/janus_v8/contracts.py",
+  "original_sha256": "3d335f8a74c232d4f29ad54c3904323f6a1ea67a104f1690577f7d78b76beff5",
+  "snapshot_sha256": "6f9e3c0b74f220fe363682727b1b3536f26a2509e604bc9465a0b1fb8916292a",
+  "scope": "parser/scorer prefix; unused EntropyGate omitted and trailing blank lines normalized"
+}

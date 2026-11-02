@@ -1,0 +1,5 @@
+model,task,n,repairs,correct_repairs,wrong_repairs,validity_losses
+mistral,arc,600,47,19,28,0
+mistral,gsm8k,600,129,81,48,0
+qwen,arc,600,0,0,0,0
+qwen,gsm8k,600,28,14,14,0

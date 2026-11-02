@@ -1,12 +1,15 @@
 # JANUS 论文修订、严格评审与实验交付
 
-最新整理：2026-10-31。根目录main.tex已整合用户报告的**两卡A800两波研究和后续单卡探索性研究**，本轮新增严格复审建议及23页编译PDF。manuscript.md尚未同步单卡结果。优先补齐原始证据并完成CPU分析，不立即重复GPU实验。新raw归档尚未在main分支提供可下载副本，本轮复审不能冒充独立完整复算。原v8.8及四卡A100计划作为历史交付保留。
+最新整理：2026-11-02。用户已上传完整raw整理包；本轮核验443个文件hash，复算单卡1,920条、双卡6,976条及历史评分。根目录main.tex、manuscript.md和main.pdf已同步原始数据审计后的修订。新增成功轨迹保持命题、全基线成本/正确选项可达性/终止条件敏感性分析；没有新增GPU推理。现有证据支持声明canonical语言内的预算控制，不自动证明通用质量优势或新范式优先权。
 
 ## 最新阅读入口
 
 | 内容 | 入口 |
 | --- | --- |
-| 当前用户整合稿 | [LaTeX，已含单卡结果](../main.tex) · [Markdown，尚未同步](../manuscript.md) |
+| 最新原始数据审计修订稿 | [LaTeX](../main.tex) · [Markdown](../manuscript.md) · [PDF](../main.pdf) |
+| 本轮raw核验与实质性发现 | [核验结论与论文修订](raw_audit_20261102/核验结论与论文修订_zh.md) · [重跑说明](raw_audit_20261102/README_zh.md) |
+| 新增派生分析表 | [全基线成本](raw_audit_20261102/analysis/single_all_baselines.csv) · [参考路径可达性](raw_audit_20261102/analysis/reference_reachability.csv) · [终止规则敏感性](raw_audit_20261102/analysis/terminal_policy_sensitivity.csv) |
+| 用户上传的原始数据 | [实验原始结果整理_20261102.zip](../实验原始结果整理_20261102.zip) |
 | 2026-10-31最新严格复审与下一步 | [完整建议](review_20261031/严格复审与下一步_zh.md) · [核查范围](review_20261031/review_checks.json) |
 | 2026-10-31最新编译PDF | [23页PDF，基于commit 52b8cc1](review_20261031/build/main.pdf) · [对应源文件](review_20261031/build/main.tex) |
 | 2026-10-28审阅快照PDF | [22页PDF，基于commit 1112413](review_20261028/build/main.pdf) |
@@ -31,16 +34,19 @@
 
 ## 直接下载
 
-- **当前优先使用：局部可控性再分析包**：[JANUS_control_reanalysis_v1_20261028.zip](packages/JANUS_control_reanalysis_v1_20261028.zip)
+- **最新论文与raw审计修订包**：[JANUS_20261102_raw_audited_revision.zip](packages/JANUS_20261102_raw_audited_revision.zip)
+- **既有局部可控性再分析工具**：[JANUS_control_reanalysis_v1_20261028.zip](packages/JANUS_control_reanalysis_v1_20261028.zip)
 - **可选追加实验运行器，未运行GPU**：[JANUS_control_gpu_v1_20261029.zip](packages/JANUS_control_gpu_v1_20261029.zip)
-- **最新复审建议与23页PDF**：[JANUS_20261031_review_and_pdf.zip](packages/JANUS_20261031_review_and_pdf.zip)
+- **2026-10-31历史复审建议与23页PDF**：[JANUS_20261031_review_and_pdf.zip](packages/JANUS_20261031_review_and_pdf.zip)
 - **2026-10-28历史论文复审快照**：[JANUS_20261028_post_experiment_strict_review.zip](packages/JANUS_20261028_post_experiment_strict_review.zip)
 - **历史论文修订包**：[JANUS_v8_8_strict_review_final_revision_20261027.zip](packages/JANUS_v8_8_strict_review_final_revision_20261027.zip)
 - **原四卡GPU实验工具**：[JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip](packages/JANUS_v8_9_1_minimal_ARC_4xA100_experiments.zip)
 
 各版本保留对应交付ZIP及SHA256SUMS。新GPU工具包同时包含其相邻推理和分析依赖，解压后保留research_outputs目录关系。v8.9原始包保留在packages作为历史版本；v8.9.1修复了ETA并发读取日志的问题。没有纳入模型权重、虚拟环境、下载缓存或伪造的GPU结果。
 
-## 当前先做CPU再分析
+## 已完成的CPU再分析与复现入口
+
+本轮完整审计见[raw_audit_20261102](raw_audit_20261102/README_zh.md)。raw已提供且已复核，不再以缺少归档为当前待办。原工具仍可复现指定轨道：
 
 ```bash
 cd research_outputs/controllability_v1
@@ -49,7 +55,7 @@ python3 -m venv .venv
 .venv/bin/python run_control.py --run /data/janus_completed --out /data/janus_control_basic
 ```
 
-精确死路诊断再安装tokenizer依赖并指定实际本地tokenizer，见执行步骤。2026-10-29已补齐[可选GPU运行器](controllability_gpu_v1/README_zh.md)：64题、2模型、3预算、5策略，1,920条记录/最多1,536条模型请求，另计校准。默认64题来自已知队列，标签为探索性；独立新64题仍未冻结，不能直接重跑旧脚本冒充新确认结果。请先解释现有raw再分析，再决定是否运行追加实验。
+旧工具的精确死路诊断需实际tokenizer；本轮单卡审计可直接使用新提供的冻结token路径，见最新重跑说明。2026-10-29交付的[GPU运行器](controllability_gpu_v1/README_zh.md)已由用户通过单卡顺序adapter执行，1,920条记录属于已知队列探索性研究。独立新64题仍未冻结；后续若做统一下游接口比较，先对齐终止合同、候选路径和评分，再冻结新方案，不直接重复旧题冒充确认。
 
 ## 历史四卡A100计划（当前无需重跑）
 

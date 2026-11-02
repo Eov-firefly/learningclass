@@ -1,0 +1,9 @@
+model,policy,n,same_returned_ids,same_correct
+qwen,full,64,64,64
+qwen,grammar,64,64,64
+qwen,deterministic,64,64,64
+qwen,xgrammar,64,64,64
+mistral,full,64,64,64
+mistral,grammar,64,64,64
+mistral,deterministic,64,64,64
+mistral,xgrammar,64,64,64

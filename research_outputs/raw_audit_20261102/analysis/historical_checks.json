@@ -1,0 +1,22 @@
+{
+  "three_gpu_counts": {
+    "timing": 10800,
+    "warmups": 480,
+    "timing_pilot": 400
+  },
+  "three_gpu_score_mismatches": {
+    "strict": 0,
+    "closure_tolerant": 0,
+    "closure_balanced": 0,
+    "wrapper_balanced_strict": 0,
+    "last_marked": 0
+  },
+  "old_counts": {
+    "dev": 6000,
+    "main": 14400,
+    "pilot": 480,
+    "timing": 4320
+  },
+  "old_main_score_mismatches": 0,
+  "note": "Historical scoring/counts recomputed. Timing means kept per session; no cross-hardware pooling or new timing-interval claim."
+}

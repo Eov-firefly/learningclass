@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-02",
+  "raw_data_commit": "6956d7e",
+  "paper_root_sources_modified": true,
+  "source_sha256": "e176f0a2ca5090f5b6c748b742abebefa54a8d923c84ebab4296bfaa5eb5f40c",
+  "markdown_sha256": "d62cf554256bec9c309818d73a457641eceeb0d3a1b345de22728a5e94d8b466",
+  "pdf_sha256": "0605121f1e5bbc5f4ebd6b64cd3a0f111a95f7fd2055f1471f8a1c58fd859e6b",
+  "pdf_pages": 28,
+  "abstract_whitespace_word_count": 213,
+  "compile_passes": 2,
+  "compile_errors": 0,
+  "overfull_warnings": 0,
+  "underfull_warnings": 4,
+  "paper_tables_checked_against_derived_audit": true,
+  "software_tests_passed": 4,
+  "finite_language_test_cases": 500,
+  "original_24_token_primary_preserved": true,
+  "raw_statuses_modified": false,
+  "new_model_inference": false,
+  "readiness": "Research revision; terminal-policy scope, nearest-prior comparison, independent evaluation and factual declarations remain bounded/open."
+}

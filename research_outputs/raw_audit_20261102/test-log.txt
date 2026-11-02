@@ -1,0 +1,9 @@
+test_dead_entry_excludes_initial_infeasibility (test_audit.AuditTests.test_dead_entry_excludes_initial_infeasibility) ... ok
+test_frozen_marker_contract_does_not_drift (test_audit.AuditTests.test_frozen_marker_contract_does_not_drift) ... ok
+test_greedy_preservation_over_finite_languages (test_audit.AuditTests.test_greedy_preservation_over_finite_languages) ... ok
+test_illegal_prefix_is_not_a_legal_dead_end (test_audit.AuditTests.test_illegal_prefix_is_not_a_legal_dead_end) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.013s
+
+OK
