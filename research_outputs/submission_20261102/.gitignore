@@ -1,0 +1,9 @@
+__pycache__/
+build/*.aux
+build/*.out
+build/*.blg
+build/*.tex
+build/*.bib
+build/*.pdf
+build/*-body.md
+build/figures/

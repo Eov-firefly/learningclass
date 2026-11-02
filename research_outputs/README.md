@@ -1,12 +1,16 @@
 # JANUS 论文修订、严格评审与实验交付
 
-最新整理：2026-11-02。用户已上传完整raw整理包；本轮核验443个文件hash，复算单卡1,920条、双卡6,976条及历史评分。根目录main.tex、manuscript.md和main.pdf已同步原始数据审计后的修订。新增成功轨迹保持命题、全基线成本/正确选项可达性/终止条件敏感性分析；没有新增GPU推理。现有证据支持声明canonical语言内的预算控制，不自动证明通用质量优势或新范式优先权。
+最新整理：2026-11-02，**通用期刊投稿定稿**。根目录正文与独立补充材料已完成术语、理论、指标、引用及格式统一；新增成功答案稳定性诊断，并配套投稿信、Highlights和标题页。作者已确认无经费、无利益冲突及全体同意投稿，不写作者贡献部分。稿件以现有raw支持的局部控制优势和边界为范围，没有新增GPU推理，不声称所有质量/效率维度全面领先。
 
 ## 最新阅读入口
 
 | 内容 | 入口 |
 | --- | --- |
-| 最新原始数据审计修订稿 | [LaTeX](../main.tex) · [Markdown](../manuscript.md) · [PDF](../main.pdf) |
+| 通用期刊正文定稿 | [PDF](../main.pdf) · [LaTeX](../main.tex) · [Markdown](../manuscript.md) |
+| 独立补充材料 | [PDF](../supplementary.pdf) · [LaTeX](../supplementary.tex) · [Markdown](../supplementary.md) |
+| 投稿文件及执行说明 | [submission_20261102](submission_20261102/README.md) · [投稿步骤](submission_20261102/投稿文件与执行说明_zh.md) |
+| 创新与实验证据对应 | [贡献与证据对应](submission_20261102/贡献与证据对应_zh.md) · [成功答案稳定性](submission_20261102/output_stability.csv) |
+| 投稿信 / Highlights / 标题页 | [投稿信](submission_20261102/cover_letter.pdf) · [Highlights](submission_20261102/highlights.txt) · [标题页](submission_20261102/title_page.pdf) |
 | 本轮raw核验与实质性发现 | [核验结论与论文修订](raw_audit_20261102/核验结论与论文修订_zh.md) · [重跑说明](raw_audit_20261102/README_zh.md) |
 | 新增派生分析表 | [全基线成本](raw_audit_20261102/analysis/single_all_baselines.csv) · [参考路径可达性](raw_audit_20261102/analysis/reference_reachability.csv) · [终止规则敏感性](raw_audit_20261102/analysis/terminal_policy_sensitivity.csv) |
 | 用户上传的原始数据 | [实验原始结果整理_20261102.zip](../实验原始结果整理_20261102.zip) |
@@ -34,7 +38,8 @@
 
 ## 直接下载
 
-- **最新论文与raw审计修订包**：[JANUS_20261102_raw_audited_revision.zip](packages/JANUS_20261102_raw_audited_revision.zip)
+- **最新通用期刊投稿定稿包**：[JANUS_20261102_submission_final.zip](packages/JANUS_20261102_submission_final.zip)
+- **上一轮raw审计修订快照**：[JANUS_20261102_raw_audited_revision.zip](packages/JANUS_20261102_raw_audited_revision.zip)
 - **既有局部可控性再分析工具**：[JANUS_control_reanalysis_v1_20261028.zip](packages/JANUS_control_reanalysis_v1_20261028.zip)
 - **可选追加实验运行器，未运行GPU**：[JANUS_control_gpu_v1_20261029.zip](packages/JANUS_control_gpu_v1_20261029.zip)
 - **2026-10-31历史复审建议与23页PDF**：[JANUS_20261031_review_and_pdf.zip](packages/JANUS_20261031_review_and_pdf.zip)

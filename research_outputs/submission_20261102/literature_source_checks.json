@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-02",
+  "scope": "Representative literature metadata, official author descriptions, versioned documentation and source inspection; not a claim of exhaustive worldwide priority search.",
+  "sources": [
+    {
+      "name": "LMQL",
+      "url": "https://github.com/eth-sri/lmql/tree/fc8edd4457dc5a5e4e595302166bec797582bf53",
+      "checked": "Official documentation and LenOp/Lt token-hint and set-membership source; token-length constraints and eager masking are established, so no first-length-control claim."
+    },
+    {
+      "name": "NeuroLogic A*esque",
+      "url": "https://github.com/GXimingLu/a_star_neurologic",
+      "checked": "Official paper citation and author-supplied abstract establish lookahead heuristic constraint satisfaction; no new head-to-head result is claimed."
+    },
+    {
+      "name": "XGrammar",
+      "url": "https://github.com/mlc-ai/xgrammar/tree/v0.1.21",
+      "checked": "Versioned README/report citation and archived adapter source. Remaining-distance absence describes the evaluated adapter, not all engine capabilities."
+    },
+    {
+      "name": "Outlines",
+      "url": "https://github.com/dottxt-ai/outlines/blob/c52af8472c6fe8a607a733ec11b709476af77a96/README.md",
+      "checked": "Official project documentation and author-provided Willard/Louf citation; practical structured generation is prior work."
+    },
+    {
+      "name": "Geng et al.",
+      "url": "https://raw.githubusercontent.com/acl-org/acl-anthology/master/data/xml/2023.emnlp.xml",
+      "checked": "Official bibliography metadata for paper674, including title, authors, DOI and pages."
+    },
+    {
+      "name": "Han et al.",
+      "url": "https://raw.githubusercontent.com/acl-org/acl-anthology/master/data/xml/2025.findings.xml",
+      "checked": "Official bibliography metadata for volume acl, paper1274."
+    },
+    {
+      "name": "Wang et al.",
+      "url": "https://raw.githubusercontent.com/acl-org/acl-anthology/master/data/xml/2024.emnlp.xml",
+      "checked": "Official bibliography metadata for paper1112; affiliations excluded from author names."
+    },
+    {
+      "name": "s1",
+      "url": "https://github.com/simplescaling/s1",
+      "checked": "Official author-provided citation metadata, including author order."
+    }
+  ],
+  "conclusion": "The final manuscript claims a contract-explicit trajectory-preserving refinement and mechanism evidence, not first invention of length constraints or backward reachability.",
+  "local_source_snapshot_hashes": {
+    "qwen25_readme.md": "0b2c2bb11806f7a00c8465f2586e2e99f15de28622fd5c9b70b83ae1ab18c75d",
+    "s1_readme.md": "7e05a5de602e2e85da4c9b4b550e76067b4eb9081c3baf9764acc765ad7af4cd",
+    "2024.emnlp_citation.json": "5782d0abd57370aed79845dc3d75c0e66af9aa1c63762666b965f6fe2150a0ac",
+    "neuro_readme.md": "1a77ebe5cbbf2b1b495d77bd634ae7b1474c7e9fd2117de5dcdfb8401ab1ffee",
+    "2023.emnlp_citation.json": "1c635e7254d260f3983f5c57e15ab90a5c61568446b83059f93ba57544a3f31f",
+    "lmql_constraints.md": "343a32f20e66094244f78c30ddc780882611ed2615abc32cb5abfb47177bf8cd",
+    "xgrammar_v0121_readme.md": "5211918eb8a8cdf9cef26bfab51314e806e072c19678a1fab7c79e597d113564",
+    "outlines_readme.md": "2200c02b392cf368f5c0232d5b2c19f6c3f85cc7643b25b487db6a6394156eab",
+    "lmql_docs_research.md": "94b6b6107b8f757dbe4898c39c9f85412cbea581466f369baefc7ce557080665",
+    "lmql_readme.md": "957d4472d4b06529f2838a1e7ad597b0531c9bb0b0de3b3540790e192f2fc258",
+    "lmql_ops.py": "e15b297237f759eb21c78d3f34b3314dfd5c448b9de8796c863fa402dc9c0ea6",
+    "2025.findings-acl_citation.json": "3ebd952928f1a5211fa030196cce2296b94eebff6420f6600b160566654d263f"
+  }
+}

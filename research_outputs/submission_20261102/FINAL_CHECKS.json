@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-02",
+  "status": "journal_neutral_submission_manuscript",
+  "source_data_unchanged": true,
+  "new_gpu_inference": false,
+  "all_main_count_tables_checked": true,
+  "answer_stability_totals": {
+    "full": {
+      "retained": 259,
+      "denominator": 259,
+      "previous_correct_lost": 0,
+      "old_wrong_corrected": 0
+    },
+    "sequence_score": {
+      "retained": 241,
+      "denominator": 259,
+      "previous_correct_lost": 10,
+      "old_wrong_corrected": 5
+    }
+  },
+  "same_data_exploratory_qualifications_retained": true,
+  "original_cap24_primary_retained": true,
+  "abstract_words": 207,
+  "highlights_max_characters": 77,
+  "authors_funding_conflicts_approval_from_user_confirmation": true,
+  "author_contributions_omitted_as_requested": true,
+  "typesetting": {
+    "main": {
+      "pages": 23,
+      "overfull": 0,
+      "underfull": 0,
+      "undefined_references": false
+    },
+    "supplementary": {
+      "pages": 8,
+      "overfull": 0,
+      "underfull": 0,
+      "undefined_references": false
+    }
+  },
+  "files_sha256": {
+    "main.tex": "bb0d4a5607fc98759aa450e4621906652d14d61af778b6ecc0fd61229ec55645",
+    "main.pdf": "92b8df7456001cada6ec63328bd4c2ceeb6cf444621e693db5410279bfaedd65",
+    "manuscript.md": "fd914060440457252ccbcd6f44ca7c3791770a67920eea595f6320f199db9498",
+    "supplementary.tex": "7b9133079303210575010e143f80bad098b23bfdf52688c46ac2793fa7286ca6",
+    "supplementary.pdf": "7b2b4febc5d2df31d40461f07d6d8bec622c4a7223d4d37d6bcfac95204a2d8e",
+    "supplementary.md": "b5f95ccfe05bc88e990aa3bde9b1988a5ed8043ffb3bcfe2789eac6eb410c763",
+    "references.bib": "9a322d7eef0500f84cfa2c5f8c11514150c2a70111ebccc854beed4ef7fb6703",
+    "figures/fixed8_outcomes.pdf": "74453ab6419eef6deba49bea989957cf8c742c579012230822aacacdbb02966e",
+    "figures/fixed8_outcomes.png": "54cf719fe321171623f80c30a646133dd69f42459a78b4ad74590c6a5125a2c8"
+  },
+  "scope": "Generic journal format; bounded claims are supported by theory and existing raw. No first-paradigm or acceptance guarantee is asserted."
+}

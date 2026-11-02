@@ -1,0 +1,5 @@
+Budget-aware token filtering prevents dead ends in declared finite languages.
+Successful matched greedy grammar trajectories remain unchanged.
+Tight-budget completion improves over the matched grammar-only policy.
+Reference reachability separates structural gains from answer correctness.
+Terminal-policy sensitivity and strong finite-choice baselines are reported.

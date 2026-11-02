@@ -1,0 +1,124 @@
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Beurer-Kellner et~al.(2023)Beurer-Kellner, Fischer, and
+  Vechev]{beurer2023}
+Luca Beurer-Kellner, Marc Fischer, and Martin Vechev.
+\newblock Prompting is programming: A query language for large language models.
+\newblock In \emph{Proceedings of PLDI}, 2023.
+\newblock URL \url{https://arxiv.org/abs/2212.06094}.
+
+\bibitem[Clark et~al.(2018)Clark, Cowhey, Etzioni, Khot, Sabharwal, Schoenick,
+  and Tafjord]{clark2018}
+Peter Clark, Isaac Cowhey, Oren Etzioni, Tushar Khot, Ashish Sabharwal, Carissa
+  Schoenick, and Oyvind Tafjord.
+\newblock Think you have solved question answering? {Try ARC}, the {AI2}
+  reasoning challenge.
+\newblock \emph{arXiv preprint arXiv:1803.05457}, 2018.
+\newblock URL \url{https://arxiv.org/abs/1803.05457}.
+
+\bibitem[Dong et~al.(2024)Dong, Ruan, Cai, Lai, Xu, Zhao, and Chen]{dong2024}
+Yixin Dong, Charlie~F. Ruan, Yaxing Cai, Ruihang Lai, Ziyi Xu, Yilong Zhao, and
+  Tianqi Chen.
+\newblock {XGrammar}: Flexible and efficient structured generation engine for
+  large language models.
+\newblock \emph{arXiv preprint arXiv:2411.15100}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2411.15100}.
+
+\bibitem[Geng et~al.(2023)Geng, Josifoski, Peyrard, and West]{geng2023}
+Saibo Geng, Martin Josifoski, Maxime Peyrard, and Robert West.
+\newblock Grammar-constrained decoding for structured {NLP} tasks without
+  finetuning.
+\newblock In \emph{Proceedings of EMNLP}, pages 10932--10952, 2023.
+\newblock \doi{10.18653/v1/2023.emnlp-main.674}.
+\newblock URL \url{https://aclanthology.org/2023.emnlp-main.674/}.
+
+\bibitem[Han et~al.(2025)Han, Wang, Fang, Zhao, Ma, and Chen]{han2025}
+Tingxu Han, Zhenting Wang, Chunrong Fang, Shiyu Zhao, Shiqing Ma, and Zhenyu
+  Chen.
+\newblock Token-budget-aware {LLM} reasoning.
+\newblock In \emph{Findings of ACL}, pages 24842--24855, 2025.
+\newblock \doi{10.18653/v1/2025.findings-acl.1274}.
+\newblock URL \url{https://aclanthology.org/2025.findings-acl.1274/}.
+
+\bibitem[Hokamp and Liu(2017)]{hokamp2017}
+Chris Hokamp and Qun Liu.
+\newblock Lexically constrained decoding for sequence generation using grid
+  beam search.
+\newblock In \emph{Proceedings of ACL}, pages 1535--1546, 2017.
+\newblock \doi{10.18653/v1/P17-1141}.
+\newblock URL \url{https://aclanthology.org/P17-1141/}.
+
+\bibitem[{Hugging Face}(2025)]{transformers2025}
+{Hugging Face}.
+\newblock Transformers v4.48.2: Generation and stopping criteria.
+\newblock Versioned software, 2025.
+\newblock URL
+  \url{https://github.com/huggingface/transformers/blob/v4.48.2/src/transformers/generation/stopping_criteria.py}.
+
+\bibitem[{LMQL contributors}(2026)]{lmqldocs}
+{LMQL contributors}.
+\newblock {LMQL} constraint documentation and operator implementation.
+\newblock Source snapshot fc8edd4457dc5a5e4e595302166bec797582bf53, 2026.
+\newblock URL
+  \url{https://github.com/eth-sri/lmql/blob/fc8edd4457dc5a5e4e595302166bec797582bf53/docs/docs/language/constraints.md}.
+\newblock Accessed 2 November 2026.
+
+\bibitem[Lu et~al.(2022)Lu, Welleck, West, Jiang, Kasai, Khashabi, Le~Bras,
+  Qin, Yu, Zellers, Smith, and Choi]{lu2022}
+Ximing Lu, Sean Welleck, Peter West, Liwei Jiang, Jungo Kasai, Daniel Khashabi,
+  Ronan Le~Bras, Lianhui Qin, Youngjae Yu, Rowan Zellers, Noah~A. Smith, and
+  Yejin Choi.
+\newblock {NeuroLogic A*esque} decoding: Constrained text generation with
+  lookahead heuristics.
+\newblock In \emph{Proceedings of NAACL-HLT}, pages 780--799, 2022.
+\newblock \doi{10.18653/v1/2022.naacl-main.57}.
+\newblock URL \url{https://aclanthology.org/2022.naacl-main.57/}.
+
+\bibitem[{Mistral AI}(2024)]{mistral2024}
+{Mistral AI}.
+\newblock {Mistral-7B-Instruct-v0.3} model card, 2024.
+\newblock URL \url{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3}.
+
+\bibitem[Muennighoff et~al.(2025)Muennighoff, Yang, Shi, Li, Fei-Fei,
+  Hajishirzi, Zettlemoyer, Liang, Cand{\`e}s, and Hashimoto]{muennighoff2025}
+Niklas Muennighoff, Zitong Yang, Weijia Shi, Xiang~Lisa Li, Li~Fei-Fei,
+  Hannaneh Hajishirzi, Luke Zettlemoyer, Percy Liang, Emmanuel Cand{\`e}s, and
+  Tatsunori Hashimoto.
+\newblock s1: Simple test-time scaling.
+\newblock \emph{arXiv preprint arXiv:2501.19393}, 2025.
+\newblock URL \url{https://arxiv.org/abs/2501.19393}.
+
+\bibitem[Wang et~al.(2024)Wang, Jain, Zhang, Ray, Kumar, and
+  Athiwaratkun]{wang2024}
+Junlin Wang, Siddhartha Jain, Dejiao Zhang, Baishakhi Ray, Varun Kumar, and Ben
+  Athiwaratkun.
+\newblock Reasoning in token economies: Budget-aware evaluation of {LLM}
+  reasoning strategies.
+\newblock In \emph{Proceedings of EMNLP}, pages 19916--19939, 2024.
+\newblock \doi{10.18653/v1/2024.emnlp-main.1112}.
+\newblock URL \url{https://aclanthology.org/2024.emnlp-main.1112/}.
+
+\bibitem[Willard and Louf(2023)]{willard2023}
+Brandon~T. Willard and R{\'e}mi Louf.
+\newblock Efficient guided generation for large language models.
+\newblock \emph{arXiv preprint arXiv:2307.09702}, 2023.
+\newblock URL \url{https://arxiv.org/abs/2307.09702}.
+
+\bibitem[{XGrammar contributors}(2026)]{xgrammarcode}
+{XGrammar contributors}.
+\newblock {XGrammar} version 0.1.21.
+\newblock Versioned software, 2026.
+\newblock URL \url{https://github.com/mlc-ai/xgrammar/tree/v0.1.21}.
+
+\bibitem[Yang et~al.(2025)]{yang2025}
+A.~Yang et~al.
+\newblock {Qwen2.5-1M} technical report.
+\newblock \emph{arXiv preprint arXiv:2501.15383}, 2025.
+\newblock URL \url{https://arxiv.org/abs/2501.15383}.
+
+\end{thebibliography}

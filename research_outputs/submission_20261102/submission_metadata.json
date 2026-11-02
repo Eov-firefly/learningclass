@@ -1,0 +1,24 @@
+{
+  "title": "Budget-viable commitment for finite-language decoding under hard token budgets",
+  "date": "2026-11-02",
+  "authors": [
+    "Ya Bai",
+    "GuoZhen Bian",
+    "Cheng Chang",
+    "ZhengGuang Cui",
+    "HaiLong Qin",
+    "ZhiHui Huang",
+    "Yue Wang"
+  ],
+  "affiliation": "China Telecom Cloud Network Operating System R&D Center, Beijing, China",
+  "corresponding_author": {
+    "name": "GuoZhen Bian",
+    "email": "biangz@chinatelecom.cn"
+  },
+  "journal_format": "generic journal-neutral author-year manuscript",
+  "funding": "No funding was received for this study.",
+  "competing_interests": "The authors declare no competing interests.",
+  "all_authors_agreed_to_submission": true,
+  "author_contribution_section": "omitted at the user's explicit request",
+  "ai_assistance": "OpenAI conversational and coding assistants for manuscript editing and code preparation; numerical results derive from archived records and offline analyses."
+}
